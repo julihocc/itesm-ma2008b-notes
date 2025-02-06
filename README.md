@@ -1,10 +1,11 @@
 # MA2008B | Numerical Analysis for Non-Linear Optimization
 
-### Module 1 Syllabus
+## Module 1 Syllabus
 
 Based on "PART FOUR OPTIMIZATION", chapters 13, 14, and 15 of Steven C. Chapra and Raymond P. Canale's "Numerical Methods for Engineers", seventh edition, McGraw-Hill
 
-**"Numerical Methods for Optimization"**
+### Numerical Methods for Optimization
+
 1. Golden Section Search for Optimization
 2. Parabolic Interpolation
 3. Newton's Method
@@ -14,11 +15,11 @@ Based on "PART FOUR OPTIMIZATION", chapters 13, 14, and 15 of Steven C. Chapra a
 7. Nonlinear Optimization with Constraints
 8. Optimization with Software Packages
 
-### Module 2 Syllabus
+## Module 2 Syllabus
 
 Based on "PART FIVE CURVE FITTING", chapters 17, 18, and 19 of Steven C. Chapra and Raymond P. Canale's "Numerical Methods for Engineers", seventh edition, McGraw-Hill
 
-#### Numerical Methods for Curve Fitting
+### Numerical Methods for Curve Fitting
 
 1. Linear Regression
 2. Polynomial Regression
@@ -31,9 +32,9 @@ Based on "PART FIVE CURVE FITTING", chapters 17, 18, and 19 of Steven C. Chapra 
 9. Multidimensional Interpolation
 10. Fourier Series
 
-### Module 3 Syllabus
+## Module 3 Syllabus
 
-#### Optimization in Machine Learning Algorithms
+### Optimization in Machine Learning Algorithms
 
 1. Iterative Algorithms
 2. Derivatives, Gradients, and Optimization
