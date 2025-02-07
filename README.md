@@ -1,165 +1,139 @@
-# MA2008B | Numerical Analysis for Non-Linear Optimization
+# Numerical Analysis for Non-Linear Optimization
 
-## Module 1 (Period 1)
+## Module 2
 
-### Main: Control Systems Fundamentals
+### Random Number Generators
 
-- Definition and classification of control systems (open and closed)
-- Examples of applications in analog and digital systems
-- Concept of open-loop and closed-loop control
+#### Introduction
 
-### Complementary: Random Number Generation Techniques
+Random number generators (RNGs) are algorithms that produce sequences of numbers that appear to be random. These sequences are crucial in scientific computing for applications such as:
 
-- Review: number generators
-- Best samples, antithetic variables, moment control techniques
-- Pseudo and quasi-random numbers
-- Taylor and Maclaurin series
+- **Monte Carlo methods:** Used in numerical integration, optimization, and simulation.
+- **Stochastic simulations:** For modeling systems with inherent randomness.
+- **Cryptography:** Ensures secure communication and data protection.
+- **Statistical analysis:** Helps in simulating random variables and testing hypotheses.
 
----
+#### Pseudo-Random Number Generators (PRNGs)
 
-## Module 2 (Period 1)
+Most random number generators used in computers are **pseudo-random number generators (PRNGs)**. These algorithms are deterministic, meaning that given the same initial conditions (seed), they will produce the same sequence of numbers. PRNGs aim to mimic the statistical properties of truly random sequences. The numbers are usually generated from a uniform distribution over the interval \([0,1)\).
 
-### Main: Differential Equations and State-Space Analysis
+##### Key Characteristics of PRNGs
 
-- Linear and nonlinear differential equations
-- Solution of ODEs with constant coefficients: free and forced responses, transient and steady-state
-- State-space representation of dynamic systems
+- **Deterministic:** Given the same initial state (seed), the generator produces the same sequence of numbers.
+- **Statistical randomness:** PRNGs pass various statistical tests for randomness.
+- **Uniform distribution:** Many PRNGs generate numbers from a uniform distribution over a specific interval, typically \([0,1)\).
+- **Periodicity:** PRNGs eventually repeat their sequences, though well-designed PRNGs have very long periods.
 
-### Complementary: Stochastic Processes and Numerical Simulation
+##### Common PRNG Functions in Python
 
-- Uncertainty and stochastic processes
-- Lyapunov exponent and Brownian motion
-- Financial options
-- Binomial model
-- ODEs and Euler + Maruyama method
-- Simulation of sample paths
-- Convergence
+Python provides several tools for generating random numbers, primarily through the NumPy and SciPy libraries:
 
----
+- **`numpy.random` module:**
+  - **`rand`:** Generates uniformly distributed floating-point numbers in \([0,1)\).
+  - **`randn`:** Produces samples from the standard normal (Gaussian) distribution.
+  - **`randint`:** Generates random integers within a specified range.
+  - **`choice`:** Randomly selects items from a list or array, with or without replacement.
+- **`scipy.stats` module:** Provides a higher-level interface for working with probability distributions, offering random sampling, probability density computation, and statistical calculations.
 
-## Module 3 (Period 1)
+##### Managing Random Number Generation
 
-### Main: Transfer Function Analysis
+- **`RandomState` Class:** NumPy's `RandomState` class allows users to manage the state of the random number generator, improving reproducibility.
+- **Seeding:** Setting a seed ensures that random sequences are reproducible, which is useful for testing and debugging.
+- **Reproducibility:** Using a `RandomState` instance rather than direct function calls in `np.random` is recommended for isolating randomness in different parts of a program.
 
-- Definition of transfer function
-- Properties and methods of obtaining it (via Laplace transform)
-- Impulse response and step response diagrams
+##### Various Statistical Distributions
 
-### Complementary: Root-Finding Methods
+Beyond uniform and normal distributions, `numpy.random` and `scipy.stats` support other statistical distributions, including:
 
-- Root-finding methods: bisection, fixed-point, Newton-Raphson, secant, and Regula Falsi
+- **Discrete distributions:** Bernoulli, binomial, Poisson.
+- **Continuous distributions:** Exponential, chi-squared, Student's t, F-distributions.
 
----
+These distributions are critical for simulating different random processes in scientific computing and data science.
 
-## Module 4 (Period 2)
+##### Randomness Testing and Quality Assessment
 
-### Main: State-Space Equations and Stability Analysis
+It is important to assess the quality of PRNGs using **randomness tests**, such as:
 
-- State-space equations: formulation and solutions
-- Characteristic polynomial and eigenvalues
-- Relationship between differential equations and state-space representation
-- Stable states and transient response analysis
+- **Chi-square test:** Tests if a sample follows a given distribution.
+- **Kolmogorov-Smirnov test:** Compares a sample’s empirical distribution to a theoretical distribution.
+- **Autocorrelation tests:** Checks for dependency between values in a sequence.
+- **Diehard tests & TestU01 suite:** Advanced statistical tests for PRNG evaluation.
 
-### Complementary: Numerical Integration and Transform Methods
+##### Quasi-Random Number Generators
 
-- Numerical integration methods: Trapezoidal, Simpson, quadrature
-- ODEs, Euler, Runge-Kutta, systems of ODEs
-- Laplace and Fourier transforms
+While PRNGs produce seemingly random sequences, **quasi-random number generators (QRNGs)** produce low-discrepancy sequences that fill space more uniformly. These are often used in **quasi-Monte Carlo methods** to improve convergence in numerical integration.
 
----
+Examples of QRNGs include:
 
-## Module 5 (Period 2)
+- **Sobol sequences:** Used in high-dimensional integration.
+- **Halton sequences:** Suitable for moderate-dimensional spaces.
+- **Faure sequences:** Alternative to Halton sequences with better uniformity.
 
-### Main: Difference Equations and Z-Transform
+#### Hardware Random Number Generators (HRNGs)
 
-- Solution of linear difference equations with constant coefficients
-- Linearity, superposition, and iterative techniques
-- Z-transform: discretization of state equations
+Unlike PRNGs, **hardware random number generators (HRNGs)** use physical processes (e.g., electrical noise, radioactive decay) to generate truly random numbers. These are essential in cryptography and secure computing.
 
-### Complementary: Numerical Stability Analysis
+### Monte Carlo Applications
 
-- Errors, convergence, and numerical stability
+Monte Carlo methods use random sampling to approximate deterministic problems. Some important applications include:
 
----
+1. **Estimating Pi:** Randomly placing points in a square and counting how many fall within an inscribed circle.
+2. **Solving integrals:** Approximating integrals in higher dimensions using Monte Carlo techniques.
+3. **Stochastic optimization:** Techniques like simulated annealing rely on PRNGs for exploration of solution spaces.
 
-## Module 6 (Period 2)
+### Exercises
 
-### Main: Laplace Transform Methods and Stability Analysis
+#### Exercises on Basic Random Number Generation
 
-- Review of Laplace transform properties
-- Solution methods for dynamic systems using Laplace
-- Stability analysis using poles and zeros
+1. **Uniform Random Numbers**
+   - Use `numpy.random.rand()` to generate a \(10 \times 10\) array of uniformly distributed random numbers in \([0,1)\).
+   - Compute the mean and standard deviation. Do these match the expected values?
 
-### Complementary: Numerical Optimization Techniques
+2. **Integer Random Numbers**
+   - Generate a 1D array of 20 random integers between 1 and 10 (inclusive).
+   - Count the frequency of each integer and display the results.
 
-- Sorting methods
-- Numerical optimization
-- Gradient descent
+3. **Gaussian Random Numbers**
+   - Generate 100 samples from a standard normal distribution using `numpy.random.randn()`.
+   - Plot a histogram and verify whether it follows a bell curve.
+   - Compute the mean and standard deviation.
 
----
+4. **Reproducibility with Seeding**
+   - Generate random numbers using a fixed seed and verify reproducibility.
 
-## Module 7 (Period 2)
+#### Exercises on Sampling and Choices
 
-### Main: Frequency Response and Stability Criteria
+5. **Random Choices**
+   - Select random colors from a predefined list, with and without replacement.
 
-- Bode, Nyquist, and polar plots
-- Stability margins: gain and phase
-- Hurwitz and Routh stability criteria
-- Application of criteria for discrete systems
+6. **Sampling with Probabilities**
+   - Assign probabilities to five different fruits and sample 100 times.
+   - Compare sampled frequencies with expected probabilities.
 
-### Complementary: Monte Carlo and Statistical Methods
+#### Exercises on Statistical Distributions
 
-- Monte Carlo integration
-- Confidence intervals
-- Multi-threading
+7. **Exponential Distribution**
+   - Generate and plot 100 samples from an exponential distribution.
 
----
+8. **Binomial Distribution**
+   - Simulate 100 binomial trials with \( n = 10 \), \( p = 0.4 \) and analyze the results.
 
-## Module 8 (Period 3)
+9. **Chi-Squared Distribution**
+   - Generate and plot 1000 samples from a chi-squared distribution.
 
-### Main: PID Controller Design and Tuning
+#### Advanced Exercises on Random Number Generators
 
-- Design of PID controllers and their implementation in discrete time
-- Compensating networks: lead, lag, and combined compensation
-- Tuning using analytical and heuristic methods
+10. **Monte Carlo Integration**
+    - Estimate Pi using Monte Carlo methods.
 
-### Complementary: Matrix and Decomposition Methods
+11. **Simulating a Random Walk**
+    - Create a 2D random walk and visualize the trajectory.
 
-- Matrix inversion
-- LU decomposition
-- Gauss-Seidel
+12. **Comparing PRNGs**
+    - Generate random sequences using different PRNGs and compare their statistical properties.
 
----
+13. **Implementing a Simple PRNG**
+    - Implement a Linear Congruential Generator (LCG) and analyze its output.
 
-## Module 9 (Period 3)
+By completing these exercises, one gains a comprehensive understanding of PRNGs and their applications in scientific computing.
 
-### Main: Optimization Techniques in Control Systems
-
-- Optimization using gradient descent and numerical methods
-- Karush-Kuhn-Tucker (KKT) constraints
-- Fine-tuning of PID controllers using optimization techniques
-
-### Complementary: Finite Difference Methods
-
-- Finite differences: Explicit, Implicit, Crank-Nicolson
-
----
-
-## Module 10 (Period 3)
-
-### Main: Linear Approximation, State Estimation, and Stability
-
-- Linear approximation around equilibrium points
-- Lyapunov stability analysis
-- Applications in control systems
-- Kalman filters
-- Luenberger observers
-- Applications in noisy or partially observable systems
-
-### Complementary: Finite Element Methods
-
-- Finite elements
-- Variational principle
-- Triangulations
-
----
