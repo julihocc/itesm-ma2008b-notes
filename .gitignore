@@ -6,4 +6,4 @@
 *.pdf
 *.synctex.gz
 *.toc
-.vscode/settings.json
+.vscode/
