@@ -15,13 +15,13 @@ Random number generators (RNGs) are algorithms that produce sequences of numbers
 
 #### Pseudo-Random Number Generators (PRNGs)
 
-Most random number generators used in computers are **pseudo-random number generators (PRNGs)**. These algorithms are deterministic, meaning that given the same initial conditions (seed), they will produce the same sequence of numbers. PRNGs aim to mimic the statistical properties of truly random sequences. The numbers are usually generated from a uniform distribution over the interval \([0,1)\).
+Most random number generators used in computers are **pseudo-random number generators (PRNGs)**. These algorithms are deterministic, meaning that given the same initial conditions (seed), they will produce the same sequence of numbers. PRNGs aim to mimic the statistical properties of truly random sequences. The numbers are usually generated from a uniform distribution over the interval [0,1).
 
 ##### Key Characteristics of PRNGs
 
 * **Deterministic:** Given the same initial state (seed), the generator produces the same sequence of numbers.
 * **Statistical randomness:** PRNGs pass various statistical tests for randomness.
-* **Uniform distribution:** Many PRNGs generate numbers from a uniform distribution over a specific interval, typically \([0,1)\).
+* **Uniform distribution:** Many PRNGs generate numbers from a uniform distribution over a specific interval, typically [0,1).
 * **Periodicity:** PRNGs eventually repeat their sequences, though well-designed PRNGs have very long periods.
 
 ##### Common PRNG Functions in Python
@@ -29,7 +29,7 @@ Most random number generators used in computers are **pseudo-random number gener
 Python provides several tools for generating random numbers, primarily through the NumPy and SciPy libraries:
 
 * **`numpy.random` module:**
-  * **`rand`:** Generates uniformly distributed floating-point numbers in \([0,1)\).
+  * **`rand`:** Generates uniformly distributed floating-point numbers in [0,1).
   * **`randn`:** Produces samples from the standard normal (Gaussian) distribution.
   * **`randint`:** Generates random integers within a specified range.
   * **`choice`:** Randomly selects items from a list or array, with or without replacement.
@@ -86,7 +86,7 @@ Monte Carlo methods use random sampling to approximate deterministic problems. S
 #### Exercises on Basic Random Number Generation
 
 1. **Uniform Random Numbers**
-   * Use `numpy.random.rand()` to generate a \(10 \times 10\) array of uniformly distributed random numbers in \([0,1)\).
+   * Use `numpy.random.rand()` to generate a 10x10 array of uniformly distributed random numbers in [0,1).
    * Compute the mean and standard deviation. Do these match the expected values?
 
 2. **Integer Random Numbers**
@@ -116,7 +116,7 @@ Monte Carlo methods use random sampling to approximate deterministic problems. S
    * Generate and plot 100 samples from an exponential distribution.
 
 8. **Binomial Distribution**
-   * Simulate 100 binomial trials with \( n = 10 \), \( p = 0.4 \) and analyze the results.
+   * Simulate 100 binomial trials with n = 10, p = 0.4 and analyze the results.
 
 9. **Chi-Squared Distribution**
    * Generate and plot 1000 samples from a chi-squared distribution.
