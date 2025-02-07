@@ -1,8 +1,8 @@
-# Numerical Analysis for Non-Linear Optimization
+# Numerical Analysis for Non-Linear Optimization | Module 1
 
-## Module 2
+## Random Number Generators
 
-### Random Number Generators
+### Theory and Examples
 
 #### Introduction
 
@@ -103,37 +103,36 @@ Monte Carlo methods use random sampling to approximate deterministic problems. S
 
 #### Exercises on Sampling and Choices
 
-5. **Random Choices**
+1. **Random Choices**
    * Select random colors from a predefined list, with and without replacement.
 
-6. **Sampling with Probabilities**
+2. **Sampling with Probabilities**
    * Assign probabilities to five different fruits and sample 100 times.
    * Compare sampled frequencies with expected probabilities.
 
 #### Exercises on Statistical Distributions
 
-7. **Exponential Distribution**
+1. **Exponential Distribution**
    * Generate and plot 100 samples from an exponential distribution.
 
-8. **Binomial Distribution**
+2. **Binomial Distribution**
    * Simulate 100 binomial trials with n = 10, p = 0.4 and analyze the results.
 
-9. **Chi-Squared Distribution**
+3. **Chi-Squared Distribution**
    * Generate and plot 1000 samples from a chi-squared distribution.
 
 #### Advanced Exercises on Random Number Generators
 
-10. **Monte Carlo Integration**
+1. **Monte Carlo Integration**
     * Estimate Pi using Monte Carlo methods.
 
-11. **Simulating a Random Walk**
+2. **Simulating a Random Walk**
     * Create a 2D random walk and visualize the trajectory.
 
-12. **Comparing PRNGs**
+3. **Comparing PRNGs**
     * Generate random sequences using different PRNGs and compare their statistical properties.
 
-13. **Implementing a Simple PRNG**
+4. **Implementing a Simple PRNG**
     * Implement a Linear Congruential Generator (LCG) and analyze its output.
 
 By completing these exercises, one gains a comprehensive understanding of PRNGs and their applications in scientific computing.
-
