@@ -53,8 +53,8 @@ print(rand_nums)
 
 ```python
 # Import the secrets module for generating secure random numbers
-import secrets
-import string
+import secrets # Import the secrets module for generating secure random numbers
+import string # Import the string module for character selection
 def generate_password(length=12):  # Function to generate a secure password
     chars = string.ascii_letters + string.digits + string.punctuation  # Define possible password characters
     return ''.join(secrets.choice(chars) for _ in range(length))
