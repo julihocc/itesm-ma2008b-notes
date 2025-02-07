@@ -1,138 +1,163 @@
 # Numerical Analysis for Non-Linear Optimization | Module 1
 
-## Random Number Generators
+## **Random Number Generators: Theory, Implementation, and Applications**
 
-### Theory and Examples
+### **1. Introduction**
 
-#### Introduction
+Random number generators (RNGs) are fundamental in **scientific computing**, used in **Monte Carlo simulations**, **cryptography**, **statistical analysis**, and **machine learning**. This module explores the theory behind RNGs, their implementation in Python, statistical validation techniques, and real-world applications.
 
-Random number generators (RNGs) are algorithms that produce sequences of numbers that appear to be random. These sequences are crucial in scientific computing for applications such as:
+### **2. Understanding Randomness: Algorithmic vs. Physical**
 
-* **Monte Carlo methods:** Used in numerical integration, optimization, and simulation.
-* **Stochastic simulations:** For modeling systems with inherent randomness.
-* **Cryptography:** Ensures secure communication and data protection.
-* **Statistical analysis:** Helps in simulating random variables and testing hypotheses.
+#### **2.1 Pseudo-Random Number Generators (PRNGs)**
 
-#### Pseudo-Random Number Generators (PRNGs)
+PRNGs are deterministic algorithms that generate sequences of numbers appearing random but are reproducible given the same seed.
 
-Most random number generators used in computers are **pseudo-random number generators (PRNGs)**. These algorithms are deterministic, meaning that given the same initial conditions (seed), they will produce the same sequence of numbers. PRNGs aim to mimic the statistical properties of truly random sequences. The numbers are usually generated from a uniform distribution over the interval [0,1).
+##### **Key Characteristics:**
 
-##### Key Characteristics of PRNGs
+- **Deterministic**: Same seed produces the same sequence.
+- **Statistical randomness**: Should pass randomness tests.
+- **Periodicity**: PRNGs eventually repeat sequences.
+- **Uniform distribution**: Most PRNGs generate numbers in [0,1).
 
-* **Deterministic:** Given the same initial state (seed), the generator produces the same sequence of numbers.
-* **Statistical randomness:** PRNGs pass various statistical tests for randomness.
-* **Uniform distribution:** Many PRNGs generate numbers from a uniform distribution over a specific interval, typically [0,1).
-* **Periodicity:** PRNGs eventually repeat their sequences, though well-designed PRNGs have very long periods.
+##### **Common PRNG Algorithms:**
 
-##### Common PRNG Functions in Python
+- **Mersenne Twister** (default in NumPy, but not ideal for cryptography).
+- **PCG (Permuted Congruential Generator)**.
+- **Xoshiro and SplitMix** (better alternatives to Mersenne Twister).
 
-Python provides several tools for generating random numbers, primarily through the NumPy and SciPy libraries:
+#### **2.2 Hardware Random Number Generators (HRNGs)**
 
-* **`numpy.random` module:**
-  * **`rand`:** Generates uniformly distributed floating-point numbers in [0,1).
-  * **`randn`:** Produces samples from the standard normal (Gaussian) distribution.
-  * **`randint`:** Generates random integers within a specified range.
-  * **`choice`:** Randomly selects items from a list or array, with or without replacement.
-* **`scipy.stats` module:** Provides a higher-level interface for working with probability distributions, offering random sampling, probability density computation, and statistical calculations.
+HRNGs generate numbers using physical phenomena such as **thermal noise** or **quantum effects**.
 
-##### Managing Random Number Generation
+##### **Entropy Sources for HRNGs:**
 
-* **`RandomState` Class:** NumPy's `RandomState` class allows users to manage the state of the random number generator, improving reproducibility.
-* **Seeding:** Setting a seed ensures that random sequences are reproducible, which is useful for testing and debugging.
-* **Reproducibility:** Using a `RandomState` instance rather than direct function calls in `np.random` is recommended for isolating randomness in different parts of a program.
+- **Electrical noise** in circuits.
+- **Photonic processes** (quantum randomness).
+- **Radioactive decay** (unpredictable at quantum level).
 
-##### Various Statistical Distributions
+HRNGs are essential in **cryptographic security** where true randomness is required.
 
-Beyond uniform and normal distributions, `numpy.random` and `scipy.stats` support other statistical distributions, including:
+### **3. Implementing Random Number Generators in Python**
 
-* **Discrete distributions:** Bernoulli, binomial, Poisson.
-* **Continuous distributions:** Exponential, chi-squared, Student's t, F-distributions.
+#### **3.1 Using NumPy's Modern PRNG API**
 
-These distributions are critical for simulating different random processes in scientific computing and data science.
+```python
+from numpy.random import default_rng
+rng = default_rng(42)  # PRNG with new API
+rand_nums = rng.random(10)  # Generate 10 uniform numbers
+```
 
-##### Randomness Testing and Quality Assessment
+#### **3.2 Generating Secure Random Numbers with `secrets`**
 
-It is important to assess the quality of PRNGs using **randomness tests**, such as:
+```python
+import secrets
+import string
+def generate_password(length=12):
+    chars = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(chars) for _ in range(length))
+print("Secure Password:", generate_password())
+```
 
-* **Chi-square test:** Tests if a sample follows a given distribution.
-* **Kolmogorov-Smirnov test:** Compares a sample’s empirical distribution to a theoretical distribution.
-* **Autocorrelation tests:** Checks for dependency between values in a sequence.
-* **Diehard tests & TestU01 suite:** Advanced statistical tests for PRNG evaluation.
+### **4. Statistical Analysis & Testing Randomness**
 
-##### Quasi-Random Number Generators
+To validate the quality of RNGs, statistical tests such as **Kolmogorov-Smirnov (KS) test**, **Chi-square test**, and **autocorrelation analysis** can be performed.
 
-While PRNGs produce seemingly random sequences, **quasi-random number generators (QRNGs)** produce low-discrepancy sequences that fill space more uniformly. These are often used in **quasi-Monte Carlo methods** to improve convergence in numerical integration.
+#### **4.1 Kolmogorov-Smirnov Test for Uniformity**
 
-Examples of QRNGs include:
+```python
+from scipy.stats import kstest
+samples = rng.random(1000)
+ks_stat, p_value = kstest(samples, 'uniform')
+print(f"KS Test Statistic: {ks_stat}, P-value: {p_value}")
+```
 
-* **Sobol sequences:** Used in high-dimensional integration.
-* **Halton sequences:** Suitable for moderate-dimensional spaces.
-* **Faure sequences:** Alternative to Halton sequences with better uniformity.
+#### **4.2 Visualization: Histogram and QQ-Plot**
 
-#### Hardware Random Number Generators (HRNGs)
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy.stats as stats
+samples = rng.normal(0, 1, 1000)
+plt.figure(figsize=(12, 5))
+sns.histplot(samples, bins=30, kde=True)
+stats.probplot(samples, dist="norm", plot=plt)
+plt.show()
+```
 
-Unlike PRNGs, **hardware random number generators (HRNGs)** use physical processes (e.g., electrical noise, radioactive decay) to generate truly random numbers. These are essential in cryptography and secure computing.
+### **5. Monte Carlo Simulations & Efficiency Enhancements**
 
-### Monte Carlo Applications
+Monte Carlo methods rely on randomness for approximating deterministic problems.
 
-Monte Carlo methods use random sampling to approximate deterministic problems. Some important applications include:
+#### **5.1 Estimating π Using Monte Carlo**
 
-1. **Estimating Pi:** Randomly placing points in a square and counting how many fall within an inscribed circle.
-2. **Solving integrals:** Approximating integrals in higher dimensions using Monte Carlo techniques.
-3. **Stochastic optimization:** Techniques like simulated annealing rely on PRNGs for exploration of solution spaces.
+```python
+from numba import njit, prange
+import numpy as np
+@njit(parallel=True)
+def monte_carlo_pi(n):
+    count = 0
+    for i in prange(n):
+        x, y = np.random.random(), np.random.random()
+        if x**2 + y**2 <= 1:
+            count += 1
+    return (count / n) * 4
+print("Estimated Pi:", monte_carlo_pi(1000000))
+```
 
-### Exercises
+#### **5.2 Monte Carlo Convergence Analysis**
 
-#### Exercises on Basic Random Number Generation
+```python
+n_values = np.logspace(2, 6, num=20, dtype=int)
+pi_estimates = [monte_carlo_pi(n) for n in n_values]
+plt.plot(n_values, pi_estimates, marker='o', linestyle='dashed')
+plt.xscale("log")
+plt.axhline(y=np.pi, color="red", linestyle="--", label="Actual Pi")
+plt.xlabel("Number of Samples")
+plt.ylabel("Estimated Pi")
+plt.legend()
+plt.title("Monte Carlo Convergence")
+plt.show()
+```
 
-1. **Uniform Random Numbers**
-   * Use `numpy.random.rand()` to generate a 10x10 array of uniformly distributed random numbers in [0,1).
-   * Compute the mean and standard deviation. Do these match the expected values?
+### **6. Real-World Applications of Random Number Generators**
 
-2. **Integer Random Numbers**
-   * Generate a 1D array of 20 random integers between 1 and 10 (inclusive).
-   * Count the frequency of each integer and display the results.
+#### **6.1 Financial Modeling: Stock Price Simulation Using Brownian Motion**
 
-3. **Gaussian Random Numbers**
-   * Generate 100 samples from a standard normal distribution using `numpy.random.randn()`.
-   * Plot a histogram and verify whether it follows a bell curve.
-   * Compute the mean and standard deviation.
+```python
+T, N, S0, mu, sigma = 1, 1000, 100, 0.05, 0.2
+dt = T/N
+t = np.linspace(0, T, N)
+brownian_motion = np.cumsum(np.random.randn(N) * np.sqrt(dt))
+stock_prices = S0 * np.exp((mu - 0.5 * sigma**2) * t + sigma * brownian_motion)
+plt.plot(t, stock_prices)
+plt.xlabel("Time")
+plt.ylabel("Stock Price")
+plt.title("Stock Price Simulation (Geometric Brownian Motion)")
+plt.show()
+```
 
-4. **Reproducibility with Seeding**
-   * Generate random numbers using a fixed seed and verify reproducibility.
+### **7. Conclusion**
 
-#### Exercises on Sampling and Choices
+Random number generators are vital in numerous domains, from simulations and cryptography to finance and AI. Understanding the differences between PRNGs and HRNGs ensures appropriate application selection. Moreover, leveraging statistical tests and efficiency techniques like Monte Carlo convergence significantly enhances computational accuracy and reliability.
 
-1. **Random Choices**
-   * Select random colors from a predefined list, with and without replacement.
+### **8. Exercises**
 
-2. **Sampling with Probabilities**
-   * Assign probabilities to five different fruits and sample 100 times.
-   * Compare sampled frequencies with expected probabilities.
+#### **Basic Random Number Generation**
 
-#### Exercises on Statistical Distributions
+1. Generate a 10x10 array of uniform random numbers and compute its mean and standard deviation.
+2. Generate 20 random integers between 1 and 10 and count their frequencies.
+3. Generate 100 Gaussian-distributed samples, plot a histogram, and compute statistical properties.
+4. Generate random numbers with a fixed seed and verify reproducibility.
 
-1. **Exponential Distribution**
-   * Generate and plot 100 samples from an exponential distribution.
+#### **Statistical Distributions**
 
-2. **Binomial Distribution**
-   * Simulate 100 binomial trials with n = 10, p = 0.4 and analyze the results.
+1. Generate and plot samples from exponential, binomial, and chi-squared distributions.
+2. Perform KS and Chi-square tests to analyze the quality of generated random numbers.
 
-3. **Chi-Squared Distribution**
-   * Generate and plot 1000 samples from a chi-squared distribution.
+#### **Advanced Topics**
 
-#### Advanced Exercises on Random Number Generators
-
-1. **Monte Carlo Integration**
-    * Estimate Pi using Monte Carlo methods.
-
-2. **Simulating a Random Walk**
-    * Create a 2D random walk and visualize the trajectory.
-
-3. **Comparing PRNGs**
-    * Generate random sequences using different PRNGs and compare their statistical properties.
-
-4. **Implementing a Simple PRNG**
-    * Implement a Linear Congruential Generator (LCG) and analyze its output.
-
-By completing these exercises, one gains a comprehensive understanding of PRNGs and their applications in scientific computing.
+1. Estimate Pi using Monte Carlo methods.
+2. Implement and analyze a comparison between PRNGs and HRNGs.
+3. Simulate a 2D random walk and visualize the trajectory.
+4. Implement a Linear Congruential Generator (LCG) and evaluate its output.
+5. Use Simulated Annealing for optimization and analyze the impact of different RNGs.
