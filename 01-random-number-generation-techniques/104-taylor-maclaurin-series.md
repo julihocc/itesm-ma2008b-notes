@@ -27,9 +27,10 @@ where $f^n(x_0)$ is the $n$th derivative of $f(x)$ evaluated at $x_0$.
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
+from math import factorial
 
 def taylor_expansion_e_x(x, n_terms):
-    return sum([(x**n) / np.math.factorial(n) for n in range(n_terms)])
+    return sum([(x**n) / factorial(n) for n in range(n_terms)])
 
 x_values = np.linspace(-2, 2, 100)
 y_actual = np.exp(x_values)
@@ -65,7 +66,7 @@ $$
 
 ```python
 def maclaurin_sin(x, n_terms):
-    return sum([((-1)**n * x**(2*n+1)) / np.math.factorial(2*n+1) for n in range(n_terms)])
+    return sum([((-1)**n * x**(2*n+1)) / factorial(2*n+1) for n in range(n_terms)])
 
 x_values = np.linspace(-np.pi, np.pi, 100)
 y_actual = np.sin(x_values)
