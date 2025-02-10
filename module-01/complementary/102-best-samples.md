@@ -30,10 +30,10 @@ The **antithetic variable method** leverages negatively correlated sample pairs 
 
 #### 3.1 Definition and Implementation
 
-- Instead of generating independent samples \(X_1, X_2, ..., X_n\), create **correlated pairs** \( (X_i, X_i^*) \) such that \( X_i^* \) is designed to counteract fluctuations in \( X_i \).
-- A common choice is \( X_i^* = 1 - X_i \) for **uniform** distributions.
+- Instead of generating independent samples $X_1, X_2, ..., X_n$, create **correlated pairs** $ (X_i, X_i^*) $ such that $ X_i^* $ is designed to counteract fluctuations in $ X_i $.
+- A common choice is $ X_i^* = 1 - X_i $ for **uniform** distributions.
 
-#### 3.2 Example: Monte Carlo Estimation of \(\pi\)
+#### 3.2 Example: Monte Carlo Estimation of $\pi$
 
 ```python
 import numpy as np
@@ -58,12 +58,12 @@ Moment control techniques enforce constraints on moments (mean, variance, skewne
 #### 4.1 Control Variates Method
 
 - **Exploits known expectations** of auxiliary variables to adjust the estimator.
-- Given a function \( f(X) \), introduce a control variable \( g(X) \) with a known expected value.
+- Given a function $ f(X) $, introduce a control variable $ g(X) $ with a known expected value.
 - Adjust the estimator using:
-  \[
+  $$
   \hat{I} = \frac{1}{n} \sum_{i=1}^{n} \left[ f(X_i) - c(g(X_i) - E[g]) \right]
-  \]
-  where \( c \) is an **optimal coefficient** minimizing variance.
+  $$
+  where $ c $ is an **optimal coefficient** minimizing variance.
 
 #### 4.2 Example: Control Variates in Integration
 
@@ -162,7 +162,7 @@ Applying **best samples**, **antithetic variables**, and **moment control techni
 #### Basic Implementations
 
 1. Implement a Monte Carlo estimator for **normal expectations** using antithetic variables.
-2. Compare variance reduction for **integration of \(\sin(x)\)** using stratified vs. simple sampling.
+2. Compare variance reduction for **integration of $\sin(x)$** using stratified vs. simple sampling.
 
 #### Advanced Applications
 
