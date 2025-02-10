@@ -17,15 +17,15 @@ Pseudo-random numbers are generated deterministically using algorithms that mimi
 - **Deterministic**: The sequence is fully determined by an initial seed.
 - **Reproducible**: The same seed generates the same sequence.
 - **Statistically random**: The numbers appear random but exhibit periodicity.
-- **Uniform distribution**: Common generators produce values in \([0,1)\).
+- **Uniform distribution**: Common generators produce values in $[0,1)$.
 
 #### 2.2 Common PRNG Algorithms
 
 - **Linear Congruential Generator (LCG)**:
-  \[
+  $$
   X_{n+1} = (a X_n + c) \mod m
-  \]
-- **Mersenne Twister**: Default PRNG in NumPy, long period (~\(2^{19937}-1\)).
+  $$
+- **Mersenne Twister**: Default PRNG in NumPy, long period (~$2^{19937}-1$).
 - **Xoshiro / SplitMix**: Modern alternatives to Mersenne Twister.
 - **PCG (Permuted Congruential Generator)**: High statistical quality and efficiency.
 
@@ -142,5 +142,5 @@ Both **pseudo-random** and **quasi-random** numbers are essential tools in numer
 
 #### Advanced Applications
 
-1. Implement a Monte Carlo integration for \( \int_0^1 \sin(x)dx \) using both **PRNs and QRNs** and compare their convergence.
+1. Implement a Monte Carlo integration for $\int_0^1 \sin(x)dx$ using both **PRNs and QRNs** and compare their convergence.
 2. Use **QRNs for optimizing a function** in 5 dimensions and compare performance with **random search**.
