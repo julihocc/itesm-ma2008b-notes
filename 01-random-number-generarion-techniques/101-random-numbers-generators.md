@@ -1,16 +1,16 @@
-# **Numerical Analysis for Non-Linear Optimization | Module 1**
+# Numerical Analysis for Non-Linear Optimization | Module 1
 
-## **Random Number Generators: Implementation and Applications**
+## Random Number Generators: Implementation and Applications
 
-### **1. Introduction**
+### 1. Introduction
 
 Random number generators (RNGs) are crucial in **scientific computing**, playing a significant role in **Monte Carlo simulations**, **machine learning**, and **statistical analysis**. This module focuses on implementing and applying random number generators efficiently in numerical methods.
 
 ---
 
-### **2. Implementing Random Number Generators in Python**
+### 2. Implementing Random Number Generators in Python
 
-#### **2.1 Using NumPy's Modern PRNG API**
+#### 2.1 Using NumPy's Modern PRNG API
 
 ```python
 import numpy as np
@@ -21,7 +21,7 @@ rand_nums = rng.random(10)  # Generate 10 uniform random numbers in [0,1)
 print(rand_nums)
 ```
 
-#### **2.2 Generating Secure Random Numbers**
+#### 2.2 Generating Secure Random Numbers
 
 ```python
 import secrets
@@ -36,11 +36,11 @@ print("Secure Password:", generate_password())
 
 ---
 
-### **3. Statistical Analysis & Testing Randomness**
+### 3. Statistical Analysis & Testing Randomness
 
 To validate the quality of RNGs, statistical tests such as **Kolmogorov-Smirnov (KS) test** and **histogram analysis** can be performed.
 
-#### **3.1 Kolmogorov-Smirnov Test for Uniformity**
+#### 3.1 Kolmogorov-Smirnov Test for Uniformity
 
 ```python
 from scipy.stats import kstest
@@ -50,7 +50,7 @@ ks_stat, p_value = kstest(samples, 'uniform')  # Perform KS test
 print(f"KS Test Statistic: {ks_stat}, P-value: {p_value}")
 ```
 
-#### **3.2 Visualization: Histogram and Distribution**
+#### 3.2 Visualization: Histogram and Distribution
 
 ```python
 import matplotlib.pyplot as plt
@@ -65,11 +65,11 @@ plt.show()
 
 ---
 
-### **4. Monte Carlo Simulations & Efficiency Enhancements**
+### 4. Monte Carlo Simulations & Efficiency Enhancements
 
 Monte Carlo methods use randomness to approximate deterministic problems.
 
-#### **4.1 Estimating π Using Monte Carlo**
+#### 4.1 Estimating π Using Monte Carlo
 
 ```python
 from numba import njit, prange
@@ -86,7 +86,7 @@ def monte_carlo_pi(n):
 print("Estimated Pi:", monte_carlo_pi(1000000))
 ```
 
-#### **4.2 Monte Carlo Convergence Analysis**
+#### 4.2 Monte Carlo Convergence Analysis
 
 ```python
 n_values = np.logspace(2, 6, num=20, dtype=int)
@@ -103,9 +103,9 @@ plt.show()
 
 ---
 
-### **5. Real-World Applications of Random Number Generators**
+### 5. Real-World Applications of Random Number Generators
 
-#### **5.1 Financial Modeling: Stock Price Simulation Using Brownian Motion**
+#### 5.1 Financial Modeling: Stock Price Simulation Using Brownian Motion
 
 ```python
 T, N, S0, mu, sigma = 1, 1000, 100, 0.05, 0.2
@@ -123,23 +123,25 @@ plt.show()
 
 ---
 
-### **6. Conclusion**
+### 6. Conclusion
 
 Random number generators are essential in numerous domains, from simulations to statistical modeling. By leveraging statistical tests and efficiency techniques like Monte Carlo convergence, computational accuracy and reliability are significantly enhanced.
 
 ---
 
-### **7. Exercises**
+### 7. Exercises
 
-#### **Basic Random Number Generation**
+#### Basic Random Number Generation
+
 1. Generate a 10x10 array of uniform random numbers and compute its mean and standard deviation.
 2. Generate 20 random integers between 1 and 10 and count their frequencies.
 
-#### **Statistical Distributions**
+#### Statistical Distributions
+
 1. Generate and plot samples from exponential and binomial distributions.
 2. Perform a KS test on a sample of normally distributed random numbers.
 
-#### **Advanced Applications**
+#### Advanced Applications
+
 1. Implement a Monte Carlo integration for \( \int_0^1 \sin(x)dx \) and compare its accuracy with numerical integration.
 2. Use simulated annealing with random numbers to find the minimum of a function.
-
