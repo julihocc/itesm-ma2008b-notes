@@ -6,7 +6,7 @@ Welcome to the **Numerical Methods for Non-linear Optimization** repository! Thi
 
 The course is divided into multiple modules, each containing **main topics** and **complementary topics** to provide a comprehensive understanding of numerical methods and their applications.
 
-### 📌 Module 1
+### 📌 Period 1
 #### **Main Topics:**
 - **Control Systems Fundamentals**
   - Definition and classification of control systems (open and closed)
@@ -38,7 +38,7 @@ The course is divided into multiple modules, each containing **main topics** and
 - **Root-Finding Methods**
   - Bisection, fixed-point, Newton-Raphson, secant, and Regula Falsi
 
-### 📌 Module 2
+### 📌 Period 2
 #### **Main Topics:**
 - **State-Space Equations and Stability Analysis**
   - State-space equations: formulation and solutions
@@ -75,7 +75,7 @@ The course is divided into multiple modules, each containing **main topics** and
   - Confidence intervals
   - Multi-threading
 
-### 📌 Module 3
+### 📌 Period 3
 #### **Main Topics:**
 - **PID Controller Design and Tuning**
   - Design of PID controllers and their implementation in discrete time
