@@ -143,5 +143,5 @@ Random number generators are essential in numerous domains, from simulations to 
 
 #### Advanced Applications
 
-1. Implement a Monte Carlo integration for \( \int_0^1 \sin(x)dx \) and compare its accuracy with numerical integration.
+1. Implement a Monte Carlo integration for $\int_0^1 \sin(x)dx$ and compare its accuracy with numerical integration.
 2. Use simulated annealing with random numbers to find the minimum of a function.
