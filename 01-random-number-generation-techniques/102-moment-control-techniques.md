@@ -68,7 +68,7 @@ Moment control techniques enforce constraints on moments (mean, variance, skewne
 #### 4.2 Example: Control Variates in Integration
 
 ```python
-import scipy.stats as stats
+from  scipy.integrate import quad
 
 def f(x):
     return np.exp(-x**2)  # Target function
