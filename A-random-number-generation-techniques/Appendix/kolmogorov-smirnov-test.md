@@ -91,5 +91,3 @@ print(f"KS Statistic: {ks_stat}, P-value: {p_value}")
 - Less powerful than parametric tests when assumptions hold (e.g., t-test for normal distributions).
 - May be **too sensitive** with large sample sizes, detecting minor differences that are not practically significant.
 - Less reliable for discrete data.
-
-Would you like an example with real data?

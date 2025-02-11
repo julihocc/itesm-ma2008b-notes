@@ -121,5 +121,3 @@ plt.show()
 - The **GBM model** captures both **deterministic growth** and **random market fluctuations**.
 - It assumes **continuous compounding of returns**, making it well-suited for **option pricing models**.
 - Real-world markets **deviate from GBM** due to **jumps, mean reversion, and heavy tails**, but it remains a widely used model in finance.
-
-Would you like to extend this with **Monte Carlo simulations** or incorporate **risk-neutral pricing**?
