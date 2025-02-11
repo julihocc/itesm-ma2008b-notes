@@ -129,5 +129,3 @@ plt.show()
 - **Good parameter selection** improves randomness and **maximizes the period**.
 - LCG is **fast**, but has **poor randomness properties** in high dimensions and is **not suitable for cryptography**.
 - **Modern alternatives**, such as **Mersenne Twister** or **Xoshiro**, are preferred for most applications.
-
-Would you like an **extension on testing randomness (e.g., Chi-square test, spectral test)?** 🚀
