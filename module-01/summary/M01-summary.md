@@ -37,6 +37,7 @@ print(f"KS Test Statistic: {ks_stat}, P-value: {p_value}")
 ```python
 from numba import njit, prange
 
+@njit(parallel=True)
 def monte_carlo_pi(n):
     count = 0
     for i in prange(n):
