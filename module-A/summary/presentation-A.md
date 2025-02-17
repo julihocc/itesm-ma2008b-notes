@@ -1,9 +1,3 @@
----
-marp: true
-paginate: true
-theme: default
----
-
 # Numerical Analysis for Non-Linear Optimization
 ## Module 1: Lecture Summaries
 
