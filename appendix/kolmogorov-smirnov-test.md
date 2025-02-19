@@ -6,50 +6,50 @@ The **Kolmogorov-Smirnov (KS) test** is a **non-parametric statistical test** us
 ### 1. **One-Sample KS Test**
 This test compares an empirical cumulative distribution function (**ECDF**) of a sample with a theoretical cumulative distribution function (**CDF**) of a reference distribution (e.g., normal, uniform). It tests the null hypothesis:
 
-\[
+$$
 H_0: F(x) = F_0(x) \quad \text{for all } x
-\]
+$$
 
 where:
-- \( F(x) \) is the empirical CDF of the sample.
-- \( F_0(x) \) is the CDF of the theoretical distribution.
+- $ F(x) $ is the empirical CDF of the sample.
+- $ F_0(x) $ is the CDF of the theoretical distribution.
 
 The **test statistic** is:
 
-\[
+$$
 D_n = \sup_x |F_n(x) - F_0(x)|
-\]
+$$
 
 where:
-- \( F_n(x) \) is the empirical CDF based on \( n \) observations.
-- \( \sup_x \) denotes the **supremum** (maximum absolute difference).
+- $ F_n(x) $ is the empirical CDF based on $ n $ observations.
+- $ \sup_x $ denotes the **supremum** (maximum absolute difference).
 
-A large \( D_n \) suggests that the sample does not follow \( F_0(x) \), and the null hypothesis is rejected.
+A large $ D_n $ suggests that the sample does not follow $ F_0(x) $, and the null hypothesis is rejected.
 
 ### 2. **Two-Sample KS Test**
 This test compares the empirical distributions of two independent samples, testing whether they come from the same underlying distribution. The null hypothesis is:
 
-\[
+$$
 H_0: F_1(x) = F_2(x) \quad \text{for all } x
-\]
+$$
 
 where:
-- \( F_1(x) \) and \( F_2(x) \) are the empirical CDFs of the two samples.
+- $ F_1(x) $ and $ F_2(x) $ are the empirical CDFs of the two samples.
 
 The **test statistic** is:
 
-\[
+$$
 D_{n,m} = \sup_x |F_n(x) - G_m(x)|
-\]
+$$
 
 where:
-- \( F_n(x) \) is the empirical CDF of the first sample (size \( n \)).
-- \( G_m(x) \) is the empirical CDF of the second sample (size \( m \)).
+- $ F_n(x) $ is the empirical CDF of the first sample (size $ n $).
+- $ G_m(x) $ is the empirical CDF of the second sample (size $ m $).
 
-A large \( D_{n,m} \) suggests that the two distributions differ significantly.
+A large $ D_{n,m} $ suggests that the two distributions differ significantly.
 
 ### 3. **Interpretation**
-- The **p-value** indicates the probability of observing the test statistic under \( H_0 \). A small p-value (e.g., \( p < 0.05 \)) suggests rejecting \( H_0 \).
+- The **p-value** indicates the probability of observing the test statistic under $ H_0 $. A small p-value (e.g., $ p < 0.05 $) suggests rejecting $ H_0 $.
 - The test is **sensitive to differences in both location and shape** between distributions.
 - It works well with **continuous distributions** but may be less reliable for discrete distributions.
 
