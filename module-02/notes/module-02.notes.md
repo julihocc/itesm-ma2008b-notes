@@ -10,9 +10,9 @@ Stochastic processes involve random variables that evolve over time. These proce
 
 A simple example is the **Wiener process** (Brownian motion), defined as:
 
-\[
+$$
 W(t) = \sum_{i=1}^{n} \Delta W_i, \quad \Delta W_i \sim \mathcal{N}(0, \Delta t)
-\]
+$$
 
 ### 🐍 **Example: Simulating a Stochastic Process**
 
@@ -42,9 +42,9 @@ The **Lyapunov exponent** measures the rate of separation of infinitesimally clo
 
 **Brownian motion** is modeled as:
 
-\[
+$$
 dX_t = \mu \, dt + \sigma \, dW_t
-\]
+$$
 
 ### 🐍 **Example: Brownian Motion Simulation**
 
@@ -71,9 +71,9 @@ The **binomial model** approximates the price of financial options. Over each ti
 
 The recursive formula for a European call option is:
 
-\[
+$$
 C_0 = e^{-rT} \mathbb{E}[C_T]
-\]
+$$
 
 ### 🐍 **Example: Binomial Model for Option Pricing**
 
@@ -106,15 +106,15 @@ print(f"Option Price: {price:.2f}")
 
 For stochastic differential equations:
 
-\[
+$$
 dX_t = \mu(X_t, t) \, dt + \sigma(X_t, t) \, dW_t
-\]
+$$
 
 The **Euler-Maruyama method** approximates solutions by:
 
-\[
+$$
 X_{t+\Delta t} = X_t + \mu(X_t, t)\Delta t + \sigma(X_t, t)\sqrt{\Delta t}Z
-\]
+$$
 
 where \( Z \sim \mathcal{N}(0,1) \).
 
