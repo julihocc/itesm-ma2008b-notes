@@ -1,10 +1,10 @@
-# 📚 Tutorial: Stochastic Processes and Numerical Simulation in Python
+# Tutorial: Stochastic Processes and Numerical Simulation in Python
 
 This tutorial covers essential concepts and practical examples related to stochastic processes and numerical simulations using Python. Topics include uncertainty in stochastic processes, Brownian motion, financial options pricing using the binomial model, and numerical solutions of stochastic differential equations (SDEs) via the Euler-Maruyama method.
 
 ---
 
-## 🌟 **Uncertainty and Stochastic Processes**
+## **Uncertainty and Stochastic Processes**
 
 Stochastic processes involve random variables that evolve over time. These processes are fundamental in modeling systems where uncertainty plays a crucial role, such as financial markets, physics, and biology.
 
@@ -14,7 +14,7 @@ $$
 W(t) = \sum_{i=1}^{n} \Delta W_i, \quad \Delta W_i \sim \mathcal{N}(0, \Delta t)
 $$
 
-### 🐍 **Example: Simulating a Stochastic Process**
+### **Example: Simulating a Stochastic Process**
 
 ```python
 import numpy as np
@@ -36,7 +36,7 @@ simulate_stochastic_process(T=1, N=1000, M=5)
 
 ---
 
-## 🌊 **Lyapunov Exponent and Brownian Motion**
+## **Lyapunov Exponent and Brownian Motion**
 
 The **Lyapunov exponent** measures the rate of separation of infinitesimally close trajectories. For stochastic systems, it helps in understanding system stability under random perturbations.
 
@@ -46,7 +46,7 @@ $$
 dX_t = \mu \, dt + \sigma \, dW_t
 $$
 
-### 🐍 **Example: Brownian Motion Simulation**
+### **Example: Brownian Motion Simulation**
 
 ```python
 def simulate_brownian_motion(T, N, M):
@@ -65,7 +65,7 @@ simulate_brownian_motion(T=1, N=1000, M=5)
 
 ---
 
-## 💰 **Financial Options and the Binomial Model**
+## **Financial Options and the Binomial Model**
 
 The **binomial model** approximates the price of financial options. Over each time step, the underlying asset price can move up or down by a certain factor.
 
@@ -75,7 +75,7 @@ $$
 C_0 = e^{-rT} \mathbb{E}[C_T]
 $$
 
-### 🐍 **Example: Binomial Model for Option Pricing**
+### **Example: Binomial Model for Option Pricing**
 
 ```python
 def binomial_option_pricing(S0, K, T, r, sigma, N, option_type='call'):
@@ -102,7 +102,7 @@ print(f"Option Price: {price:.2f}")
 
 ---
 
-## 🧮 **ODEs and Euler + Maruyama Method**
+## **ODEs and Euler + Maruyama Method**
 
 For stochastic differential equations:
 
@@ -118,7 +118,7 @@ $$
 
 where \( Z \sim \mathcal{N}(0,1) \).
 
-### 🐍 **Example: Euler-Maruyama Method for SDE**
+### **Example: Euler-Maruyama Method for SDE**
 
 ```python
 def euler_maruyama(mu, sigma, X0, T, N, M):
@@ -140,11 +140,11 @@ euler_maruyama(mu=0.1, sigma=0.2, X0=1, T=1, N=1000, M=5)
 
 ---
 
-## 🎲 **Simulation of Sample Paths and Convergence**
+## **Simulation of Sample Paths and Convergence**
 
 Simulating sample paths involves generating multiple realizations of a stochastic process to estimate statistical properties. **Convergence** is evaluated by refining the time discretization and observing if the numerical solution stabilizes.
 
-### 🐍 **Example: Convergence of Euler-Maruyama Method**
+### **Example: Convergence of Euler-Maruyama Method**
 
 ```python
 def convergence_analysis(mu, sigma, X0, T, N_values, M):
@@ -170,7 +170,7 @@ convergence_analysis(mu=0.1, sigma=0.2, X0=1, T=1, N_values=[100, 500, 1000, 500
 
 ---
 
-## 🎯 **Conclusion**
+## **Conclusion**
 
 This tutorial introduced key stochastic simulation concepts using Python, including:
 
