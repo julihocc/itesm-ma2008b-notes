@@ -1,12 +1,12 @@
-### **Brownian Motion: A Comprehensive Explanation**
+# **Brownian Motion: A Comprehensive Explanation**
 
-#### **1. Introduction to Brownian Motion**
+## **1. Introduction to Brownian Motion**
 
 **Brownian motion**, also known as a **Wiener process**, is a fundamental stochastic process that plays a critical role in various fields such as physics, finance, and mathematics. It models the random movement of particles suspended in a fluid, originally observed by botanist **Robert Brown** in 1827. In the context of stochastic calculus, Brownian motion provides the foundation for modeling continuous-time random processes.
 
 ---
 
-#### **2. Definition of Brownian Motion**
+## **2. Definition of Brownian Motion**
 
 A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the following properties:
 
@@ -36,7 +36,7 @@ A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the 
 
 ---
 
-#### **3. Mathematical Properties of Brownian Motion**
+## **3. Mathematical Properties of Brownian Motion**
 
 - **Expectation and Variance:**
   ```math
@@ -62,7 +62,7 @@ A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the 
 
 ---
 
-#### **4. Simulation of Brownian Motion in Python**
+## **4. Simulation of Brownian Motion in Python**
 
 Brownian motion can be simulated using the properties of normally distributed increments. Below is a Python implementation:
 
@@ -100,7 +100,7 @@ plt.show()
 
 ---
 
-#### **5. Applications of Brownian Motion**
+## **5. Applications of Brownian Motion**
 
 1. **Finance:**  
    Brownian motion underpins the **Geometric Brownian Motion (GBM)** model, used to model stock price dynamics in the **Black–Scholes** option pricing framework.
@@ -119,7 +119,7 @@ plt.show()
 
 ---
 
-#### **6. Key Insights and Properties**
+## **6. Key Insights and Properties**
 
 - **Path Behavior:**  
   While Brownian motion paths are continuous, they are **nowhere differentiable**, meaning they are extremely irregular and exhibit fractal-like behavior.
@@ -136,7 +136,7 @@ plt.show()
 
 ---
 
-#### **7. Variants of Brownian Motion**
+## **7. Variants of Brownian Motion**
 
 1. **Geometric Brownian Motion (GBM):**  
    Models processes where the logarithm of the variable follows Brownian motion:
@@ -152,6 +152,6 @@ plt.show()
 
 ---
 
-#### **8. Conclusion**
+## **8. Conclusion**
 
 Brownian motion is a cornerstone concept in stochastic processes, characterized by its continuous, yet highly irregular paths. It models the evolution of systems influenced by randomness and is fundamental to fields ranging from financial mathematics to physics. Its properties, such as independent increments, normal distribution, and the Markov and martingale characteristics, make it an essential building block in stochastic calculus and modern probability theory.
