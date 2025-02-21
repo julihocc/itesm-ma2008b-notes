@@ -15,8 +15,8 @@ Antithetic variables are a variance reduction technique used in Monte Carlo simu
 ### 🔍 **2. Conceptual Understanding**
 
 #### ⚡ **Key Idea: Negative Correlation**
-Given a random variable \( U \sim \text{Uniform}(0, 1) \), its antithetic counterpart is \( 1 - U \).  
-When estimating \( E[f(U)] \), instead of using:
+Given a random variable $U \sim \text{Uniform}(0, 1)$, its antithetic counterpart is $1 - U$.  
+When estimating $E[f(U)]$, instead of using:
 ````math
 \frac{1}{N} \sum_{i=1}^N f(U_i)
 ````
@@ -25,7 +25,7 @@ we use:
 \frac{1}{2N} \sum_{i=1}^N [f(U_i) + f(1 - U_i)]
 ````
 
-This reduces variance because high values in \( f(U_i) \) are likely to be offset by low values in \( f(1 - U_i) \).
+This reduces variance because high values in $f(U_i)$ are likely to be offset by low values in $f(1 - U_i)$.
 
 ---
 
@@ -36,7 +36,7 @@ This reduces variance because high values in \( f(U_i) \) are likely to be offse
 
 ---
 
-### 🧑‍💻 **4. Python Example: Estimating \( \pi \) Using Monte Carlo with Antithetic Variables**
+### 🧑‍💻 **4. Python Example: Estimating $ \pi $ Using Monte Carlo with Antithetic Variables**
 
 #### **💬 Without Antithetic Variables:**
 ```python
@@ -99,7 +99,7 @@ The estimate using antithetic variables typically shows lower variance and highe
 ---
 
 ### ✍️ **7. Exercises**
-1. Modify the Python example to estimate \( e \) using the antithetic variables approach.
+1. Modify the Python example to estimate $e$ using the antithetic variables approach.
 2. Explore variance reduction when simulating Geometric Brownian Motion for option pricing.
 3. Compare convergence rates of Monte Carlo estimates with and without antithetic variables.
 
@@ -109,4 +109,3 @@ The estimate using antithetic variables typically shows lower variance and highe
 - Monte Carlo Methods in Financial Engineering — Paul Glasserman
 - Variance Reduction Techniques — Rubinstein and Kroese  
 - *Python Libraries*: `numpy`, `scipy`, `matplotlib` for further simulation and visualization tasks.
-`
