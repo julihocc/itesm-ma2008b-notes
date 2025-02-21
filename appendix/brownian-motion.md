@@ -8,16 +8,16 @@
 
 #### **2. Definition of Brownian Motion**
 
-A **standard Brownian motion** \( W_t \) is a stochastic process that satisfies the following properties:
+A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the following properties:
 
 1. **Initial Value:**
    ```math
    W_0 = 0
    ```
-   The process starts at zero at time \( t = 0 \).
+   The process starts at zero at time $t = 0$.
 
 2. **Independent Increments:**
-   For \( 0 \leq s < t \), the increment \( W_t - W_s \) is independent of the process history before time \( s \).
+   For $0 \leq s < t$, the increment $W_t - W_s$ is independent of the process history before time $s$.
 
 3. **Stationary Increments:**
    The increments are normally distributed with mean zero and variance proportional to the time increment:
@@ -26,7 +26,7 @@ A **standard Brownian motion** \( W_t \) is a stochastic process that satisfies 
    ```
 
 4. **Continuity of Paths:**
-   The function \( t \mapsto W_t \) is continuous with probability one, although the paths are nowhere differentiable.
+   The function $t \mapsto W_t$ is continuous with probability one, although the paths are nowhere differentiable.
 
 5. **Gaussian Increments:**
    The increments are normally distributed:
@@ -58,7 +58,7 @@ A **standard Brownian motion** \( W_t \) is a stochastic process that satisfies 
   ```math
   \mathbb{E}[W_t \mid \mathcal{F}_s] = W_s \quad \text{for} \quad s < t
   ```
-  Here, \( \mathcal{F}_s \) represents the information available up to time \( s \).
+  Here, $\mathcal{F}_s$ represents the information available up to time $s$.
 
 ---
 
@@ -125,7 +125,7 @@ plt.show()
   While Brownian motion paths are continuous, they are **nowhere differentiable**, meaning they are extremely irregular and exhibit fractal-like behavior.
 
 - **Scaling Property:**  
-  For any constant \( c > 0 \):
+  For any constant $c > 0$:
   ```math
   W_{ct} \overset{d}{=} \sqrt{c} W_t
   ```
