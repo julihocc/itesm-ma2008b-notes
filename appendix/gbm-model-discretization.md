@@ -9,9 +9,9 @@ The **Geometric Brownian Motion (GBM)** is a widely used stochastic process in f
 
 The **continuous-time stochastic differential equation (SDE)** for the GBM is given by:
 
-\[
+$$
 dS_t = \mu S_t \, dt + \sigma S_t \, dW_t
-\]
+$$
 
 where:  
 - \( S_t \): Stock price at time \( t \).  
@@ -25,27 +25,27 @@ where:
 
 To simulate GBM numerically, we discretize the continuous SDE using the **Euler-Maruyama method**, resulting in:
 
-\[
+$$
 S_{t+\Delta t} = S_t \exp\left( \left( \mu - \frac{1}{2}\sigma^2 \right)\Delta t + \sigma \sqrt{\Delta t} \, Z_t \right)
-\]
+$$
 
 where \( Z_t \sim N(0,1) \) (standard normal distribution).
 
 #### **Key Steps in Derivation:**
 1. **Log Transformation:**
-   \[
+   $$
    d(\ln S_t) = \left(\mu - \frac{1}{2}\sigma^2\right) dt + \sigma \, dW_t
-   \]
+   $$
 
 2. **Integration Over Time Interval:**
-   \[
+   $$
    \ln(S_{t+\Delta t}) - \ln(S_t) = \left(\mu - \frac{1}{2}\sigma^2\right)\Delta t + \sigma \sqrt{\Delta t} \, Z_t
-   \]
+   $$
 
 3. **Exponential Transformation:**
-   \[
+   $$
    S_{t+\Delta t} = S_t \exp\left( \left(\mu - \frac{1}{2}\sigma^2\right)\Delta t + \sigma \sqrt{\Delta t} \, Z_t \right)
-   \]
+   $$
 
 ---
 
