@@ -25,15 +25,6 @@ A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the 
    W_t - W_s \sim \mathcal{N}(0, t - s)
    ```
 
-4. **Continuity of Paths:**
-   The function $t \mapsto W_t$ is continuous with probability one, although the paths are nowhere differentiable.
-
-5. **Gaussian Increments:**
-   The increments are normally distributed:
-   ```math
-   W_t - W_s \sim N(0, t - s)
-   ```
-
 ---
 
 ## **3. Mathematical Properties of Brownian Motion**
@@ -60,6 +51,9 @@ A **standard Brownian motion** $W_t$ is a stochastic process that satisfies the 
   ```
   Here, $\mathcal{F}_s$ represents the information available up to time $s$.
 
+- **Continuity of Paths:**
+   The function $t \mapsto W_t$ is continuous with probability one, although the paths are nowhere differentiable.
+
 ---
 
 ## **4. Simulation of Brownian Motion in Python**
@@ -71,17 +65,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parameters
-T = 1.0       # Total time
-N = 1000      # Number of time steps
-dt = T / N    # Time step size
-n_paths = 5   # Number of paths to simulate
+T = 1.0  # Total time
+N = 1000  # Number of time steps
+dt = T / N  # Time step size
+n_paths = 5  # Number of paths to simulate
 
 # Time vector
-time = np.linspace(0, T, N+1)
+time = np.linspace(0, T, N + 1)
 
 # Simulate Brownian motion paths
 np.random.seed(42)  # For reproducibility
-W = np.zeros((n_paths, N+1))
+W = np.zeros((n_paths, N + 1))
 for i in range(n_paths):
     increments = np.random.normal(loc=0.0, scale=np.sqrt(dt), size=N)
     W[i, 1:] = np.cumsum(increments)
@@ -89,10 +83,10 @@ for i in range(n_paths):
 # Plot the simulated paths
 plt.figure(figsize=(10, 6))
 for i in range(n_paths):
-    plt.plot(time, W[i], label=f'Path {i+1}')
-plt.title('Simulated Brownian Motion Paths')
-plt.xlabel('Time')
-plt.ylabel('W(t)')
+    plt.plot(time, W[i], label=f"Path {i + 1}")
+plt.title("Simulated Brownian Motion Paths")
+plt.xlabel("Time")
+plt.ylabel("W(t)")
 plt.grid(True)
 plt.legend()
 plt.show()
