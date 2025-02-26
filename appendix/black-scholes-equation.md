@@ -2,7 +2,7 @@
 
 The **Black-Scholes equation** is a partial differential equation (PDE) that describes the price dynamics of a financial derivative, specifically European call and put options. The equation plays a fundamental role in financial mathematics, particularly in the valuation of options and other financial instruments.
 
-### **Form of the Black-Scholes Equation**
+## **Form of the Black-Scholes Equation**
 
 The general form of the equation is:
 
@@ -17,7 +17,7 @@ where:
 - $S$: the price of the underlying asset.
 - $t$: time.
 
-### **Key Concepts Behind the Equation**
+## **Key Concepts Behind the Equation**
 1. **No-Arbitrage Principle**: The Black-Scholes model assumes that there is no opportunity for riskless profit (arbitrage) in the market. This condition ensures that the derivative price is unique.
    
 2. **Stochastic Process for Asset Prices**: The underlying asset price is modeled using a stochastic differential equation following a geometric Brownian motion:
@@ -34,7 +34,7 @@ where:
    ```
    where $K$ is the strike price.
 
-### **Solution and Interpretation**
+## **Solution and Interpretation**
 The **Black-Scholes formula** for a European call option is:
 ```math
 C(S, t) = S_0 \Phi(d_1) - K e^{-r(T-t)} \Phi(d_2)
@@ -52,12 +52,12 @@ d_2 = d_1 - \sigma \sqrt{T-t}
 - $K$ is the strike price.
 - $T$ is the time to expiration.
 
-### **Importance and Applications**
+## **Importance and Applications**
 - The Black-Scholes equation provides a closed-form solution for pricing European-style options, which cannot be exercised before the expiration date.
 - It revolutionized financial markets by providing a systematic method for pricing derivatives, leading to the growth of options markets.
 - The model is also used for risk management and financial decision-making.
 
-### **Limitations**
+## **Limitations**
 - Assumes constant volatility and interest rates.
 - Assumes a frictionless market without transaction costs or taxes.
 - Does not account for dividends paid by the underlying asset.
