@@ -1,50 +1,196 @@
 # Numerical Analysis for Non-Linear Optimization | Module 1
 
 ## Table of Contents
-1. **Introduction**  
-2. **Pseudo and Quasi-Random Numbers**  
-   2.1 [Pseudo-Random Numbers (PRNs)](#21-pseudo-random-numbers-prns)  
-   2.2 [Quasi-Random Numbers (QRNs)](#22-quasi-random-numbers-qrns)  
-   2.3 [Applications of PRNs and QRNs](#23-applications-of-prns-and-qrns)  
-   2.4 [Comparison of PRNs and QRNs](#24-comparison-of-prns-and-qrns)  
-   2.5 [Exercises for Section 2](#25-exercises-for-section-2)  
-3. **Random Number Generators: Implementation and Applications**  
-   3.1 [Using NumPy’s Modern PRNG API](#31-using-numpys-modern-prng-api)  
-   3.2 [Generating Secure Random Numbers](#32-generating-secure-random-numbers)  
-4. **Statistical Analysis & Testing Randomness**  
-   4.1 [Kolmogorov-Smirnov Test for Uniformity](#41-kolmogorov-smirnov-test-for-uniformity)  
-   4.2 [Visualization: Histogram and Distribution](#42-visualization-histogram-and-distribution)  
-5. **Monte Carlo Simulations & Efficiency Enhancements**  
-   5.1 [Estimating π Using Monte Carlo](#51-estimating-π-using-monte-carlo)  
-   5.2 [Monte Carlo Convergence Analysis](#52-monte-carlo-convergence-analysis)  
-6. **Real-World Applications of Random Number Generators**  
-   6.1 [Financial Modeling: Stock Price Simulation Using Brownian Motion](#61-financial-modeling-stock-price-simulation-using-brownian-motion)  
-7. **Best Samples, Antithetic Variables, and Moment Control Techniques**  
+1. [Introduction](#1-introduction)  
+2. [Brownian Motion: A Comprehensive Explanation](#2-brownian-motion-a-comprehensive-explanation)  
+   2.1 [Introduction to Brownian Motion](#21-introduction-to-brownian-motion)  
+   2.2 [Definition of Brownian Motion](#22-definition-of-brownian-motion)  
+   2.3 [Mathematical Properties of Brownian Motion](#23-mathematical-properties-of-brownian-motion)  
+   2.4 [Simulation of Brownian Motion in Python](#24-simulation-of-brownian-motion-in-python)  
+   2.5 [Applications of Brownian Motion](#25-applications-of-brownian-motion)  
+   2.6 [Key Insights and Properties](#26-key-insights-and-properties)  
+   2.7 [Variants of Brownian Motion](#27-variants-of-brownian-motion)  
+3. [Pseudo and Quasi-Random Numbers](#3-pseudo-and-quasi-random-numbers)  
+   3.1 [Pseudo-Random Numbers (PRNs)](#31-pseudo-random-numbers-prns)  
+   3.2 [Quasi-Random Numbers (QRNs)](#32-quasi-random-numbers-qrns)  
+   3.3 [Applications of PRNs and QRNs](#33-applications-of-prns-and-qrns)  
+   3.4 [Comparison of PRNs and QRNs](#34-comparison-of-prns-and-qrns)  
+   3.5 [Exercises for Section 3](#35-exercises-for-section-3)  
+4. [Random Number Generators: Implementation and Applications](#4-random-number-generators-implementation-and-applications)  
+   4.1 [Using NumPy’s Modern PRNG API](#41-using-numpys-modern-prng-api)  
+   4.2 [Generating Secure Random Numbers](#42-generating-secure-random-numbers)  
+5. [Statistical Analysis & Testing Randomness](#5-statistical-analysis--testing-randomness)  
+   5.1 [Kolmogorov-Smirnov Test for Uniformity](#51-kolmogorov-smirnov-test-for-uniformity)  
+   5.2 [Visualization: Histogram and Distribution](#52-visualization-histogram-and-distribution)  
+6. [Monte Carlo Simulations & Efficiency Enhancements](#6-monte-carlo-simulations--efficiency-enhancements)  
+   6.1 [Estimating π Using Monte Carlo](#61-estimating-π-using-monte-carlo)  
+   6.2 [Monte Carlo Convergence Analysis](#62-monte-carlo-convergence-analysis)  
+7. [Best Samples, Antithetic Variables, and Moment Control Techniques](#7-best-samples-antithetic-variables-and-moment-control-techniques)  
    7.1 [Best Samples: Enhancing Estimation Accuracy](#71-best-samples-enhancing-estimation-accuracy)  
    7.2 [Antithetic Variables: Correlation for Variance Reduction](#72-antithetic-variables-correlation-for-variance-reduction)  
-8. **Applications in Monte Carlo Simulations**  
-   8.1 [Estimating the Price of a European Call Option (Variance Reduction)](#81-estimating-the-price-of-a-european-call-option-variance-reduction)  
-9. **Conclusion**  
-10. **Consolidated Exercises**  
+8. [Real-World Applications of Random Number Generators](#8-real-world-applications-of-random-number-generators)  
+   8.1 [Financial Modeling: Stock Price Simulation Using Brownian Motion](#81-financial-modeling-stock-price-simulation-using-brownian-motion)  
+9. [Applications in Monte Carlo Simulations](#9-applications-in-monte-carlo-simulations)  
+   9.1 [Estimating the Price of a European Call Option (Variance Reduction)](#91-estimating-the-price-of-a-european-call-option-variance-reduction)  
+10. [Conclusion](#10-conclusion)  
+11. [Consolidated Exercises](#11-consolidated-exercises)  
 
 ---
 
 ## 1. Introduction
 
-Monte Carlo methods and random number generators are foundational to **scientific computing**, **optimization**, and **risk analysis**. These techniques let us approximate deterministic problems via stochastic sampling, and they also appear in areas like **finance**, **engineering**, and **machine learning**.  
+Monte Carlo methods and random number generation are foundational to **scientific computing**, **optimization**, and **risk analysis**. These techniques let us approximate deterministic problems via stochastic sampling, and they also appear in areas like **finance**, **engineering**, and **machine learning**.
 
-In the following sections, we cover:  
+In the following sections, we cover:
+
+- A **comprehensive explanation of Brownian motion** and its simulation.  
 - The distinction between **pseudo-random** and **quasi-random** numbers.  
 - Practical implementation of random number generation using **NumPy** and Python’s **`secrets`** module.  
 - Methods for validating randomness (e.g., **Kolmogorov-Smirnov** tests, histograms).  
 - Applications of **Monte Carlo simulations** for estimating constants (like \(\pi\)) and solving real-world problems.  
-- Advanced techniques for **variance reduction** (e.g., **antithetic variables**, **best sample selection**, **moment control**).  
+- Advanced techniques for **variance reduction** (e.g., **antithetic variables**, **best sample selection**, **moment control**).
 
 ---
 
-## 2. Pseudo and Quasi-Random Numbers
+## 2. Brownian Motion: A Comprehensive Explanation
 
-### 2.1 Pseudo-Random Numbers (PRNs)
+### 2.1 Introduction to Brownian Motion
+
+**Brownian motion**, also known as a **Wiener process**, is a fundamental stochastic process that plays a critical role in various fields—especially **physics**, **finance**, and **mathematics**. It models the random movement of particles suspended in a fluid, originally observed by botanist **Robert Brown** in 1827. In stochastic calculus, Brownian motion provides the foundation for modeling continuous-time random processes.
+
+---
+
+### 2.2 Definition of Brownian Motion
+
+A **standard Brownian motion** \(W_t\) is a stochastic process satisfying:
+
+1. **Initial Value**:  
+   \[
+   W_0 = 0.
+   \]
+
+2. **Independent Increments**:  
+   For \(0 \leq s < t\), the increment \(W_t - W_s\) is independent of the process history before time \(s\).
+
+3. **Stationary Increments**:  
+   \[
+   W_t - W_s \sim \mathcal{N}(0, t - s).
+   \]  
+   Increments are normally distributed with mean 0 and variance proportional to \((t - s)\).
+
+---
+
+### 2.3 Mathematical Properties of Brownian Motion
+
+- **Expectation and Variance**:  
+  \[
+  \mathbb{E}[W_t] = 0, \quad \text{Var}(W_t) = t.
+  \]
+
+- **Covariance Structure**:  
+  \[
+  \text{Cov}(W_s, W_t) = \min(s, t).
+  \]
+
+- **Markov Property**:  
+  Brownian motion is Markovian; the future depends only on the current state.
+
+- **Martingale Property**:  
+  \[
+  \mathbb{E}[W_t \mid \mathcal{F}_s] = W_s \quad (s < t).
+  \]
+
+- **Continuity of Paths**:  
+  Brownian motion paths are continuous with probability 1, but nowhere differentiable.
+
+---
+
+### 2.4 Simulation of Brownian Motion in Python
+
+Below is a simple Python script to simulate multiple paths of standard Brownian motion:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+T = 1.0      # Total time
+N = 1000     # Number of time steps
+dt = T / N   # Time step size
+n_paths = 5  # Number of paths to simulate
+
+# Time vector
+time = np.linspace(0, T, N + 1)
+
+# Simulate Brownian motion paths
+np.random.seed(42)  # For reproducibility
+W = np.zeros((n_paths, N + 1))
+for i in range(n_paths):
+    increments = np.random.normal(loc=0.0, scale=np.sqrt(dt), size=N)
+    W[i, 1:] = np.cumsum(increments)
+
+# Plot the simulated paths
+plt.figure(figsize=(10, 6))
+for i in range(n_paths):
+    plt.plot(time, W[i], label=f"Path {i + 1}")
+plt.title("Simulated Brownian Motion Paths")
+plt.xlabel("Time")
+plt.ylabel("W(t)")
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+---
+
+### 2.5 Applications of Brownian Motion
+
+1. **Finance**:  
+   Underpins the **Geometric Brownian Motion (GBM)** model, used in the **Black–Scholes** option pricing framework.  
+2. **Physics**:  
+   Describes the random motion of particles suspended in a fluid.  
+3. **Mathematics**:  
+   Fundamental example in **stochastic calculus** and **modern probability** theory.  
+4. **Biology**:  
+   Models population dynamics under random fluctuations.  
+5. **Engineering**:  
+   Used in control systems and signal processing to model noise and uncertainties.
+
+---
+
+### 2.6 Key Insights and Properties
+
+- **Path Behavior**:  
+  Continuous but nowhere differentiable, exhibiting fractal-like characteristics.  
+- **Scaling Property**:  
+  \[
+  W_{ct} \overset{d}{=} \sqrt{c}\,W_t,
+  \]  
+  showing how Brownian motion scales in time and space.  
+- **Reflection Principle**:  
+  Relates the distribution of the maximum of Brownian motion to its endpoint distribution.
+
+---
+
+### 2.7 Variants of Brownian Motion
+
+1. **Geometric Brownian Motion (GBM)**:  
+   \[
+   dS_t = \mu S_t\,dt + \sigma S_t\,dW_t,
+   \]  
+   commonly used for stock prices in finance.
+
+2. **Fractional Brownian Motion**:  
+   Incorporates memory effects, so increments are not independent.
+
+3. **Brownian Bridge**:  
+   A Brownian motion conditioned to return to a specific value at a future time.
+
+---
+
+## 3. Pseudo and Quasi-Random Numbers
+
+### 3.1 Pseudo-Random Numbers (PRNs)
 
 **Pseudo-random numbers** are generated by deterministic algorithms that aim to mimic randomness. Although they pass many statistical tests for randomness, they do have a period and are entirely determined by an initial *seed*.
 
@@ -54,13 +200,10 @@ In the following sections, we cover:
 - **Uniform distribution**: Most PRNGs produce values in \([0,1)\).  
 
 **Common PRNG Algorithms**  
-- **Linear Congruential Generator (LCG)**:  
-  \[
-  X_{n+1} = (aX_n + c) \bmod m.
-  \]  
-- **Mersenne Twister**: Default PRNG in NumPy (period \(\approx 2^{19937}-1\)).  
-- **Xoshiro / SplitMix**: Modern, high-quality PRNGs.  
-- **PCG (Permuted Congruential Generator)**: Combines speed and excellent statistical properties.
+- **Linear Congruential Generator (LCG)**  
+- **Mersenne Twister** (default in NumPy)  
+- **Xoshiro / SplitMix**  
+- **PCG (Permuted Congruential Generator)**  
 
 #### Example: PRNG in Python
 ```python
@@ -74,19 +217,19 @@ print(random_numbers)
 
 ---
 
-### 2.2 Quasi-Random Numbers (QRNs)
+### 3.2 Quasi-Random Numbers (QRNs)
 
 **Quasi-random numbers** are low-discrepancy sequences that fill the sample space more uniformly than typical pseudo-random sequences. They are powerful in numerical integration and high-dimensional sampling, as they reduce clustering and can improve convergence rates.
 
 **Key Characteristics**  
-- **Low discrepancy**: Points are more uniformly spread.  
-- **Deterministic**: But no conventional “period” like PRNGs.  
-- **Ideal for integration/optimization**: Especially in moderately high dimensions.
+- **Low discrepancy**  
+- **Deterministic** (no period)  
+- **Ideal for integration/optimization**
 
 **Common QRN Sequences**  
-- **Sobol**: Often used for high-dimensional integrals.  
-- **Halton**: Good for lower dimensions.  
-- **Faure**: Similar to Halton but sometimes more uniform.
+- **Sobol**  
+- **Halton**  
+- **Faure**
 
 #### Example: Sobol in Python
 ```python
@@ -100,7 +243,7 @@ print(qrn_points)
 
 ---
 
-### 2.3 Applications of PRNs and QRNs
+### 3.3 Applications of PRNs and QRNs
 
 #### Monte Carlo Integration with PRNs
 ```python
@@ -108,11 +251,6 @@ def monte_carlo_integral_prn(f, a, b, n):
     rng = np.random.default_rng(42)
     x = rng.uniform(a, b, n)  
     return (b - a) * np.mean(f(x))
-
-def f(x):
-    return np.exp(-x**2)
-
-print("MC Integral (PRN):", monte_carlo_integral_prn(f, 0, 1, 10000))
 ```
 
 #### Monte Carlo Integration with QRNs
@@ -121,10 +259,8 @@ from scipy.stats.qmc import Halton
 
 def monte_carlo_integral_qrn(f, a, b, n):
     halton = Halton(d=1, scramble=False)
-    x = halton.random(n) * (b - a) + a  # Scale to [a,b]
+    x = halton.random(n) * (b - a) + a
     return (b - a) * np.mean(f(x))
-
-print("MC Integral (QRN):", monte_carlo_integral_qrn(f, 0, 1, 10000))
 ```
 
 #### Quasi-Random Sampling for Optimization
@@ -134,14 +270,11 @@ from scipy.stats.qmc import Sobol
 def sobol_sampling(dim, num_samples):
     sampler = Sobol(d=dim, scramble=False)
     return sampler.random(n=num_samples)
-
-samples = sobol_sampling(3, 10)  # 10 samples in 3D
-print(samples)
 ```
 
 ---
 
-### 2.4 Comparison of PRNs and QRNs
+### 3.4 Comparison of PRNs and QRNs
 
 | Feature                     | Pseudo-Random Numbers | Quasi-Random Numbers      |
 |-----------------------------|-----------------------|---------------------------|
@@ -153,7 +286,7 @@ print(samples)
 
 ---
 
-### 2.5 Exercises for Section 2
+### 3.5 Exercises for Section 3
 
 1. **Implement an LCG**: Generate 1000 pseudo-random numbers using a basic **Linear Congruential Generator** and plot their histogram.  
 2. **Halton vs. Sobol**: Generate and plot **Halton** and **Sobol** sequences in 2D. Compare their distribution visually.  
@@ -161,15 +294,13 @@ print(samples)
    - Use PRNs (Mersenne Twister) to compute \(\int_0^1 \sin(x)\,dx\).  
    - Use a Quasi-Random sequence (Sobol or Halton) for the same integral.  
    - Compare how quickly each approach converges.  
-4. **High-Dimensional Optimization**: Use **QRNs** (e.g., Sobol) to optimize a 5D function (like a Rosenbrock variant) and compare with a purely random search in terms of required samples/time.
+4. **High-Dimensional Optimization**: Use **QRNs** (e.g., Sobol) to optimize a 5D function and compare with purely random search in terms of required samples/time.
 
 ---
 
-## 3. Random Number Generators: Implementation and Applications
+## 4. Random Number Generators: Implementation and Applications
 
-While section 2 introduced PRNs vs. QRNs conceptually, this section focuses on **practical usage** in Python’s standard toolchain.
-
-### 3.1 Using NumPy’s Modern PRNG API
+### 4.1 Using NumPy’s Modern PRNG API
 ```python
 import numpy as np
 
@@ -179,7 +310,7 @@ rand_nums = rng.random(10)
 print(rand_nums)
 ```
 
-### 3.2 Generating Secure Random Numbers
+### 4.2 Generating Secure Random Numbers
 ```python
 import secrets
 import string
@@ -193,11 +324,9 @@ print("Secure Password:", generate_password())
 
 ---
 
-## 4. Statistical Analysis & Testing Randomness
+## 5. Statistical Analysis & Testing Randomness
 
-To ensure generated numbers behave “randomly,” we use statistical tests and visual methods.
-
-### 4.1 Kolmogorov-Smirnov Test for Uniformity
+### 5.1 Kolmogorov-Smirnov Test for Uniformity
 ```python
 from scipy.stats import kstest
 
@@ -206,7 +335,7 @@ ks_stat, p_value = kstest(samples, "uniform")
 print(f"KS Test Statistic: {ks_stat}, P-value: {p_value}")
 ```
 
-### 4.2 Visualization: Histogram and Distribution
+### 5.2 Visualization: Histogram and Distribution
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -219,11 +348,11 @@ plt.show()
 
 ---
 
-## 5. Monte Carlo Simulations & Efficiency Enhancements
+## 6. Monte Carlo Simulations & Efficiency Enhancements
 
 Monte Carlo methods use randomness to approximate deterministic problems.
 
-### 5.1 Estimating π Using Monte Carlo
+### 6.1 Estimating π Using Monte Carlo
 ```python
 from numba import njit, prange
 import numpy as np
@@ -236,11 +365,9 @@ def monte_carlo_pi(n):
         if x**2 + y**2 <= 1:
             count += 1
     return (count / n) * 4
-
-print("Estimated Pi:", monte_carlo_pi(1_000_000))
 ```
 
-### 5.2 Monte Carlo Convergence Analysis
+### 6.2 Monte Carlo Convergence Analysis
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -260,9 +387,34 @@ plt.show()
 
 ---
 
-## 6. Real-World Applications of Random Number Generators
+## 7. Best Samples, Antithetic Variables, and Moment Control Techniques
 
-### 6.1 Financial Modeling: Stock Price Simulation Using Brownian Motion
+### 7.1 Best Samples: Enhancing Estimation Accuracy
+- **Importance Sampling**: Weighs samples by their PDF to reduce variance in regions of interest.  
+- **Stratified Sampling**: Divides the domain into strata, sampling each proportionally.  
+- **Quasi-Random Sequences**: Reduce clustering and often improve integration efficiency.
+
+### 7.2 Antithetic Variables: Correlation for Variance Reduction
+
+By pairing each random draw \(X_i\) with a negatively correlated draw \(X_i^*\), you can reduce variance.
+
+```python
+import numpy as np
+
+def monte_carlo_pi_antithetic(n):
+    u = np.random.random(n // 2)
+    v = 1 - u
+    x = np.concatenate((u, v))
+    y = np.random.random(n)
+    inside_circle = (x**2 + y**2) <= 1
+    return (np.sum(inside_circle) / n) * 4
+```
+
+---
+
+## 8. Real-World Applications of Random Number Generators
+
+### 8.1 Financial Modeling: Stock Price Simulation Using Brownian Motion
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -279,40 +431,13 @@ plt.ylabel("Stock Price")
 plt.title("Stock Price Simulation (Geometric Brownian Motion)")
 plt.show()
 ```
+> **Note**: For more on Brownian motion itself, see [Section 2](#2-brownian-motion-a-comprehensive-explanation).
 
 ---
 
-## 7. Best Samples, Antithetic Variables, and Moment Control Techniques
+## 9. Applications in Monte Carlo Simulations
 
-### 7.1 Best Samples: Enhancing Estimation Accuracy
-- **Importance Sampling**: Weighs samples by their PDF to reduce variance in regions of interest.  
-- **Stratified Sampling**: Divides the domain into strata, sampling each proportionally.  
-- **Quasi-Random Sequences**: (See Section 2.2) Reduce clustering and often improve integration efficiency.
-
-### 7.2 Antithetic Variables: Correlation for Variance Reduction
-
-By pairing each random draw \(X_i\) with a negatively correlated draw \(X_i^*\), you can reduce variance.  
-**Example**: \(X_i^* = 1 - X_i\) for a uniform distribution.
-
-```python
-import numpy as np
-
-def monte_carlo_pi_antithetic(n):
-    u = np.random.random(n // 2)
-    v = 1 - u
-    x = np.concatenate((u, v))
-    y = np.random.random(n)
-    inside_circle = (x**2 + y**2) <= 1
-    return (np.sum(inside_circle) / n) * 4
-
-print("Estimated Pi (Antithetic):", monte_carlo_pi_antithetic(1_000_000))
-```
-
----
-
-## 8. Applications in Monte Carlo Simulations
-
-### 8.1 Estimating the Price of a European Call Option (Variance Reduction)
+### 9.1 Estimating the Price of a European Call Option (Variance Reduction)
 ```python
 import numpy as np
 
@@ -330,7 +455,7 @@ def monte_carlo_european_call(S0, K, T, r, sigma, num_simulations):
     sem = np.std(discounted_payoff) / np.sqrt(num_simulations)
     return mean_price, sem
 
-# Parameters
+# Example
 S0, K, T, r, sigma, num_sims = 100, 100, 1, 0.05, 0.2, 100000
 call_price, error = monte_carlo_european_call(S0, K, T, r, sigma, num_sims)
 print(f"European Call Option Price: {call_price:.4f} ± {error:.4f}")
@@ -338,15 +463,15 @@ print(f"European Call Option Price: {call_price:.4f} ± {error:.4f}")
 
 ---
 
-## 9. Conclusion
+## 10. Conclusion
 
-Random number generation and Monte Carlo simulations are cornerstones of **numerical analysis** and **non-linear optimization**. By understanding the difference between **pseudo-random** and **quasi-random** approaches—and by incorporating **variance reduction** techniques like **best samples**, **antithetic variables**, and **moment control**—you can achieve more efficient, reliable, and faster convergence in a wide range of applications.
+Random number generation and Monte Carlo simulations are cornerstones of **numerical analysis** and **non-linear optimization**. By understanding Brownian motion, the difference between **pseudo-random** and **quasi-random** approaches, and by incorporating **variance reduction** techniques (like **best samples**, **antithetic variables**, and **moment control**), you can achieve more efficient, reliable, and faster convergence in a wide range of applications.
 
 ---
 
-## 10. Consolidated Exercises
+## 11. Consolidated Exercises
 
-Below is a combined set of exercises from all three notes. They range from basic random sampling to advanced variance reduction and financial applications.
+Below is a combined set of exercises from all the notes. They range from basic random sampling to advanced variance reduction, financial applications, and Brownian motion concepts.
 
 1. **Basic Random Number Generation**  
    - Generate a \(10 \times 10\) array of uniform random numbers. Compute its mean and standard deviation.  
@@ -371,4 +496,10 @@ Below is a combined set of exercises from all three notes. They range from basic
 6. **Advanced Applications**  
    - Apply **moment control** techniques (e.g., controlling first and second moments) to estimate European call option prices. Compare to a plain Monte Carlo approach.  
    - Modify a Monte Carlo simulation for **stochastic differential equations (SDEs)** (e.g., using Euler-Maruyama) while applying **variance reduction** methods.  
-   - Use **QRNs** for high-dimensional optimization (e.g., 5D Rosenbrock function) and compare against purely random sampling.
+   - Use **QRNs** for high-dimensional optimization (e.g., a 5D Rosenbrock function) and compare against purely random sampling.  
+
+7. **Brownian Motion**  
+   - Simulate multiple paths of **standard Brownian motion** (as in [Section 2.4](#24-simulation-of-brownian-motion-in-python)) and verify its statistical properties (e.g., increment distributions, empirical mean/variance).  
+   - Investigate **Geometric Brownian Motion** by simulating and plotting multiple paths for a hypothetical stock price.  
+   - Explore the **Reflection Principle** numerically by examining the maximum of simulated paths.
+
