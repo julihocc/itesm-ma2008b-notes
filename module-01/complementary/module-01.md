@@ -25,9 +25,19 @@
 6. [Monte Carlo Simulations & Efficiency Enhancements](#6-monte-carlo-simulations--efficiency-enhancements)  
    6.1 [Estimating π Using Monte Carlo](#61-estimating-π-using-monte-carlo)  
    6.2 [Monte Carlo Convergence Analysis](#62-monte-carlo-convergence-analysis)  
-7. [Best Samples, Antithetic Variables, and Moment Control Techniques](#7-best-samples-antithetic-variables-and-moment-control-techniques)  
+7. [Variance Reduction Techniques](#7-variance-reduction-techniques)  
    7.1 [Best Samples: Enhancing Estimation Accuracy](#71-best-samples-enhancing-estimation-accuracy)  
-   7.2 [Antithetic Variables: Correlation for Variance Reduction](#72-antithetic-variables-correlation-for-variance-reduction)  
+   7.2 [Antithetic Variables](#72-antithetic-variables)  
+       - 7.2.1 [Learning Objectives](#721-learning-objectives)  
+       - 7.2.2 [Introduction to Antithetic Variables](#722-introduction-to-antithetic-variables)  
+       - 7.2.3 [Conceptual Understanding: Negative Correlation](#723-conceptual-understanding-negative-correlation)  
+       - 7.2.4 [Why Use Antithetic Variables?](#724-why-use-antithetic-variables)  
+       - 7.2.5 [Python Example: Estimating π](#725-python-example-estimating-π)  
+       - 7.2.6 [Results & Comparison](#726-results--comparison)  
+       - 7.2.7 [Key Takeaways](#727-key-takeaways)  
+       - 7.2.8 [Exercises](#728-exercises)  
+       - 7.2.9 [Further Reading](#729-further-reading)  
+   7.3 [Moment Control Techniques](#73-moment-control-techniques)  
 8. [Real-World Applications of Random Number Generators](#8-real-world-applications-of-random-number-generators)  
    8.1 [Financial Modeling: Stock Price Simulation Using Brownian Motion](#81-financial-modeling-stock-price-simulation-using-brownian-motion)  
 9. [Applications in Monte Carlo Simulations](#9-applications-in-monte-carlo-simulations)  
@@ -48,7 +58,7 @@ In the following sections, we cover:
 - Practical implementation of random number generation using **NumPy** and Python’s **`secrets`** module.  
 - Methods for validating randomness (e.g., **Kolmogorov-Smirnov** tests, histograms).  
 - Applications of **Monte Carlo simulations** for estimating constants (like \(\pi\)) and solving real-world problems.  
-- Advanced techniques for **variance reduction** (e.g., **antithetic variables**, **best sample selection**, **moment control**).
+- Advanced **variance reduction** techniques, including **antithetic variables**, **best sample selection**, **moment control**, and more.
 
 ---
 
@@ -70,7 +80,7 @@ A **standard Brownian motion** \(W_t\) is a stochastic process satisfying:
    \]
 
 2. **Independent Increments**:  
-   For \(0 \leq s < t\), the increment \(W_t - W_s\) is independent of the process history before time \(s\).
+   For \(0 \leq s < t\), the increment \(W_t - W_s\) is independent of everything that happened before time \(s\).
 
 3. **Stationary Increments**:  
    \[
@@ -97,7 +107,7 @@ A **standard Brownian motion** \(W_t\) is a stochastic process satisfying:
 
 - **Martingale Property**:  
   \[
-  \mathbb{E}[W_t \mid \mathcal{F}_s] = W_s \quad (s < t).
+  \mathbb{E}[W_t \mid \mathcal{F}_s] = W_s, \quad s < t.
   \]
 
 - **Continuity of Paths**:  
@@ -387,28 +397,143 @@ plt.show()
 
 ---
 
-## 7. Best Samples, Antithetic Variables, and Moment Control Techniques
+## 7. Variance Reduction Techniques
 
 ### 7.1 Best Samples: Enhancing Estimation Accuracy
+
 - **Importance Sampling**: Weighs samples by their PDF to reduce variance in regions of interest.  
 - **Stratified Sampling**: Divides the domain into strata, sampling each proportionally.  
-- **Quasi-Random Sequences**: Reduce clustering and often improve integration efficiency.
+- **Quasi-Random Sequences**: (See [Section 3](#3-pseudo-and-quasi-random-numbers)) Often reduce clustering and improve integration efficiency.
 
-### 7.2 Antithetic Variables: Correlation for Variance Reduction
+---
 
-By pairing each random draw \(X_i\) with a negatively correlated draw \(X_i^*\), you can reduce variance.
+### 7.2 Antithetic Variables
 
+This section expands on the concept of **antithetic variables**—a method to reduce variance by introducing *negative correlation* among samples. The following subsections unify the new material from *antithetic-variables.md* with our existing notes.
+
+#### 7.2.1 Learning Objectives
+- Understand the concept and purpose of antithetic variables.  
+- Learn how antithetic variables reduce variance in Monte Carlo simulations.  
+- Apply the concept through Python code examples.
+
+---
+
+#### 7.2.2 Introduction to Antithetic Variables
+
+Antithetic variables are a **variance reduction technique** used in Monte Carlo simulations. The goal is to improve the accuracy of estimates without increasing the number of simulations. By introducing negative correlation between paired samples, we reduce the overall variance of the estimator.
+
+---
+
+#### 7.2.3 Conceptual Understanding: Negative Correlation
+
+Given a random variable \(U \sim \text{Uniform}(0, 1)\), its antithetic counterpart is \(1 - U\).  
+When estimating \( E[f(U)] \), instead of using
+
+\[
+\frac{1}{N} \sum_{i=1}^N f(U_i),
+\]
+
+we use
+
+\[
+\frac{1}{2N} \sum_{i=1}^N \Bigl[f(U_i) + f\bigl(1 - U_i\bigr)\Bigr].
+\]
+
+Because \(U\) and \(1 - U\) are negatively correlated, high values of \(f(U_i)\) often offset lower values of \(f(1 - U_i)\), reducing the estimator’s variance.
+
+---
+
+#### 7.2.4 Why Use Antithetic Variables?
+- **Reduces variance** without extra simulations.  
+- **Improves efficiency** by leveraging negative correlation.  
+- **Widely applicable** in finance (option pricing), risk analysis, and any domain where Monte Carlo simulations are used.
+
+---
+
+#### 7.2.5 Python Example: Estimating \(\pi\)
+
+##### Without Antithetic Variables
 ```python
 import numpy as np
 
-def monte_carlo_pi_antithetic(n):
-    u = np.random.random(n // 2)
-    v = 1 - u
-    x = np.concatenate((u, v))
-    y = np.random.random(n)
+def estimate_pi(n_samples=10000):
+    x = np.random.rand(n_samples)
+    y = np.random.rand(n_samples)
     inside_circle = (x**2 + y**2) <= 1
-    return (np.sum(inside_circle) / n) * 4
+    return 4 * np.mean(inside_circle)
+
+# Example usage:
+np.random.seed(42)
+estimate = estimate_pi(1000000)
+print(f"Estimated pi without antithetic variables: {estimate:.5f}")
 ```
+
+##### With Antithetic Variables
+```python
+def estimate_pi_antithetic(n_samples=10000):
+    half_samples = n_samples // 2
+    x = np.random.rand(half_samples)
+    y = np.random.rand(half_samples)
+
+    # Antithetic pairs
+    x_antithetic = 1 - x
+    y_antithetic = 1 - y
+
+    inside_circle = np.concatenate([
+        (x**2 + y**2) <= 1,
+        (x_antithetic**2 + y_antithetic**2) <= 1
+    ])
+
+    return 4 * np.mean(inside_circle)
+
+# Example usage with antithetic variables:
+np.random.seed(42)
+estimate_anti = estimate_pi_antithetic(1000000)
+print(f"Estimated pi with antithetic variables: {estimate_anti:.5f}")
+```
+
+---
+
+#### 7.2.6 Results & Comparison
+
+- Without antithetic variables:  
+  *Estimated pi ≈ 3.14156*  
+
+- With antithetic variables:  
+  *Estimated pi ≈ 3.14159*  
+
+**Observation**:  
+The estimate using antithetic variables typically shows **lower variance** and higher precision with the same number of samples.
+
+---
+
+#### 7.2.7 Key Takeaways
+
+- Antithetic variables create **negatively correlated sample pairs** to reduce variance.  
+- They are particularly useful when increasing sample size is costly.  
+- Applicable in **financial modeling**, **stochastic process** simulations, and any Monte Carlo method.
+
+---
+
+#### 7.2.8 Exercises
+
+1. Modify the Python example to estimate \(e\) using the antithetic variables approach.  
+2. Explore variance reduction when simulating **Geometric Brownian Motion** for option pricing.  
+3. Compare **convergence rates** of Monte Carlo estimates with and without antithetic variables.
+
+---
+
+#### 7.2.9 Further Reading
+
+- *Monte Carlo Methods in Financial Engineering* — Paul Glasserman  
+- *Variance Reduction Techniques* — Rubinstein and Kroese  
+- **Python Libraries**: `numpy`, `scipy`, `matplotlib` for further simulation and visualization tasks.
+
+---
+
+### 7.3 Moment Control Techniques
+
+Aside from antithetic variables, other variance reduction methods include **moment control**, which ensures that generated samples match desired statistical properties (e.g., specific means or variances). These techniques can be combined with antithetic pairing, importance sampling, or best samples for even greater efficiency gains.
 
 ---
 
@@ -460,18 +585,19 @@ S0, K, T, r, sigma, num_sims = 100, 100, 1, 0.05, 0.2, 100000
 call_price, error = monte_carlo_european_call(S0, K, T, r, sigma, num_sims)
 print(f"European Call Option Price: {call_price:.4f} ± {error:.4f}")
 ```
+> **Note**: This approach includes **antithetic variables** (`U` and `-U`) to reduce variance in the option price estimate.
 
 ---
 
 ## 10. Conclusion
 
-Random number generation and Monte Carlo simulations are cornerstones of **numerical analysis** and **non-linear optimization**. By understanding Brownian motion, the difference between **pseudo-random** and **quasi-random** approaches, and by incorporating **variance reduction** techniques (like **best samples**, **antithetic variables**, and **moment control**), you can achieve more efficient, reliable, and faster convergence in a wide range of applications.
+Random number generation and Monte Carlo simulations are cornerstones of **numerical analysis** and **non-linear optimization**. By understanding Brownian motion, the difference between **pseudo-random** and **quasi-random** approaches, and by incorporating **variance reduction** techniques (like **antithetic variables**, **best samples**, **moment control**), you can achieve more efficient, reliable, and faster convergence in a wide range of applications.
 
 ---
 
 ## 11. Consolidated Exercises
 
-Below is a combined set of exercises from all the notes. They range from basic random sampling to advanced variance reduction, financial applications, and Brownian motion concepts.
+Below is a combined set of exercises from all notes, including the newly added **antithetic variables** material. These range from basic random sampling to advanced variance reduction, financial applications, and Brownian motion concepts.
 
 1. **Basic Random Number Generation**  
    - Generate a \(10 \times 10\) array of uniform random numbers. Compute its mean and standard deviation.  
@@ -492,6 +618,7 @@ Below is a combined set of exercises from all the notes. They range from basic r
 5. **Antithetic Variables**  
    - Implement a Monte Carlo estimator for a *normal* random variable (e.g., \(\mathbb{E}[X]\) for \(X \sim \mathcal{N}(0,1)\)) using antithetic variables.  
    - Compare variance to a straightforward (independent) Monte Carlo approach.  
+   - Modify the \(\pi\)-estimation code to see how quickly it converges with and without antithetic variables.  
 
 6. **Advanced Applications**  
    - Apply **moment control** techniques (e.g., controlling first and second moments) to estimate European call option prices. Compare to a plain Monte Carlo approach.  
@@ -502,4 +629,3 @@ Below is a combined set of exercises from all the notes. They range from basic r
    - Simulate multiple paths of **standard Brownian motion** (as in [Section 2.4](#24-simulation-of-brownian-motion-in-python)) and verify its statistical properties (e.g., increment distributions, empirical mean/variance).  
    - Investigate **Geometric Brownian Motion** by simulating and plotting multiple paths for a hypothetical stock price.  
    - Explore the **Reflection Principle** numerically by examining the maximum of simulated paths.
-
