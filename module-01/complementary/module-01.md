@@ -253,7 +253,9 @@ def estimate_pi_antithetic(n_samples=10000):
 - Without antithetic: ~3.14156  
 - With antithetic: ~3.14159  
 
-### 6. Moment Control Techniques
+---
+
+## 6. Moment Control Techniques
 
 **Goal**: Ensure the simulated samples have desired **mean**, **variance**, or higher moments (e.g., skewness, kurtosis).  
 
@@ -328,23 +330,23 @@ def monte_carlo_european_call(S0, K, T, r, sigma, num_sims):
 
 #### 8.1.1 GBM SDE & Closed-Form Solution
 
-\[
+$$
 dS_t = \mu S_t\,dt + \sigma S_t\,dW_t
 \quad\Longrightarrow\quad
 S_t = S_0 e^{(\mu-\tfrac12\sigma^2)t + \sigma W_t}.
-\]
+$$
 
 #### 8.1.2 Discretizing GBM (Exponential Form)
 
-\[
+$$
 S_{t+\Delta t} = S_t \exp\Bigl((\mu-\tfrac12\sigma^2)\Delta t + \sigma\sqrt{\Delta t}\,Z\Bigr).
-\]
+$$
 
 #### 8.1.3 Euler–Maruyama for GBM
 
-\[
+$$
 S_{t+\Delta t} \approx S_t + \mu S_t\,\Delta t + \sigma S_t\,\Delta W_t.
-\]
+$$
 
 #### 8.1.4 Extended GBM Example (simulate_gbm)
 
