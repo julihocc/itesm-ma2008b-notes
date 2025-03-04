@@ -1,6 +1,6 @@
 # Module 1 | Preliminaries
 
-## 1. Introduction
+## Introduction
 
 Monte Carlo methods, random number generation, and **Taylor/Maclaurin expansions** are foundational in **non-linear optimization** and **numerical analysis**. This document covers:
 
@@ -9,9 +9,9 @@ Monte Carlo methods, random number generation, and **Taylor/Maclaurin expansions
 
 ---
 
-## 2. Pseudo-Random Number Generators
+## Pseudo-Random Number Generators
 
-### 2.1 Key Concepts in PRNGs
+### Key Concepts in PRNGs
 
 - **Period**: A PRNG eventually repeats its sequence; a longer period reduces unwanted repetition.  
 - **Statistical Quality**: Good PRNGs pass tests like Kolmogorov–Smirnov to confirm uniformity.  
@@ -21,9 +21,9 @@ Quasi-random (low-discrepancy) sequences (e.g., **Sobol**) provide more uniform 
 
 ---
 
-### 2.2 Linear Congruential Generator (LCG)
+### Linear Congruential Generator (LCG)
 
-#### 2.2.1 Theory
+#### Theory
 
 A **Linear Congruential Generator** uses:
 
@@ -46,7 +46,7 @@ We map $\{X_n\}$ into $[0,1)$ via $\frac{X_n}{m}$.
 - Not secure  
 - Tends to produce points on hyperplanes in higher dimensions
 
-#### 2.2.2 Python Example
+#### Python Example
 
 ```python
 import numpy as np
@@ -81,16 +81,16 @@ plt.show()
 
 ---
 
-### 2.3 Mersenne Twister (MT19937)
+### Mersenne Twister (MT19937)
 
-#### 2.3.1 Overview
+#### Overview
 
 - Period: $2^{19937} - 1$  
 - Excellent statistical quality  
 - Very fast (bitwise operations)  
 - **Not** cryptographically secure
 
-#### 2.3.2 Python Examples
+#### Python Examples
 
 1. **Using NumPy**:
 
@@ -126,13 +126,13 @@ plt.show()
 
 ---
 
-### 2.4 Sobol Sequences (Quasi-Random)
+### Sobol Sequences (Quasi-Random)
 
-#### 2.4.1 What Are Sobol Sequences?
+#### What Are Sobol Sequences?
 
 A **Sobol** sequence is a *low-discrepancy* (quasi-random) sequence offering more uniform coverage of \([0,1)^d\). This improves efficiency for high-dimensional tasks like integration or optimization.
 
-#### 2.4.2 Python Example (SciPy)
+#### Python Example (SciPy)
 
 ```python
 from scipy.stats.qmc import Sobol
@@ -151,14 +151,14 @@ plt.show()
 
 ---
 
-### 2.5 Kolmogorov-Smirnov (KS) Test
+### Kolmogorov-Smirnov (KS) Test
 
-#### 2.5.1 Purpose
+#### Purpose
 
 - **One-sample KS**: Sample vs. theoretical distribution (e.g., uniform).  
 - **Two-sample KS**: Sample vs. sample.
 
-#### 2.5.2 Python Example
+#### Python Example
 
 ```python
 import numpy as np
@@ -176,7 +176,7 @@ ks_stat_2, p_value_2 = ks_2samp(sample1, sample2)
 
 ---
 
-### 2.6 Summary and Comparisons
+### Summary and Comparisons
 
 | **Generator/Sequence** | **Period**               | **Speed**        | **Statistical Quality**         | **Security**               | **Usage**                                   |
 |------------------------|--------------------------|------------------|---------------------------------|----------------------------|---------------------------------------------|
@@ -187,17 +187,17 @@ ks_stat_2, p_value_2 = ks_2samp(sample1, sample2)
 
 ---
 
-## 3. Taylor and Maclaurin Series
+## Taylor and Maclaurin Series
 
 **Taylor** and **Maclaurin** expansions approximate functions, analyze errors, and support methods like **Newton’s method**.
 
-### 3.1 Taylor Series
+### Taylor Series
 
 $$
 f(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + \dots
 $$
 
-#### 3.1.1 Example: Approximating $e^x$
+#### Example: Approximating $e^x$
 
 ```python
 import numpy as np
@@ -222,12 +222,12 @@ plt.show()
 
 ---
 
-### 3.2 Maclaurin Series
+### Maclaurin Series
 
 A **Maclaurin series** is a Taylor series centered at 0.  
 For example, $\sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}}{(2n+1)!}$.
 
-#### 3.2.1 Example: Approximating $\sin(x)$
+#### Example: Approximating $\sin(x)$
 
 ```python
 import numpy as np
@@ -252,7 +252,7 @@ plt.show()
 
 ---
 
-### 3.3 Applications
+### Applications
 
 1. **Error Analysis**: Higher-order terms show truncation error.  
 2. **Inverse Transform Sampling**: Approximate inverse CDFs via Taylor expansions.  
@@ -275,7 +275,7 @@ print("Approx root:", root_approx)
 
 ---
 
-## 4. Concluding Remarks
+## Concluding Remarks
 
 **Pseudo-random number generators** (LCG, Mersenne Twister, Sobol) and **Taylor/Maclaurin expansions** are fundamental in **numerical analysis** and **non-linear optimization**:
 
