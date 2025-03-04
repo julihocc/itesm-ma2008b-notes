@@ -1,33 +1,5 @@
 # Module 1 | Preliminaries
 
-## Table of Contents
-
-1. [Introduction](#1-introduction)  
-2. [Pseudo-Random Number Generators](#2-pseudo-random-number-generators)  
-   2.1 [Key Concepts in PRNGs](#21-key-concepts-in-prngs)  
-   2.2 [Linear Congruential Generator (LCG)](#22-linear-congruential-generator-lcg)  
-       - 2.2.1 [Theory](#221-theory)  
-       - 2.2.2 [Python Example](#222-python-example)  
-   2.3 [Mersenne Twister (MT19937)](#23-mersenne-twister-mt19937)  
-       - 2.3.1 [Overview](#231-overview)  
-       - 2.3.2 [Python Examples](#232-python-examples)  
-   2.4 [Sobol Sequences (Quasi-Random)](#24-sobol-sequences-quasi-random)  
-       - 2.4.1 [What Are Sobol Sequences?](#241-what-are-sobol-sequences)  
-       - 2.4.2 [Python Example (SciPy)](#242-python-example-scipy)  
-   2.5 [Kolmogorov-Smirnov (KS) Test](#25-kolmogorov-smirnov-ks-test)  
-       - 2.5.1 [Purpose](#251-purpose)  
-       - 2.5.2 [Python Example](#252-python-example)  
-   2.6 [Summary and Comparisons](#26-summary-and-comparisons)  
-3. [Taylor and Maclaurin Series](#3-taylor-and-maclaurin-series)  
-   3.1 [Taylor Series](#31-taylor-series)  
-       - 3.1.1 [Example: Approximating $e^x$](#311-example-approximating-ex)  
-   3.2 [Maclaurin Series](#32-maclaurin-series)  
-       - 3.2.1 [Example: Approximating $\sin(x)$](#321-example-approximating-sinx)  
-   3.3 [Applications](#33-applications)  
-4. [Concluding Remarks](#4-concluding-remarks)
-
----
-
 ## 1. Introduction
 
 Monte Carlo methods, random number generation, and **Taylor/Maclaurin expansions** are foundational in **non-linear optimization** and **numerical analysis**. This document covers:
