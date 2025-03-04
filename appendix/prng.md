@@ -20,23 +20,23 @@ To evaluate whether a sample *looks* random, statisticians often use the **Kolmo
 A **Linear Congruential Generator** uses the recurrence:
 
 \[
-X_{n+1} = (a X_n + c)\;\bmod\; m
+X_{n+1} = (a X_n + c) \mod m
 \]
 
 Parameters:
-- \(a\): multiplier  
-- \(c\): increment  
-- \(m\): modulus  
-- \(X_0\): seed (initial state)
+- $a$: multiplier  
+- $c$: increment  
+- $m$: modulus  
+- $X_0$: seed (initial state)
 
-Each output \(\frac{X_n}{m}\) is a pseudo-random number in \([0,1)\).  
+Each output $\frac{X_n}{m}$ is a pseudo-random number in $[0,1)$.  
 
 **Strengths**:  
 - **Simplicity**: Very easy to implement.  
 - **Speed**: One multiplication, one addition, and a mod operation per step.  
 
 **Limitations**:  
-- **Short/limited period** (max \(m\)).  
+- **Short/limited period** (max $m$).  
 - **Non-cryptographic**: Predictable if parameters/seed are known.  
 - **Poor high-dimensional randomness**: Tends to fall into hyperplanes in multiple dimensions.
 
@@ -81,7 +81,7 @@ plt.show()
 
 ### 3.1. Overview
 **Mersenne Twister (MT19937)** is a widely used PRNG with:
-- A **huge period** of \(2^{19937} - 1\).
+- A **huge period** of $2^{19937} - 1$.
 - Excellent statistical properties (passes many test batteries).
 - Very fast generation, using bitwise operations on a 624-element internal state array.
 
@@ -125,7 +125,7 @@ plt.show()
 ## 4. Sobol Sequences (Quasi-Random)
 
 ### 4.1. What Are Sobol Sequences?
-**Sobol sequences** are *low-discrepancy* (quasi-random) sequences that fill the unit hypercube \([0,1)^d\) in a more uniform way than pseudo-random numbers. This reduces clustering and can significantly improve integration or optimization convergence in high dimensions.
+**Sobol sequences** are *low-discrepancy* (quasi-random) sequences that fill the unit hypercube $[0,1)^d$ in a more uniform way than pseudo-random numbers. This reduces clustering and can significantly improve integration or optimization convergence in high dimensions.
 
 ### 4.2. Python Example (SciPy)
 
@@ -154,7 +154,7 @@ When you plot *random* points vs. *Sobol* points (both 2D), you’ll see how Sob
 ### 5.1. Purpose
 The **Kolmogorov-Smirnov test** checks how well a sample matches a reference distribution (one-sample KS) or compares two samples (two-sample KS). For PRNG validation, a common usage is the one-sample KS test against a uniform distribution:  
 \[
-H_0: \text{The data come from a uniform distribution on } [0,1).
+H_0: \text{The data come from a uniform distribution on [0,1).
 \]
 
 ### 5.2. Python Example
@@ -175,7 +175,7 @@ print(f"Two-Sample KS test: Statistic={ks_stat_2samp}, P-value={p_value_2samp}")
 ```
 
 - **Interpretation**:  
-  - A large statistic and small p-value \((<0.05)\) imply we reject the hypothesis that the distributions match.
+  - A large statistic and small p-value $(<0.05)$ imply we reject the hypothesis that the distributions match.
 
 ---
 
@@ -185,8 +185,8 @@ Below is a concise overview of each generator type and its typical usage.
 
 | **Generator / Sequence** | **Period**                | **Speed**         | **Statistical Quality**       | **Security**               | **Use Cases**                                 |
 |--------------------------|----------------------------|-------------------|-------------------------------|----------------------------|-----------------------------------------------|
-| **LCG**                  | \(\leq m\)                | ✅ Fast           | Fair (depends on parameters)  | ❌ Not secure              | Basic simulations, simple teaching examples    |
-| **Mersenne Twister**     | \(2^{19937} - 1\)         | ✅✅ Very Fast    | Excellent for typical tests   | ❌ Not secure              | General-purpose random draws (e.g., in NumPy) |
+| **LCG**                  | $\leq m$                | ✅ Fast           | Fair (depends on parameters)  | ❌ Not secure              | Basic simulations, simple teaching examples    |
+| **Mersenne Twister**     | $2^{19937} - 1$         | ✅✅ Very Fast    | Excellent for typical tests   | ❌ Not secure              | General-purpose random draws (e.g., in NumPy) |
 | **Sobol** (Quasi-Random) | Deterministic; not “periodic” in the same sense, but systematically covers the space | ✅✅ Efficient | Low-discrepancy (more uniform coverage) | N/A (not used for security) | Monte Carlo integration, optimization         |
 | **Cryptographic PRNG**   | Very large or “infeasible” period | ❌ Slower       | Unpredictable by design       | ✅ Secure                 | Cryptography, sensitive data generation       |
 
