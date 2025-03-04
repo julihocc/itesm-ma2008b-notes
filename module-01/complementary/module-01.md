@@ -52,7 +52,7 @@
 Monte Carlo methods and **random number generation** serve as a cornerstone in **non-linear optimization** and **scientific computing**. They approximate solutions to deterministic problems via random sampling, and they also appear in **finance**, **risk analysis**, and **machine learning**. This module covers:
 
 - **PRNGs vs. QRNs**, plus validation (Kolmogorov–Smirnov, histograms).  
-- **Monte Carlo** fundamentals (estimating \(\pi\), convergence).  
+- **Monte Carlo** fundamentals (estimating $\pi$, convergence).  
 - **Brownian motion**: A key stochastic process for advanced models.  
 - **Variance reduction** (antithetic variables, best samples).  
 - **Moment control** to match specific mean/variance/skewness.  
@@ -83,7 +83,7 @@ Low-discrepancy sequences:
 | Generation    | Seed-based algorithm          | Deterministic sequence   |
 | Periodicity   | Yes (can be extremely long)   | None                     |
 | Uniformity    | Moderate (by chance)          | High (low discrepancy)   |
-| Integration   | \(\sim 1/\sqrt{N}\)           | Potentially faster       |
+| Integration   | $\sim 1/\sqrt{N}$             | Potentially faster       |
 | Usage         | General Monte Carlo           | Integration, optimization|
 
 ### 2.4 Implementation Examples
@@ -130,7 +130,7 @@ print(qrn_points)
 
 ## 3. Monte Carlo Simulations: Fundamentals
 
-### 3.1 Estimating π Using Monte Carlo
+### 3.1 Estimating $\pi$ Using Monte Carlo
 
 ```python
 from numba import njit, prange
@@ -167,18 +167,18 @@ plt.show()
 
 ### 4.1 Definition & Properties
 
-A **standard Brownian motion** \(W_t\):
+A **standard Brownian motion** $W_t$:
 
-1. \(W_0=0\).  
+1. $W_0=0$.  
 2. Independent, stationary increments.  
-3. \(\mathbb{E}[W_t]=0\), \(\mathrm{Var}(W_t)=t\).  
+3. $\mathbb{E}[W_t]=0$, $\mathrm{Var}(W_t)=t$.  
 4. Continuous, nowhere differentiable paths.
 
 ### 4.2 Mathematical Characteristics
 
-- **Covariance**: \(\text{Cov}(W_s, W_t)=\min(s,t)\).  
+- **Covariance**: $\text{Cov}(W_s, W_t)=\min(s,t)$.  
 - **Markov** & **martingale** properties.  
-- **Scaling**: \(W_{ct}\overset{d}{=}\sqrt{c}W_t\).
+- **Scaling**: $W_{ct}\overset{d}{=}\sqrt{c}W_t$.
 
 ### 4.3 Simulation of Brownian Motion in Python
 
@@ -224,7 +224,7 @@ plt.show()
 
 #### 5.2.1 Conceptual Overview & Code
 
-Example \(\pi\)-estimator with antithetic:
+Example $\pi$-estimator with antithetic:
 
 ```python
 import numpy as np
@@ -259,10 +259,10 @@ def estimate_pi_antithetic(n_samples=10000):
 
 ### 6.1 Statistical Moments
 
-1. **Mean** \((\mu)\)  
-2. **Variance** \((\sigma^2)\)  
-3. **Skewness** \((\gamma_1)\)  
-4. **Kurtosis** \((\gamma_2)\)
+1. **Mean** $(\mu)$  
+2. **Variance** $(\sigma^2)$  
+3. **Skewness** $(\gamma_1)$  
+4. **Kurtosis** $(\gamma_2)$
 
 ### 6.2 Matching Mean and Variance
 
@@ -425,5 +425,5 @@ def monte_carlo_var(initial_value, mu, sigma, T, alpha, num_sims):
 
 8. **Stochastic Modeling in Finance**  
    - Compare a simple **Black–Scholes** formula for a European call vs. a Monte Carlo estimate.  
-   - Investigate how changing **volatility** (\(\sigma\)) affects the price under Black–Scholes vs. Monte Carlo.  
+   - Investigate how changing **volatility** $(\sigma)$ affects the price under Black–Scholes vs. Monte Carlo.  
    - Use the **monte_carlo_var** function to estimate 99% VaR and interpret the result.
