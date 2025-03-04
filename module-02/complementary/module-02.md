@@ -302,38 +302,101 @@ def simulate_gbm(S0, mu, sigma, T, N):
     t = np.linspace(0, T, N)
     
     W = np.cumsum(np.random.randn(N) * np.sqrt(dt))
-    S = S0 * np.exp((mu - 0.5*sigma^2)*t + sigma*W)
+    S = S0 * np.exp((mu - 0.5*sigma**2)*t + sigma*W)
     return t, S
+
+S0, mu, sigma, T, N = 100, 0.05, 0.2, 1, 1000
+t, S = simulate_gbm(S0, mu, sigma, T, N)
+
+plt.figure(figsize=(10,6))
+plt.plot(t, S)
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.title('Geometric Brownian Motion')
+plt.show()
+```
+
+```python
+# Euler-Maruyama Method
+
+def simulate_gbm_em(S0, mu, sigma, T, N):
+    dt = T / N
+    t = np.linspace(0, T, N)
+    
+    W = np.cumsum(np.random.randn(N) * np.sqrt(dt))
+    S = np.zeros(N)
+    S[0] = S0
+    for i in range(1, N):
+        S[i] = S[i-1] * (1 + mu*dt + sigma*W[i])
+    return t, S
+
+t, S = simulate_gbm_em(S0, mu, sigma, T, N)
+
+plt.figure(figsize=(10,6))
+plt.plot(t, S)
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.title('Geometric Brownian Motion (Euler-Maruyama)')
+plt.show()
 ```
 
 ### Monte Carlo for European Option Pricing
 
-A single-step approach under risk-neutral measure; compute average discounted payoff.
-
 ```python
 import numpy as np
 
-def monte_carlo_european_call(S0, K, T, r, sigma, num_sims):
-    dt = T
-    U = np.random.normal(0, 1, num_sims//2)
+def monte_carlo_european_call(S0, K, T, r, mu, sigma, num_sims, steps):
+    dt = T/steps
+    U = np.random.normal(0, 1, (num_sims//2, steps))
     V = -U
     Z = np.concatenate((U, V))
+    S = np.zeros_like(Z)
 
-    ST = S0 * np.exp((r - 0.5*sigma^2)*dt + sigma*np.sqrt(dt)*Z)
-    payoff = np.maximum(ST - K, 0)
+    S[:, 0] = S0
+    for t in range(1, steps):
+        S[:, t] = S[:, t-1] * np.exp((mu - 0.5*sigma**2)*dt + sigma*np.sqrt(dt)*Z[:, t]) 
+
+    payoff = np.maximum(S[:, -1] - K, 0)
     discounted = np.exp(-r*T)*payoff
     return np.mean(discounted), np.std(discounted)/np.sqrt(num_sims)
+
+S0, K, T, r, mu, sigma = 100, 100, 1, 0.05, 0.05, 0.2
+num_sims, steps = 100000, 1000
+monte_carlo_european_call(S0, K, T, r, mu, sigma, num_sims, steps)
 ```
 
 ### Value at Risk (VaR) Estimation via Monte Carlo
 
 ```python
-def monte_carlo_var(initial_value, mu, sigma, T, alpha, num_sims):
-    Z = np.random.normal(0, 1, num_sims)
-    ST = initial_value * np.exp((mu - 0.5\sigma^2)*T + sigma*np.sqrt(T)*Z)
-    losses = initial_value - ST
-    var_estimate = np.percentile(losses, 100 * alpha)
-    return var_estimate
+import numpy as np
+
+def monte_carlo_var(initial_value, mu, sigma, T, confidence_level, num_sims, steps):
+    dt = T / steps
+    U = np.random.normal(0, 1, (num_sims // 2, steps))
+    V = -U  # Antithetic variates
+    Z = np.concatenate((U, V)) if num_sims % 2 == 0 else np.vstack((np.concatenate((U, V)), np.random.normal(0, 1, (1, steps))))
+    
+    S = np.zeros_like(Z)
+    S[:, 0] = initial_value
+
+    for t in range(1, steps):
+        S[:, t] = S[:, t - 1] * np.exp((mu - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * Z[:, t])
+
+    profit = S[:, -1] - initial_value
+
+    var = np.percentile(profit, 100 * (1 - confidence_level))  # Corrected quantile direction
+    cvar = np.mean(profit[profit >= var])  # CVaR should consider losses >= VaR threshold
+    
+    return var, cvar
+
+# Parameters
+initial_value, mu, sigma, T, alpha = 100, 0.05, 0.2, 1, 0.95
+num_sims, steps = 100000, 1000
+
+# Run simulation
+var, cvar = monte_carlo_var(initial_value, mu, sigma, T, alpha, num_sims, steps)
+print(f"VaR (95%): {var:.2f}, CVaR (95%): {cvar:.2f}")
+
 ```
 
 ### Advantages and Limitations of Monte Carlo in Finance
