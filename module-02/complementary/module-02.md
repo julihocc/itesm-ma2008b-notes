@@ -144,6 +144,8 @@ def monte_carlo_pi(n):
         if x**2 + y**2 <= 1:
             count += 1
     return 4.0 * count / n
+
+print("Monte Carlo Pi:", monte_carlo_pi(1000000))
 ```
 
 ### 3.2 Monte Carlo Convergence Analysis
@@ -246,6 +248,9 @@ def estimate_pi_antithetic(n_samples=10000):
         (x_anti**2 + y_anti**2) <= 1
     ])
     return 4 * np.mean(inside)
+
+print("Standard Monte Carlo:", estimate_pi_standard(1000000))
+print("Antithetic Variates:", estimate_pi_antithetic(1000000))
 ```
 
 #### 5.2.2 Results & Comparison
@@ -276,6 +281,11 @@ def generate_normal_samples(target_mean, target_std, size=1000):
     adjusted_samples = (samples - np.mean(samples)) / np.std(samples)
     adjusted_samples = target_mean + target_std * adjusted_samples
     return adjusted_samples
+
+target_mean, target_std = 10, 2
+samples = generate_normal_samples(target_mean, target_std, 10000)
+print("Mean:", np.mean(samples))
+print("Std Dev:", np.std(samples))
 ```
 
 ### 6.3 Adjusting Higher-Order Moments
@@ -289,6 +299,11 @@ def adjust_higher_moments(samples, target_skew, target_kurt):
     scaled = samples * (target_skew / (current_skew+1e-9))
     shifted = scaled + (target_kurt - current_kurt)
     return shifted
+
+target_skew, target_kurt = 1, 3
+samples = adjust_higher_moments(samples, target_skew, target_kurt)
+print("Skew:", skew(samples))
+print("Kurtosis:", kurtosis(samples))
 ```
 
 ### 6.4 Applications of Moment Control
