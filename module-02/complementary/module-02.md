@@ -1,4 +1,4 @@
-# Numerical Analysis for Non-Linear Optimization | Module 1
+# Numerical Analysis for Non-Linear Optimization | Module 2
 
 ## Table of Contents
 
