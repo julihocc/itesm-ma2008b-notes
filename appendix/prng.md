@@ -19,9 +19,9 @@ To evaluate whether a sample *looks* random, statisticians often use the **Kolmo
 ### 2.1. Theory
 A **Linear Congruential Generator** uses the recurrence:
 
-\[
+$$
 X_{n+1} = (a X_n + c) \mod m
-\]
+$$
 
 Parameters:
 - $a$: multiplier  
@@ -153,9 +153,9 @@ When you plot *random* points vs. *Sobol* points (both 2D), you’ll see how Sob
 
 ### 5.1. Purpose
 The **Kolmogorov-Smirnov test** checks how well a sample matches a reference distribution (one-sample KS) or compares two samples (two-sample KS). For PRNG validation, a common usage is the one-sample KS test against a uniform distribution:  
-\[
-H_0: \text{The data come from a uniform distribution on [0,1).
-\]
+$$
+H_0: \text{The data come from a uniform distribution on [0,1)}.
+$$
 
 ### 5.2. Python Example
 ```python
