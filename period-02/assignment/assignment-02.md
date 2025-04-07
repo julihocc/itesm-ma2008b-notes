@@ -1,0 +1,72 @@
+# MA2008B | Period 02
+
+## Problem 1 (Solving IVPs Using the Variation of Constants Formula)
+
+Use the variation of constants formula from Theorem 1.6 to solve the following initial value problems of the form:
+$$
+x' = p(t)x + q(t), \quad x(t_0) = x_0
+$$
+
+**Step 1.**  
+Identify the functions $p(t)$, $q(t)$, the initial time $t_0$, and the initial value $x_0$ from the given differential equation and initial condition.
+
+**Step 2.**  
+Compute the inner integral:
+$$
+\int_{t_0}^s p(\tau)\, d\tau
+$$
+This will appear inside the integrand of the second term in the variation of constants formula.
+
+**Step 3.**  
+Simplify the integrand:
+$$
+e^{-\int_{t_0}^s p(\tau)\, d\tau} \cdot q(s)
+$$
+Write this expression in the simplest possible form using the result from Step 2.
+
+**Step 4.**  
+Evaluate the integral:
+$$
+\int_{t_0}^t \left(e^{-\int_{t_0}^s p(\tau)\, d\tau} \cdot q(s)\right) ds
+$$
+Use standard calculus techniques to compute it explicitly.
+
+**Step 5.**  
+Compute the exponential factor:
+$$
+\int_{t_0}^t p(\tau)\, d\tau \quad \text{and} \quad e^{\int_{t_0}^t p(\tau)\, d\tau}
+$$
+
+**Step 6.**  
+Write the full expression for the solution using the formula:
+$$
+x(t) = e^{\int_{t_0}^t p(\tau)\, d\tau} \cdot x_0 + e^{\int_{t_0}^t p(\tau)\, d\tau} \cdot \left( \text{value from Step 4} \right)
+$$
+
+**Step 7.**  
+Simplify the final expression for $x(t)$. Use algebraic techniques and common factorizations to combine terms and eliminate redundant expressions. Aim to write a final answer that is easy to interpret, avoids nested exponentials, and shows clearly how $x(t)$ depends on $t$.
+
+**Step 8.**  
+Verify that your final expression satisfies the initial condition $x(t_0) = x_0$ and differentiate $x(t)$ and check that it satisfies the original differential equation.
+
+
+
+## Problem 2 (Fixed-Point Iteration and Root-Finding Methods)
+
+Let $E: x = e^{-x}$ be the equation under study.
+
+**Step 1.**  
+Apply the fixed-point iterative method defined by $x_{n+1} = e^{-x_n}$ with the initial value $x_0 = 0.5$. Continue the iteration until the difference between successive approximations satisfies $|x_{n+1} - x_n| < \varepsilon$, with $\varepsilon = 0.001$. Based on the iteration results, conjecture an approximate value $x^*$ for the solution of the equation.
+
+**Step 2.**  
+Prove that the function $f(x) = e^{-x}$ is Lipschitz continuous in a neighborhood of the conjectured root $x^*$ that also contains the initial value $x_0$.
+
+**Step 3.**  
+Apply the Newton-Raphson method to approximate the solution of $E$, using the same initial value $x_0 = 0.5$ and the same stopping criterion $|x_{n+1} - x_n| < \varepsilon$.
+
+**Step 4.**  
+Use the bisection method to approximate the solution of $E$, with stopping criterion $|b_n - a_n| < \varepsilon$, where $[a_n, b_n]$ is the current interval. Choose a valid initial interval $[a, b]$ that contains the root, based on your observations in Step 1.
+
+**Step 5.**  
+Apply the *regula falsi* (false position) method to the same interval and stopping criterion used in Step 4. Compare its efficiency to the bisection method.
+
