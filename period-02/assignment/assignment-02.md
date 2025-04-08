@@ -70,3 +70,33 @@ Use the bisection method to approximate the solution of $E$, with stopping crite
 **Step 5.**  
 Apply the *regula falsi* (false position) method to the same interval and stopping criterion used in Step 4. Compare its efficiency to the bisection method.
 
+## Problem 3 (Numerical Integration of the Gaussian Density Function)
+
+Let 
+$$
+f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}
+$$ 
+be the standard normal (Gaussian) probability density function. Consider the integral
+$$
+I = \int_{-2}^{2} f(x)\,dx,
+$$
+which represents the probability that a standard normal random variable lies within two standard deviations of the mean.
+
+**Step 1.**  
+Use the **composite trapezoidal rule** with $n = 8$ subintervals to approximate the integral $I$. Write out the general form of the rule and substitute the function values. Report your final approximation to at least six decimal digits.
+
+**Step 2.**  
+Repeat the computation using the **composite Simpson’s rule** with the same number of subintervals $n = 8$. Use the alternating coefficients structure $1, 4, 2, 4, \dots, 4, 1$, and compute the result to the same level of accuracy.
+
+**Step 3.**  
+Apply the **composite Simpson’s 3/8 rule** with $n = 9$ subintervals. Use the appropriate coefficient pattern $1, 3, 3, 2, 3, 3, 2, \dots, 3, 3, 1$, and write out the weighted sum explicitly before computing the approximation.
+
+**Step 4.**  
+Determine the **exact value** of the integral using the error function:
+$$
+I_{\text{exact}} = \operatorname{erf}\left(\frac{2}{\sqrt{2}}\right) = \operatorname{erf}(\sqrt{2}).
+$$
+Use a reliable calculator, table, or software to evaluate this quantity numerically to at least six decimal digits.
+
+**Step 5.**  
+For each method in Steps 1–3, compute the **absolute error** by subtracting the exact value obtained in Step 4. Discuss the relative accuracy of the methods and comment on how the number of subintervals and the rule used influence the error.
