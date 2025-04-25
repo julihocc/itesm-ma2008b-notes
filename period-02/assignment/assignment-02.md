@@ -121,7 +121,7 @@ Find a numerical approximation to the solution at $t=1$ if $F_0 = 1.9$, $S_0=0.1
 Now find a numerical approximation to the solution at $t=1$ if $F_0 = 1.9$, $S_0=0.1$, and $\Delta t = 0.001$, but now utilize [scipy.integrate.solve_ivp](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html). Plot the numerical solution that you found in a different view and compare with the previous solution.
 
 **Step 4**
-Find a numerical approximation to the solution at $t=1$ if $F_0 = 1$, $S_0=2$, and $\Delta t = 0.001$. Plot the numerical solution that you found.
+Find a numerical approximation to the solution at $t=1$ if $F_0 = 1$, $S_0=2$, and $\Delta t = 0.001$, using your own implementation. Plot the numerical solution that you found.
 
 **Step 5**
 Based on the system of equations and the corresponding numerical scheme, explain the results from the step 4.
