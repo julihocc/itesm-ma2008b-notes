@@ -107,8 +107,10 @@ For each method in Steps 1–3, compute the **absolute error** by subtracting th
 
 Consider the system
 $$
+\begin{cases}
 F' = (2-S)F, \quad F(0) = F_0 \\
 S' = (F-1)S, \quad S(0) = S_0
+\end{cases}
 $$
 
 **Step 1**
