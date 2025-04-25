@@ -49,8 +49,6 @@ Simplify the final expression for $x(t)$. Use algebraic techniques and common fa
 **Step 8.**  
 Verify that your final expression satisfies the initial condition $x(t_0) = x_0$ and differentiate $x(t)$ and check that it satisfies the original differential equation.
 
-
-
 ## Problem 2 (Fixed-Point Iteration and Root-Finding Methods)
 
 Let $E: x = e^{-x}$ be the equation under study.
@@ -72,10 +70,10 @@ Apply the *regula falsi* (false position) method to the same interval and stoppi
 
 ## Problem 3 (Numerical Integration of the Gaussian Density Function)
 
-Let 
+Let
 $$
 f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}
-$$ 
+$$
 be the standard normal (Gaussian) probability density function. Consider the integral
 $$
 I = \int_{-2}^{2} f(x)\,dx,
@@ -100,3 +98,30 @@ Use a reliable calculator, table, or software to evaluate this quantity numerica
 
 **Step 5.**  
 For each method in Steps 1–3, compute the **absolute error** by subtracting the exact value obtained in Step 4. Discuss the relative accuracy of the methods and comment on how the number of subintervals and the rule used influence the error.
+
+## Problem 4
+
+**Reference:**
+
+> 1. Chasnov, J. R. (2012). Numerical methods. Hong Kong University of Science and Technology. <https://www.math.hkust.edu.hk/~machas/numerical-methods.pdf>
+
+Consider the system
+$$
+F' = (2-S)F, \quad F(0) = F_0 \\
+S' = (F-1)S, \quad S(0) = S_0
+$$
+
+**Step 1**
+Determine an numerical scheme to approximate the solution and implement  it in vanilla Python. Consider the modified Euler Method for systems, described in the reference, but you're allowed any other method that you consider even better.
+
+**Step 2**
+Find a numerical approximation to the solution at $t=1$ if $F_0 = 1.9$, $S_0=0.1$, and $\Delta t = 0.001$. Plot the numerical solution that you found.
+
+**Step 3**
+Now find a numerical approximation to the solution at $t=1$ if $F_0 = 1.9$, $S_0=0.1$, and $\Delta t = 0.001$, but now utilize [scipy.integrate.solve_ivp](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html). Plot the numerical solution that you found in a different view and compare with the previous solution.
+
+**Step 4**
+Find a numerical approximation to the solution at $t=1$ if $F_0 = 1$, $S_0=2$, and $\Delta t = 0.001$. Plot the numerical solution that you found.
+
+**Step 5**
+Based on the system of equations and the corresponding numerical scheme, explain the results from the step 4.
