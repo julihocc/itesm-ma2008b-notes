@@ -125,3 +125,30 @@ Find a numerical approximation to the solution at $t=1$ if $F_0 = 1$, $S_0=2$, a
 
 **Step 5**
 Based on the system of equations and the corresponding numerical scheme, explain the results from the step 4.
+
+## Problem 5
+
+Utilize `Sagemath` to solve the initial value problem
+$$
+\begin{cases}
+x'(t) - 2y(t) = 4t & ; \quad x(0) = 4, \\
+y'(t) + 2y(t) - 4x(t) = -4t - 2 & ; \quad y(0) = -5.
+\end{cases}
+$$
+by completing the following steps. Write down and explain the code that you utilized.
+
+**Step 1** Take the Laplace transformation  $\mathscr{L}$ in both sides of the differential equations and substitute the initial conditions.
+
+**Step 2** Substitute $\mathscr{L}\{x\}(s)$ with $X(s)$, and $\mathscr{L}\{y\}(s)$ with $Y(s)$, and simplify the system to the form
+$$
+\begin{cases}
+a_1(s)X(s)+b_1(s)Y(s)=c_1(s)\\
+a_2(s)X(s)+b_2(s)Y(s)=c_2(s)
+\end{cases}
+$$
+
+**Step 3** Solve the previous system for $X(s), Y(s)$.
+
+**Step 4** Utilize the inverse Laplace transformation to get $x(t)$ from $X(s)$, and $y(t)$ from $Y(s)$.
+
+**Step 5** Verify your solution, both the equations and the initial values.
