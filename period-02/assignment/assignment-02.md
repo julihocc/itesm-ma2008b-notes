@@ -4,8 +4,9 @@
 
 Use the variation of constants formula from Theorem 1.6 to solve the following initial value problems of the form:
 $$
-x' = p(t)x + q(t), \quad x(t_0) = x_0
+x' = m x + b , \quad x(t_0) = x_0
 $$
+where $m, b$ are constants.
 
 **Step 1.**  
 Identify the functions $p(t)$, $q(t)$, the initial time $t_0$, and the initial value $x_0$ from the given differential equation and initial condition.
