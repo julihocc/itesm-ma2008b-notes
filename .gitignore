@@ -8,3 +8,5 @@
 .vscode/
 .venv/
 cspell.json
+*:com.dropbox.attrs
+*:Zone.Identifier
