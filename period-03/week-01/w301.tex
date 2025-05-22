@@ -355,4 +355,91 @@
     \end{alertblock}
 \end{frame}
 
+\section{Backward Heat Equation}
+
+\begin{frame}{Time Reversal Transformation}
+    Consider the time transformation:
+    \[
+    t = T - \tau, \quad T \text{ constant}
+    \]
+    
+    The time derivative transforms as:
+    \[
+    \frac{\partial u}{\partial \tau} = \frac{\partial u}{\partial t} \frac{\partial t}{\partial \tau} = -\frac{\partial u}{\partial t}
+    \]
+    
+    Applying to the heat equation:
+    \[
+    \frac{\partial u}{\partial \tau} = -\frac{\partial^2 u}{\partial x^2} \quad \text{(Backward Heat Equation)}
+    \]
+    
+    \begin{alertblock}{Important Property}
+        The backward heat equation is generally \textbf{ill-posed} for most initial conditions
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Fundamental Solution}
+    The fundamental solution to the (forward) heat equation:
+    \[
+    u_g(x,t) = 
+    \begin{cases} 
+    \frac{1}{2\sqrt{\pi t}} e^{-x^2/(4t)} & t > 0 \\ 
+    \delta_0(x) & t = 0 
+    \end{cases}
+    \]
+    
+    Consider the variant:
+    \[
+    u(x,t) = \frac{1}{2\sqrt{\pi(\tau-t)}} e^{-\frac{x^2}{4(\tau-t)}}
+    \]
+    
+    \begin{itemize}
+        \item Solves the backward heat equation
+        \item Initial condition: $u_0(x) = \frac{1}{2\sqrt{\pi\tau}} e^{-x^2/(4\tau)}$
+        \item \textbf{Blows up} at $t = \tau$ (singularity)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Final Value Problem}
+    The backward heat equation with final condition:
+    \[
+    u_T(x) = u_g(x,\tau)
+    \]
+    
+    \begin{block}{Well-Posed Case}
+        This specific final value problem is well-posed when:
+        \begin{itemize}
+            \item Properly transformed to a forward problem via $t \mapsto T-t$
+            \item The final condition decays sufficiently fast
+            \item Solution exists in a limited time domain $t < \tau$
+        \end{itemize}
+    \end{block}
+    
+    \begin{example}
+        In finance, appears in:
+        \begin{itemize}
+            \item Option pricing with terminal payoff conditions
+            \item Implicit finite difference methods
+        \end{itemize}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Mathematical Implications}
+    Key observations about the backward heat equation:
+    \begin{itemize}
+        \item \textbf{Ill-posedness}: Small changes in final conditions can lead to large solution changes
+        \item \textbf{Regularization needed} for practical applications
+        \item \textbf{Time reversal} requires special treatment
+    \end{itemize}
+    
+    \begin{alertblock}{Numerical Challenges}
+        Requires:
+        \begin{itemize}
+            \item Special discretization schemes
+            \item Stability analysis
+            \item Often needs additional constraints
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
 \end{document}
