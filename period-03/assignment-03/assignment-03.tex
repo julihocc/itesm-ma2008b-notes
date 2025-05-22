@@ -19,26 +19,70 @@
     \item Submit your assignment by the due date.
 \end{itemize}
 
-\section*{Problems}
+\section{Partial Differential Equations}
 
-\begin{enumerate}[label=\textbf{Problem \arabic*.}]
-    \item (Sample Problem) Solve for $x$:
-    \[
-        2x + 5 = 13
-    \]
-    \vspace{2cm}
+\begin{enumerate}
+    \item Show that the solution to the initial value problem is unique 
+provided that it is sufficiently smooth and decays sufficiently 
+fast at infinity, as follows:
 
-    \item Compute the derivative of $f(x) = x^3 + 2x^2 - x + 7$.
-    \vspace{2cm}
+Suppose that $u_1(x, t)$ and $u_2(x, t)$ are both solutions to the 
+initial value problem (4.5)--(4.9): 
 
-    \item Evaluate the integral:
-    \[
-        \int_0^1 (3x^2 + 2x)\,dx
-    \]
-    \vspace{2cm}
+\[\frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2} - \infty < x < \infty, \quad t > 0, \tag{4.5}\]
 
-    \item Prove that if $a > b$ and $b > c$, then $a > c$.
-    \vspace{2cm}
+with
+
+\[u(x, 0) = u_0(x), \tag{4.6}\]
+
+where
+
+(i) \( u_0(x) \) is sufficiently well behaved, \hspace{20pt} (4.7)
+
+(ii) \[ \lim_{|x|\to\infty} u_0(x)e^{-ax^2} = 0 \] for any \( a > 0 \), \hspace{20pt} (4.8)
+
+and lastly where
+
+\[ \lim_{|x|\to\infty} u(x,t)e^{-ax^2} = 0 \] for any \( a > 0 \), \( t > 0 \), \hspace{20pt} (4.9)
+
+Show that $v(x, t) = u_1 - u_2$ 
+is also a solution of (4.5) with $v(x, 0) = 0$. 
+
+Show that if
+\[
+E(t) = \int_{-\infty}^\infty v^2 \, dx,
+\]
+then
+\[
+E(t) \geq 0, \quad E(0) = 0,
+\]
+and, by integrating by parts, that
+\[
+\frac{dE}{dt} \leq 0;
+\]
+thus $E(t) \equiv 0$, hence $v(x, t) \equiv 0$.
+
+Note, though, that as yet we have no guarantee that $v(x, t)$ exists, 
+nor that the above manipulations can be justified.
 \end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{stewart}
+James Stewart,
+\textit{Calculus: Early Transcendentals},
+8th Edition, Cengage Learning, 2015.
+
+\bibitem{rudin}
+Walter Rudin,
+\textit{Principles of Mathematical Analysis},
+3rd Edition, McGraw-Hill, 1976.
+
+\bibitem{wilmott}
+P. Wilmott, J. Dewynne, S. Howison,
+\textit{Option Pricing: Mathematical Models and Computation},
+Oxford Financial Press, 1993.
+
+\end{thebibliography}
 
 \end{document}
