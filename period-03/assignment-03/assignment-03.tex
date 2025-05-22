@@ -3,6 +3,7 @@
 \usepackage{geometry}
 \geometry{margin=1in}
 \usepackage{enumitem}
+\newtheorem{problem}{Problem}[section]
 
 \title{MA2008B: Assignment 03}
 \author{Dr. Juliho Castillo Colmeares}
@@ -64,19 +65,13 @@ thus $E(t) \equiv 0$, hence $v(x, t) \equiv 0$.
 
 Note, though, that as yet we have no guarantee that $v(x, t)$ exists, 
 nor that the above manipulations can be justified.
+
+\item Show that \(\sin nx \, e^{-n^2t}\) is a solution of the forward diffusion equation, and that \(\sin nx \, e^{n^2t}\) is a solution of the backward diffusion equation. Now try to solve the initial value problem for the forward and backward equations in the interval \(-\pi < x < \pi\) by expanding the solution in a Fourier series in \(x\) with coefficients depending on \(t\). What difference do you see between the two problems? Which is well-posed?
+
+
 \end{enumerate}
 
 \begin{thebibliography}{9}
-
-\bibitem{stewart}
-James Stewart,
-\textit{Calculus: Early Transcendentals},
-8th Edition, Cengage Learning, 2015.
-
-\bibitem{rudin}
-Walter Rudin,
-\textit{Principles of Mathematical Analysis},
-3rd Edition, McGraw-Hill, 1976.
 
 \bibitem{wilmott}
 P. Wilmott, J. Dewynne, S. Howison,
