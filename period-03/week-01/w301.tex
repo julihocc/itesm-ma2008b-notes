@@ -215,4 +215,55 @@
     \end{alertblock}
 \end{frame}
 
+
+\section{Heat Equation Analysis}
+
+\begin{frame}{Heat Equation}
+    The fundamental heat equation:
+    \[
+    \frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2}
+    \]
+    
+    Physical interpretation:
+    \begin{itemize}
+        \item $u(x,t)$ represents temperature distribution along a thin insulated rod
+        \item Models heat diffusion over time
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Mathematical Properties}
+    Key characteristics:
+    \begin{itemize}
+        \item Linear equation (superposition principle applies)
+        \item Second order in space ($x$)
+        \item First order in time ($t$)
+        \item Parabolic type (discriminant $\Delta = 0$)
+    \end{itemize}
+    
+    \begin{block}{Analytic Solutions}
+        Solutions are analytic functions of $x$:
+        \begin{itemize}
+            \item For any $t^* > 0$ and $a < x_0 < b$
+            \item $u(x,t^*)$ can be expressed as a convergent power series in $(x-x_0)$
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Solution Behavior}
+    Important features:
+    \begin{itemize}
+        \item \textbf{Smoothing property}: Solutions become instantly smooth for $t>0$
+        \item \textbf{Infinite propagation speed}: Initial disturbances spread infinitely fast
+        \item \textbf{Maximum principle}: Extreme values occur only at initial/boundary conditions
+    \end{itemize}
+    
+    \begin{alertblock}{Financial Interpretation}
+        Analogous to:
+        \begin{itemize}
+            \item Diffusion of volatility in option pricing
+            \item Smoothing of price shocks over time
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
 \end{document}
