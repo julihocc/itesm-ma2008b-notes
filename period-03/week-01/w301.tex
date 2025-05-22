@@ -48,18 +48,74 @@
     \end{enumerate}
 \end{frame}
 
-\begin{frame}{Fundamental Approach}
-    \begin{block}{Analytical vs. Numerical Solutions}
-        \begin{itemize}
-            \item Seek explicit solutions when possible (e.g., Black-Scholes formula)
-            \item Understand limitations of analytical methods
-            \item Develop numerical methods for more complex cases
-        \end{itemize}
+\section{First Order Linear PDEs}
+
+\begin{frame}{First Order Linear PDE}
+    Consider the equation:
+    \[
+    \alpha(s,t)\frac{\partial u}{\partial s} + \beta(s,t)\frac{\partial u}{\partial t} = \gamma(s,t)u(t)
+    \]
+    
+    \begin{block}{Linearity Property}
+        If $u_1, u_2$ are solutions, then $c_1u_1 + c_2u_2$ is also a solution for constants $c_1,c_2$.
     \end{block}
     
-    \begin{alertblock}{Special Challenges}
-        Free boundary problems require particular attention in financial applications
+    \begin{proof}
+        \small
+        Substitute $u = c_1u_1 + c_2u_2$ into the PDE and use linearity of derivatives.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Constant Coefficient Case}
+    When $\alpha,\beta$ are constants and $\gamma \equiv 0$:
+    \[
+    \alpha_0\frac{\partial u}{\partial s} + \beta_0\frac{\partial u}{\partial t} = 0 \quad (4.2)
+    \]
+    
+    Define the vector $\vec{v} = (\alpha_0, \beta_0)$ with $\beta_0\alpha_0 \neq 0$.
+    
+    The directional derivative:
+    \[
+    \nabla_{\vec{v}} u = \langle \alpha_0, \beta_0 \rangle \cdot \langle \frac{\partial u}{\partial s}, \frac{\partial u}{\partial t} \rangle
+    \]
+    
+    Thus, (4.2) $\Leftrightarrow \nabla_{\vec{v}} u \equiv 0$
+\end{frame}
+
+\begin{frame}{Characteristic Coordinates}
+    Introduce new coordinates:
+    \[
+    \xi = \beta_0s + \alpha_0t, \quad \zeta = \beta_0s - \alpha_0t
+    \]
+    
+    The Jacobian determinant:
+    \[
+    \begin{vmatrix}
+    \beta_0 & \alpha_0 \\
+    \beta_0 & -\alpha_0
+    \end{vmatrix} = -2\alpha_0\beta_0 \neq 0
+    \]
+    
+    Computing $\frac{\partial u}{\partial \xi}$:
+    \[
+    \frac{\partial u}{\partial \xi} = \beta_0\frac{\partial u}{\partial s} + \alpha_0\frac{\partial u}{\partial t} \equiv 0
+    \]
+    
+    Therefore, $u$ depends only on $\zeta$: $u = F(\zeta)$
+\end{frame}
+
+\begin{frame}{Characteristics and Information Propagation}
+    \begin{itemize}
+        \item $\xi = \beta_0s - \alpha_0t$ is called a \textbf{characteristic}
+        \item Characteristics represent directions in which information propagates
+        \item Analogous to constants of integration in ODEs
+    \end{itemize}
+    
+    \begin{alertblock}{Important Note}
+        Without boundary conditions, the solution remains arbitrary (like the constant $C$ in ODEs)
     \end{alertblock}
 \end{frame}
+
+
 
 \end{document}
