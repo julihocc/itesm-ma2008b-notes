@@ -117,5 +117,102 @@
 \end{frame}
 
 
+\section{Second-Order Linear PDEs}
+
+\begin{frame}{General Second-Order Linear PDE}
+    Consider the general form in two variables:
+    \[
+    a(x,t)u_{xx} + 2b(x,t)u_{xt} + c(x,t)u_{tt} + d(x,t)u_x + e(x,t)u_t + f(x,t)u = g(x,t)
+    \]
+    where $a,b,c,d,e,f,g: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$ are coefficient functions.
+    
+    \begin{block}{Principal Part}
+        The highest-order terms form the principal part:
+        \[
+        L_p(u) = a u_{xx} + 2b u_{xt} + c u_{tt}
+        \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Classification of PDEs}
+    Define the discriminant:
+    \[
+    \Delta(L) = b^2 - ac : (x,t) \mapsto b(x,t)^2 - a(x,t)c(x,t)
+    \]
+    
+    The PDE is classified as:
+    \begin{itemize}
+        \item \textbf{Hyperbolic} if $\Delta(L) > 0$ (e.g., wave equation)
+        \item \textbf{Parabolic} if $\Delta(L) = 0$ (e.g., heat equation)
+        \item \textbf{Elliptic} if $\Delta(L) < 0$ (e.g., Laplace equation)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Coordinate Transformations}
+    \begin{definition}
+        A transformation $(\xi, \eta) = (\xi(x,t), \eta(x,t))$ is called a change of coordinates if the Jacobian is non-zero:
+        \[
+        J := \xi_x \eta_t - \xi_t \eta_x \neq 0
+        \]
+    \end{definition}
+    
+    \begin{theorem}
+        The type of a linear second-order PDE in two variables is invariant under a change of coordinates.
+    \end{theorem}
+\end{frame}
+
+\begin{frame}{Proof of Invariance}
+    Under transformation $(\xi, \eta)$, the principal part becomes:
+    \[
+    A u_{\xi\xi} + 2B u_{\xi\eta} + C u_{\eta\eta}
+    \]
+    where:
+    \[
+    \begin{aligned}
+        A &= a \xi_x^2 + 2b \xi_x \xi_t + c \xi_t^2 \\
+        B &= a \xi_x \eta_x + b (\xi_x \eta_t + \xi_t \eta_x) + c \xi_t \eta_t \\
+        C &= a \eta_x^2 + 2b \eta_x \eta_t + c \eta_t^2
+    \end{aligned}
+    \]
+    
+    The new discriminant satisfies:
+    \[
+    \Delta_{new} = AC - B^2 = J^2 (b^2 - ac) = J^2 \Delta_{original}
+    \]
+\end{frame}
+
+\begin{frame}{Canonical Forms}
+    \begin{itemize}
+        \item \textbf{Hyperbolic}: $u_{\xi\xi} - u_{\eta\eta} = \text{lower order terms}$ (wave equation)
+        \item \textbf{Parabolic}: $u_{\xi\xi} = \text{lower order terms}$ (heat equation)
+        \item \textbf{Elliptic}: $u_{\xi\xi} + u_{\eta\eta} = \text{lower order terms}$ (Laplace equation)
+    \end{itemize}
+    
+    \begin{examples}
+        \begin{itemize}
+            \item Wave equation: $u_{tt} = c^2(u_{xx} + u_{yy})$
+            \item Heat equation: $u_t = k(u_{xx} + u_{yy})$
+            \item Laplace equation: $u_{xx} + u_{yy} = 0$
+        \end{itemize}
+    \end{examples}
+\end{frame}
+
+\begin{frame}{Simplification Through Coordinates}
+    A proper linear change of coordinates can transform:
+    \begin{itemize}
+        \item Hyperbolic equations to $u_{\xi\eta} = 0$
+        \item Parabolic equations to $u_{\xi\xi} = 0$
+        \item Elliptic equations to $u_{\xi\xi} + u_{\eta\eta} = 0$
+    \end{itemize}
+    
+    \begin{alertblock}{Important Note}
+        The classification determines:
+        \begin{itemize}
+            \item Nature of characteristics
+            \item Appropriate boundary conditions
+            \item Solution techniques
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
 
 \end{document}
