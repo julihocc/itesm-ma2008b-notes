@@ -266,4 +266,93 @@
     \end{alertblock}
 \end{frame}
 
+
+\section{Initial Value Problems with Boundary Conditions}
+
+\begin{frame}{Dirichlet Boundary Value Problem}
+    Heat equation on finite interval:
+    \[
+    \frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2}, \quad -L < x < L, \ t > 0
+    \]
+    
+    With conditions:
+    \begin{itemize}
+        \item Initial condition: $u(x,0) = u_0(x)$
+        \item Boundary conditions:
+        \begin{itemize}
+            \item $u(-L,t) = g_1(t)$ (left end temperature)
+            \item $u(L,t) = g_2(t)$ (right end temperature)
+        \end{itemize}
+    \end{itemize}
+    
+    \begin{block}{Physical Interpretation}
+        Models heat diffusion in a finite rod with controlled end temperatures
+    \end{block}
+\end{frame}
+
+\begin{frame}{Neumann Boundary Value Problem}
+    Same heat equation with flux conditions:
+    \[
+    \frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2}, \quad -L < x < L, \ t > 0
+    \]
+    
+    With conditions:
+    \begin{itemize}
+        \item Initial condition: $u(x,0) = u_0(x)$
+        \item Flux boundary conditions:
+        \begin{itemize}
+            \item $-\frac{\partial u}{\partial x}(-L,t) = h_1(t)$ (left end flux)
+            \item $\frac{\partial u}{\partial x}(L,t) = h_2(t)$ (right end flux)
+        \end{itemize}
+    \end{itemize}
+    
+    \begin{block}{Physical Interpretation}
+        Models heat diffusion with controlled heat flow at boundaries
+    \end{block}
+\end{frame}
+
+\begin{frame}{Infinite Domain Problem}
+    Taking $L \to \infty$:
+    \[
+    \frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2}, \quad x \in \mathbb{R}, \ t > 0
+    \]
+    
+    With initial condition:
+    \[
+    u(x,0) = u_0(x)
+    \]
+    
+    \begin{block}{Growth Conditions}
+        For well-posedness:
+        \begin{itemize}
+            \item $u_0(x)$ piecewise continuous (finite jumps allowed)
+            \item $\lim_{|x|\to\infty} \frac{u_0(x)}{e^{ax^2}} = 0 \quad \forall a > 0$
+            \item $\lim_{|x|\to\infty} \frac{u(x,t)}{e^{ax^2}} = 0 \quad \forall a,t > 0$
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Semi-Infinite Domain with Mixed Conditions}
+    Example problem:
+    \[
+    u_t = u_{xx}, \quad 0 < x < \infty, \ t > 0
+    \]
+    
+    With conditions:
+    \begin{itemize}
+        \item Initial condition: $u(x,0) = u_0(x)$ (sufficiently smooth)
+        \item Boundary condition: $u(0,t) = g(t)$
+        \item Growth conditions at infinity
+    \end{itemize}
+    
+    \begin{alertblock}{Well-Posedness}
+        The problem is well-posed when:
+        \begin{itemize}
+            \item Initial/boundary conditions are compatible
+            \item Growth conditions are satisfied
+            \item Solution exists, is unique, and depends continuously on data
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
 \end{document}
