@@ -1,0 +1,107 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+\title{Black-Scholes Mathematical Analysis}
+\subtitle{Partial Differential Equations and Option Pricing}
+\author{Lecturer}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+
+\section{Proving the Black-Scholes Equation is Parabolic}
+
+\begin{frame}
+\frametitle{The Black-Scholes Partial Differential Equation}
+The Black-Scholes equation for option pricing is:
+
+$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0$$
+
+Where:
+\begin{itemize}
+\item $V(S,t)$ = option value
+\item $S$ = underlying asset price
+\item $t$ = time
+\item $\sigma$ = volatility
+\item $r$ = risk-free interest rate
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{General Form of Second-Order PDEs}
+A general second-order PDE in two variables has the form:
+
+$$A\frac{\partial^2 u}{\partial x^2} + B\frac{\partial^2 u}{\partial x \partial y} + C\frac{\partial^2 u}{\partial y^2} + D\frac{\partial u}{\partial x} + E\frac{\partial u}{\partial y} + F \cdot u + G = 0$$
+
+\begin{block}{Classification of PDEs}
+PDEs are classified based on the discriminant $\Delta = B^2 - 4AC$:
+\begin{itemize}
+\item \textbf{Elliptic}: $\Delta < 0$
+\item \textbf{Parabolic}: $\Delta = 0$
+\item \textbf{Hyperbolic}: $\Delta > 0$
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Identifying Coefficients in Black-Scholes}
+Rewriting the Black-Scholes equation in standard form with $x = S$ and $y = t$:
+
+$$\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + 0 \frac{\partial^2 V}{\partial S \partial t} + 0 \frac{\partial^2 V}{\partial t^2} + rS \frac{\partial V}{\partial S} + \frac{\partial V}{\partial t} - rV = 0$$
+
+\begin{block}{Coefficients}
+\begin{itemize}
+\item $A = \frac{1}{2}\sigma^2 S^2$
+\item $B = 0$
+\item $C = 0$
+\item $D = rS$
+\item $E = 1$
+\item $F = -r$
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Computing the Discriminant}
+$$\Delta = B^2 - 4AC = 0^2 - 4 \cdot \left(\frac{1}{2}\sigma^2 S^2\right) \cdot 0 = 0 - 0 = 0$$
+
+\begin{block}{Conclusion}
+Since the discriminant $\Delta = 0$, the Black-Scholes equation is \textbf{parabolic}.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Physical Interpretation}
+The parabolic nature reflects:
+
+\begin{enumerate}
+\item \textbf{Diffusion Process}: The $\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}$ term represents diffusion in the asset price, similar to heat diffusion
+
+\item \textbf{Time Evolution}: Information propagates through the system over time, characteristic of parabolic PDEs
+
+\item \textbf{No Second Time Derivative}: Unlike wave equations (hyperbolic), there's no "acceleration" term in time
+\end{enumerate}
+
+\begin{block}{Important Implications}
+\begin{itemize}
+\item Parabolic PDEs have unique solutions under appropriate boundary conditions
+\item Numerical methods for parabolic PDEs are well-established
+\item The solution exhibits smoothing properties typical of diffusion processes
+\end{itemize}
+\end{block}
+\end{frame}
+
+\end{document}
