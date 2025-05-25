@@ -104,6 +104,115 @@ The parabolic nature reflects:
 \end{block}
 \end{frame}
 
+\section{Itô's Formula and Stochastic Calculus}
+
+\begin{frame}
+\frametitle{The Need for Stochastic Calculus}
+\begin{block}{Problem with Ordinary Calculus}
+When dealing with random processes like stock prices, ordinary calculus fails because:
+\begin{itemize}
+\item Brownian motion isn't differentiable
+\item The quadratic term $(dx)^2$ doesn't vanish
+\item We need special rules for stochastic differentiation
+\end{itemize}
+\end{block}
+
+\begin{block}{Brownian Motion Properties}
+For Brownian motion $W(t)$:
+\begin{itemize}
+\item $W(0) = 0$ (starts at zero)
+\item Independent, normally distributed increments
+\item Continuous paths but nowhere differentiable
+\item \textbf{Key property}: $(dW)^2 = dt$
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Itô's Formula: The Stochastic Chain Rule}
+For a function $f(W,t)$ where $W$ is Brownian motion:
+
+$df = \left(\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W^2}\right) dt + \frac{\partial f}{\partial W} dW$
+
+\begin{block}{Key Insight}
+The second derivative term appears because $(dW)^2 = dt \neq 0$ in stochastic calculus!
+\end{block}
+
+In ordinary calculus: $df = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dx$
+
+In stochastic calculus: We get an extra $\frac{1}{2}\frac{\partial^2 f}{\partial W^2}dt$ term.
+\end{frame}
+
+\begin{frame}
+\frametitle{Geometric Brownian Motion}
+Stock prices follow geometric Brownian motion (GBM):
+$dS = \mu S dt + \sigma S dW$
+
+Where:
+\begin{itemize}
+\item $\mu$ = expected return (drift)
+\item $\sigma$ = volatility
+\item $dW$ = Brownian motion increment
+\end{itemize}
+
+\begin{block}{Why GBM?}
+\begin{itemize}
+\item Stock prices can't go negative
+\item Percentage changes are more natural than absolute changes
+\item Leads to lognormal distribution of future prices
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Itô's Formula for Functions of GBM}
+For a function $V(S,t)$ where $S$ follows GBM, Itô's formula gives:
+
+$dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW$
+
+\begin{block}{The Derivation Logic}
+\begin{enumerate}
+\item Start with Taylor expansion around $(S,t)$
+\item Use $dS = \mu S dt + \sigma S dW$
+\item Compute $(dS)^2 = \sigma^2 S^2 dt$ (key step!)
+\item Keep terms up to order $dt$
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Crucial Stochastic Rules}
+\begin{block}{Fundamental Rules}
+\begin{itemize}
+\item $(dt)^2 = 0$ - second-order infinitesimals vanish
+\item $(dW)^2 = dt$ - \textbf{this is the key stochastic rule}
+\item $dt \times dW = 0$ - deterministic and random parts are orthogonal
+\end{itemize}
+\end{block}
+
+\begin{block}{Computing $(dS)^2$}
+$(dS)^2 = (\mu S dt + \sigma S dW)^2$
+$= \mu^2 S^2 (dt)^2 + 2\mu\sigma S^2 (dt)(dW) + \sigma^2 S^2 (dW)^2$
+$= 0 + 0 + \sigma^2 S^2 dt = \sigma^2 S^2 dt$
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Itô's Formula Matters for Options}
+The formula tells us how option value $V(S,t)$ changes:
+
+$dV = \left[\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt + \sigma S \frac{\partial V}{\partial S} dW$
+
+\begin{block}{Key Observations}
+\begin{itemize}
+\item \textbf{Same randomness}: Both stock and option driven by the same $dW$
+\item \textbf{The drift term}: Contains the volatility effect $\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}$
+\item \textbf{The diffusion term}: Proportional to $\frac{\partial V}{\partial S}$ (the delta!)
+\item \textbf{Foundation for hedging}: This shared randomness enables delta hedging
+\end{itemize}
+\end{block}
+\end{frame}
+
 \section{Derivation of the Black-Scholes Equation}
 
 \begin{frame}
