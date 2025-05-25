@@ -104,4 +104,146 @@ The parabolic nature reflects:
 \end{block}
 \end{frame}
 
+\section{Derivation of the Black-Scholes Equation}
+
+\begin{frame}
+\frametitle{Key Assumptions for Black-Scholes}
+\begin{enumerate}
+\item \textbf{Geometric Brownian Motion}: Stock price follows
+$$dS = \mu S dt + \sigma S dW$$
+where $dW$ is a Wiener process (Brownian motion)
+
+\item \textbf{Constant Parameters}: Risk-free rate $r$, volatility $\sigma$ are constant
+
+\item \textbf{No Dividends}: The stock pays no dividends
+
+\item \textbf{Perfect Market}: No transaction costs, continuous trading, unlimited borrowing/lending at rate $r$
+
+\item \textbf{European Exercise}: Option can only be exercised at expiration
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 1: Stock Price Model}
+The stock price follows geometric Brownian motion:
+$$dS = \mu S dt + \sigma S dW$$
+
+Where:
+\begin{itemize}
+\item $\mu$ is the expected return (drift)
+\item $\sigma$ is the volatility  
+\item $dW$ is a Wiener process (random walk)
+\end{itemize}
+
+\begin{block}{Interpretation}
+The stock has a deterministic trend $\mu S$ and random fluctuations $\sigma S$.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 2: Option Value Changes (Itô's Lemma)}
+For option value $V(S,t)$, applying Itô's lemma:
+
+$$dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW$$
+
+\begin{block}{Key Insight}
+Both $dS$ and $dV$ contain the same random term $dW$ - this is crucial for hedging.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 3: Constructing the Hedged Portfolio}
+Create a portfolio $\Pi$ consisting of:
+\begin{itemize}
+\item \textbf{Long 1 option} (value = $V$)
+\item \textbf{Short $\Delta$ shares} (value = $-\Delta S$)
+\end{itemize}
+
+So: $\Pi = V - \Delta S$
+
+The change in portfolio value is:
+$$d\Pi = dV - \Delta \, dS$$
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 4: The Critical Substitution}
+Substitute the expressions for $dV$ and $dS$:
+
+\begin{align}
+d\Pi &= \left[\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - \Delta\mu S\right] dt \\
+&\quad + \left[\sigma S \frac{\partial V}{\partial S} - \Delta\sigma S\right] dW
+\end{align}
+
+Factoring the $dW$ coefficient:
+$$\text{dW coefficient} = \sigma S\left[\frac{\partial V}{\partial S} - \Delta\right]$$
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 4: Eliminating Risk - The Magic Choice}
+To eliminate the random $dW$ term, we set:
+$$\Delta = \frac{\partial V}{\partial S}$$
+
+\begin{block}{Why This Works}
+$\frac{\partial V}{\partial S}$ is the option's sensitivity to stock price changes. By shorting exactly this many shares, we create perfect hedge:
+\begin{itemize}
+\item Stock goes up $\rightarrow$ option gains, short stock loses
+\item Stock goes down $\rightarrow$ option loses, short stock gains
+\item \textbf{Net effect: zero risk!}
+\end{itemize}
+\end{block}
+
+With this choice: $d\Pi = \left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt$
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 5: No-Arbitrage Condition}
+Since the portfolio is now risk-free, it must earn the risk-free rate $r$:
+$$d\Pi = r\Pi \, dt$$
+
+But $\Pi = V - \Delta S = V - \frac{\partial V}{\partial S}S$
+
+Therefore:
+$$\left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt = r\left[V - \frac{\partial V}{\partial S}S\right] dt$$
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 6: The Black-Scholes Equation Emerges}
+Dividing by $dt$ and rearranging:
+
+$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = rV - rS\frac{\partial V}{\partial S}$$
+
+Rearranging to standard form:
+
+$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$
+
+\begin{block}{Remarkable Results}
+\begin{itemize}
+\item The expected return $\mu$ disappeared completely!
+\item Option prices depend only on volatility $\sigma$, not expected return
+\item Perfect hedging creates risk-free portfolio
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Deep Intuition}
+\begin{block}{What We Accomplished}
+By setting $\Delta = \frac{\partial V}{\partial S}$, we matched the sensitivities:
+\begin{itemize}
+\item Option position sensitivity = Stock position sensitivity
+\item Random fluctuations cancel out perfectly
+\item Only deterministic terms remain
+\end{itemize}
+\end{block}
+
+\begin{block}{Economic Interpretation}
+In an efficient market with no arbitrage opportunities:
+\begin{itemize}
+\item Risk-free portfolios must earn the risk-free rate
+\item This constraint determines option prices uniquely
+\item The mathematics captures this economic principle
+\end{itemize}
+\end{block}
+\end{frame}
+
 \end{document}
