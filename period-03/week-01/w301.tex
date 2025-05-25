@@ -85,7 +85,7 @@
 \begin{frame}{Characteristic Coordinates}
     Introduce new coordinates:
     \[
-    \xi = \beta_0s + \alpha_0t, \quad \zeta = \beta_0s - \alpha_0t
+    \xi = \beta_0 S + \alpha_0t, \quad \zeta = \beta_0 S - \alpha_0t
     \]
     
     The Jacobian determinant:
@@ -96,10 +96,31 @@
     \end{vmatrix} = -2\alpha_0\beta_0 \neq 0
     \]
     
+\end{frame}
+
+\begin{frame}
+Let's solve the system for $S,t$:
+
+\begin{align} 
+    S &= \frac{1}{2\beta_0}(\xi + \zeta) \\
+    t &= \frac{1}{2\alpha_0}(\xi-\zeta)
+\end{align}
+
+Then 
+\begin{align}
+    \frac{\partial S}{\partial \xi} &= \frac{1}{2\beta_0} \\
+    \frac{\partial t}{\partial \xi} &= \frac{1}{2\alpha_0}  
+\end{align}
+\end{frame}
+
+\begin{frame}
     Computing $\frac{\partial u}{\partial \xi}$:
-    \[
-    \frac{\partial u}{\partial \xi} = \beta_0\frac{\partial u}{\partial s} + \alpha_0\frac{\partial u}{\partial t} \equiv 0
-    \]
+\begin{align} 
+        \frac{\partial u}{\partial \xi} &= \frac{\partial u}{\partial S} \frac{\partial S}{\partial \xi} + \frac{\partial u}{\partial t} \frac{\partial t}{\partial \xi} \\
+        & = \frac{1}{2\beta_0} \frac{\partial u}{\partial S} + \frac{1}{2\alpha_0} \frac{\partial u}{\partial t} \\
+        & = \frac{1}{2\beta_0 \alpha_0} \left( \alpha_0 \frac{\partial u}{\partial S} + \beta_0\frac{\partial u}{\partial t}\right) \\
+        & = 0
+\end{align}
     
     Therefore, $u$ depends only on $\zeta$: $u = F(\zeta)$
 \end{frame}
