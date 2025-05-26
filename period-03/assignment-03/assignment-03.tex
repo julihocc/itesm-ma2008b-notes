@@ -1,85 +1,177 @@
-\documentclass[12pt]{article}
-\usepackage{amsmath, amssymb, amsthm}
-\usepackage{geometry}
-\geometry{margin=1in}
-\usepackage{enumitem}
-\newtheorem{problem}{Problem}[section]
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{enumerate}
 
-\title{MA2008B: Assignment 03}
-\author{Dr. Juliho Castillo Colmeares}
-\date{Updated: \today}
+\title{\textbf{Examen de Análisis Numérico}}
+\author{}
+\date{}
 
 \begin{document}
 
 \maketitle
 
-\section*{Instructions}
+\section*{Instrucciones}
+
+\subsection*{Modalidad de Examen}
 \begin{itemize}
-    \item Show all your work for full credit.
-    \item Write your answers clearly and neatly.
-    \item Submit your assignment by the due date.
+\item \textbf{Resolución:} Manual, escrito a tinta en papel
+\item \textbf{Formato:} Utilizar únicamente un lado de cada hoja (el reverso se reserva para anotaciones del profesor)
+\item \textbf{Organización:} Cada ejercicio debe comenzar en una hoja nueva (no mezclar ejercicios en la misma hoja)
+\item \textbf{Entrega:} Física en clase + archivo digital escaneado subido a Canvas
 \end{itemize}
 
-\section{Partial Differential Equations}
+\subsection*{Evaluación}
+\begin{itemize}
+\item \textbf{Puntuación:} 10 puntos por inciso (100 puntos total)
+\item \textbf{Criterios:} Las respuestas deben estar justificadas matemáticamente y ser numéricamente correctas
+\end{itemize}
 
-\begin{problem}
-Show that the solution to the initial value problem is unique 
-provided that it is sufficiently smooth and decays sufficiently 
-fast at infinity, as follows:
+\subsection*{Herramientas Permitidas}
+\begin{itemize}
+\item \textbf{Calculadora:} Solo calculadoras científicas básicas (sin capacidad de programación, gráficas o simbólicas)
+\item \textbf{Operaciones permitidas:} Aritmética básica (+, -, $\times$, $\div$), funciones elementales ($\ln$, $\exp$, $\sin$, $\cos$, etc.)
+\item \textbf{Prohibido:} Software de cálculo numérico, aplicaciones móviles, calculadoras programables
+\end{itemize}
 
-Suppose that $u_1(x, t)$ and $u_2(x, t)$ are both solutions to the 
-initial value problem (4.5)--(4.9): 
+\subsection*{Formato de Presentación}
+\begin{itemize}
+\item \textbf{Cálculos intermedios:} Mantener mínimo 4 cifras decimales
+\item \textbf{Resultados finales:} Redondear a 3 cifras decimales
+\item \textbf{Procedimiento:} Mostrar todos los pasos de cálculo de forma ordenada y legible
+\item \textbf{Conclusión:} Al final de cada ejercicio, presentar los resultados numéricos en forma tabular como resumen
+\end{itemize}
 
-\[\frac{\partial u}{\partial t} = \frac{\partial^2 u}{\partial x^2} - \infty < x < \infty, \quad t > 0, \tag{4.5}\]
+\subsection*{Ejemplos de Tablas de Resultados}
 
-with
+\textbf{Ejercicio 1:}
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Método} & \textbf{Resultado} \\
+\hline
+Newton-Raphson (2 iter.) & $x \approx$ \\
+\hline
+Secante (1 iter.) & $x \approx$ \\
+\hline
+\end{tabular}
+\end{center}
 
-\[u(x, 0) = u_0(x), \tag{4.6}\]
+\textbf{Ejercicio 2:}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Método} & \textbf{Aproximación} & \textbf{Error Absoluto} \\
+\hline
+Valor Exacto & & - \\
+\hline
+Trapecio ($n=4$) & & \\
+\hline
+Simpson ($n=4$) & & \\
+\hline
+\end{tabular}
+\end{center}
 
-where
+\textbf{Ejercicio 3:}
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Método} & \textbf{h} & \textbf{Punto Evaluado} & \textbf{Aproximación} \\
+\hline
+Analítica & - & $y(1)$ & \\
+\hline
+Euler & $0.25$ & $y(1)$ & \\
+\hline
+RK2 & $0.5$ & $y(1)$ & \\
+\hline
+RK4 & $1.0$ & $y(1)$ & \\
+\hline
+\end{tabular}
+\end{center}
 
-(i) \( u_0(x) \) is sufficiently well behaved, \hspace{20pt} (4.7)
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
 
-(ii) \[ \lim_{|x|\to\infty} u_0(x)e^{-ax^2} = 0 \] for any \( a > 0 \), \hspace{20pt} (4.8)
+\section*{Ejercicio 1: Búsqueda de Raíces}
 
-and lastly where
+Considera la ecuación $f(x) = x^3 - 2x - 5 = 0$.
 
-\[ \lim_{|x|\to\infty} u(x,t)e^{-ax^2} = 0 \] for any \( a > 0 \), \( t > 0 \), \hspace{20pt} (4.9)
+\subsection*{a) Existencia de raíces}
+Demuestra que existe una raíz en el intervalo $[2, 3]$.
 
-Show that $v(x, t) = u_1 - u_2$ 
-is also a solution of (4.5) with $v(x, 0) = 0$. 
+\subsection*{b) Método de Newton-Raphson}
+Aplica el método de Newton-Raphson con valor inicial $x_0 = 2.5$ para calcular dos iteraciones. Muestra todos los cálculos intermedios, incluyendo la obtención de la derivada $f'(x)$ y la fórmula:
 
-Show that if
-\[
-E(t) = \int_{-\infty}^\infty v^2 \, dx,
-\]
-then
-\[
-E(t) \geq 0, \quad E(0) = 0,
-\]
-and, by integrating by parts, that
-\[
-\frac{dE}{dt} \leq 0;
-\]
-thus $E(t) \equiv 0$, hence $v(x, t) \equiv 0$.
+$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
 
-Note, though, that as yet we have no guarantee that $v(x, t)$ exists, 
-nor that the above manipulations can be justified.
-\end{problem}
+\subsection*{c) Método de la Secante}
+Aplica el método de la secante con valores iniciales $x_0 = 2$ y $x_1 = 3$ para calcular una iteración. Muestra todos los cálculos usando la fórmula:
 
-\begin{problem}
-Show that \(\sin nx \, e^{-n^2t}\) is a solution of the forward diffusion equation, and that \(\sin nx \, e^{n^2t}\) is a solution of the backward diffusion equation. Now try to solve the initial value problem for the forward and backward equations in the interval \(-\pi < x < \pi\) by expanding the solution in a Fourier series in \(x\) with coefficients depending on \(t\). What difference do you see between the two problems? Which is well-posed?
+$$x_{n+1} = x_n - f(x_n) \cdot \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
 
-    
-\end{problem}
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
 
-\begin{thebibliography}{9}
+\section*{Ejercicio 2: Integración Numérica}
 
-\bibitem{wilmott}
-P. Wilmott, J. Dewynne, S. Howison,
-\textit{Option Pricing: Mathematical Models and Computation},
-Oxford Financial Press, 1993.
+Se desea aproximar la integral:
 
-\end{thebibliography}
+$$I = \int_{1}^{2} \frac{\ln(x)}{x} \, dx$$
+
+\subsection*{a) Solución analítica}
+Encuentra el valor exacto de la integral $I$ definida utilizando el teorema fundamental del cálculo.
+
+\subsection*{b) Regla del Trapecio}
+Aplica la regla del trapecio compuesto con $n = 4$ subintervalos para aproximar el valor de $I$, y compara con el valor exacto.
+
+\subsection*{c) Regla de Simpson}
+Aplica la regla de Simpson compuesto con $n = 4$ subintervalos para aproximar el valor de $I$, y compara con el valor exacto.
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\section*{Ejercicio 3: Ecuaciones Diferenciales Ordinarias}
+
+Considera el problema de valor inicial:
+
+$$\begin{cases}
+y'(t) = 2y(t) - t, \quad t \in [0, 1] \\
+y(0) = 1
+\end{cases}$$
+
+\subsection*{a) Solución Analítica}
+Calcula la solución analítica exacta de esta ecuación diferencial y evalúa $y(1)$. Compara numéricamente este valor con todas las aproximaciones obtenidas en los siguientes incisos (Método de Euler, RK2 y RK4).
+
+\subsection*{b) Método de Euler}
+Aplica el método de Euler con paso $h = 0.25$ para aproximar $y(1)$. Muestra todos los cálculos paso a paso usando la fórmula:
+
+$$y_{n+1} = y_n + h \cdot f(t_n, y_n)$$
+
+\subsection*{c) Método de Runge-Kutta de Orden 2}
+Aplica el método de Runge-Kutta de segundo orden (método del punto medio) con paso $h = 0.5$ para aproximar $y(1)$. Muestra todos los cálculos detalladamente usando las fórmulas:
+
+\begin{align}
+k_1 &= h \cdot f(t_n, y_n) \\
+k_2 &= h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
+y_{n+1} &= y_n + k_2
+\end{align}
+
+\subsection*{d) Método de Runge-Kutta de Orden 4}
+Aplica una iteración del método de Runge-Kutta de cuarto orden con paso $h = 1$ para aproximar $y(1)$ directamente. Muestra todos los cálculos usando las fórmulas:
+
+\begin{align}
+k_1 &= h \cdot f(t_n, y_n) \\
+k_2 &= h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
+k_3 &= h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_2}{2}\right) \\
+k_4 &= h \cdot f(t_n + h, y_n + k_3) \\
+y_{n+1} &= y_n + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
+\end{align}
 
 \end{document}
