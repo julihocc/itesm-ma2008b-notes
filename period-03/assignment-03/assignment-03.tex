@@ -35,7 +35,7 @@
 \subsection*{Herramientas Permitidas}
 \begin{itemize}
 \item \textbf{Calculadora:} Solo calculadoras científicas básicas (sin capacidad de programación, gráficas o simbólicas)
-\item \textbf{Operaciones permitidas:} Aritmética básica (+, -, $\times$, $\div$), funciones elementales ($\ln$, $\exp$, $\sin$, $\cos$, etc.)
+\item \textbf{Operaciones permitidas:} Aritmética básica (+, -, \(\times\), \(\div\)), funciones elementales (\(\ln\), \(\exp\), \(\sin\), \(\cos\), etc.)
 \item \textbf{Prohibido:} Software de cálculo numérico, aplicaciones móviles, calculadoras programables
 \end{itemize}
 
@@ -48,67 +48,71 @@
 
 \section*{Ejercicio 1: Búsqueda de Raíces}
 
-Considera la ecuación $f(x) = x^4 - 6x^2 - 7 = 0$.
+Considera la ecuación \(f(x) = x^4 - 6x^2 - 7 = 0\).
 
 \subsection*{a) Solución exacta}
-Encuentra las raíces reales de la ecuación utilizando un método algebraico. \textit{Sugerencia: Realiza la sustitución $u = x^2$ para convertir la ecuación en una cuadrática.}
+Encuentra las raíces reales de la ecuación utilizando un método algebraico. \textit{Sugerencia: Realiza la sustitución \(u = x^2\) para convertir la ecuación en una cuadrática.}
 
 \subsection*{b) Método de Newton-Raphson}
-Aplica el método de Newton-Raphson con valor inicial $x_0 = 2.5$ para calcular tres iteraciones. Muestra todos los cálculos intermedios, incluyendo la obtención de la derivada $f'(x)$ y la fórmula:
+Aplica el método de Newton-Raphson con valor inicial \(x_0 = 2.5\) para calcular tres iteraciones. Muestra todos los cálculos intermedios, incluyendo la obtención de la derivada \(f'(x)\) y la fórmula:
 
-$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$
+\[x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}\]
 
 \subsection*{c) Método de la Secante}
-Aplica el método de la secante con valores iniciales $x_0 = 2$ y $x_1 = 3$ para calcular tres iteraciones. Muestra todos los cálculos usando la fórmula:
+Aplica el método de la secante con valores iniciales \(x_0 = 2\) y \(x_1 = 3\) para calcular tres iteraciones. Muestra todos los cálculos usando la fórmula:
 
-$$x_{n+1} = x_n - f(x_n) \cdot \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
+\[x_{n+1} = x_n - f(x_n) \cdot \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}\]
 
 \section*{Ejercicio 2: Integración Numérica}
 
 Se desea aproximar la integral:
 
-$$I = \int_{1}^{2} \frac{\ln(x)}{x} \, dx$$
+\[I = \int_{1}^{2} \frac{\ln(x)}{x} \, dx\]
 
 \subsection*{a) Solución analítica}
-Encuentra el valor exacto de la integral $I$ definida utilizando el teorema fundamental del cálculo.
+Encuentra el valor exacto de la integral \(I\) definida utilizando el teorema fundamental del cálculo.
 
 \subsection*{b) Regla del Trapecio}
-Aplica la regla del trapecio compuesto con $n = 4$ subintervalos para aproximar el valor de $I$, y compara con el valor exacto.
+Aplica la regla del trapecio compuesto con \(n = 4\) subintervalos para aproximar el valor de \(I\), y compara con el valor exacto.
 
 \subsection*{c) Regla de Simpson}
-Aplica la regla de Simpson compuesto con $n = 4$ subintervalos para aproximar el valor de $I$, y compara con el valor exacto.
+Aplica la regla de Simpson compuesto con \(n = 4\) subintervalos para aproximar el valor de \(I\), y compara con el valor exacto.
 
 \section*{Ejercicio 3: Ecuaciones Diferenciales Ordinarias}
 
 Considera el problema de valor inicial:
 
-$$\begin{cases}
+\[\begin{cases}
 y'(t) = 2y(t) - t, \quad t \in [0, 1] \\
 y(0) = 1
-\end{cases}$$
+\end{cases}\]
 
 \subsection*{a) Solución Analítica}
-Calcula la solución analítica exacta de esta ecuación diferencial y evalúa $y(1)$.
+Calcula la solución analítica exacta de esta ecuación diferencial y evalúa \(y(1)\).
 
 \subsection*{b) Método de Euler}
-Aplica el método de Euler con paso $h = 0.25$ para aproximar $y(1)$. Muestra todos los cálculos paso a paso usando la fórmula:
+Aplica el método de Euler con paso \(h = 0.25\) para aproximar \(y(1)\). Muestra todos los cálculos paso a paso usando la fórmula:
 
-$$y_{n+1} = y_n + h \cdot f(t_n, y_n)$$
+\[y_{n+1} = y_n + h \cdot f(t_n, y_n)\]
 
 \subsection*{c) Método de Runge-Kutta de Orden 2}
-Aplica el método de Runge-Kutta de segundo orden (método del punto medio) con paso $h = 0.5$ para aproximar $y(1)$. Muestra todos los cálculos detalladamente usando las fórmulas:
+Aplica el método de Runge-Kutta de segundo orden (método del punto medio) con paso \(h = 0.5\) para aproximar \(y(1)\). Muestra todos los cálculos detalladamente usando las fórmulas:
 
-$k_1 = h \cdot f(t_n, y_n)$
-$k_2 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right)$
-$y_{n+1} = y_n + k_2$
+\begin{gather*}
+k_1 = h \cdot f(t_n, y_n) \\
+k_2 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
+y_{n+1} = y_n + k_2
+\end{gather*}
 
 \subsection*{d) Método de Runge-Kutta de Orden 4}
-Aplica una iteración del método de Runge-Kutta de cuarto orden con paso $h = 1$ para aproximar $y(1)$ directamente. Muestra todos los cálculos usando las fórmulas:
+Aplica una iteración del método de Runge-Kutta de cuarto orden con paso \(h = 1\) para aproximar \(y(1)\) directamente. Muestra todos los cálculos usando las fórmulas:
 
-$k_1 = h \cdot f(t_n, y_n)$
-$k_2 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right)$
-$k_3 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_2}{2}\right)$
-$k_4 = h \cdot f(t_n + h, y_n + k_3)$
-$y_{n+1} = y_n + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}$
+\begin{gather*}
+k_1 = h \cdot f(t_n, y_n) \\
+k_2 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
+k_3 = h \cdot f\left(t_n + \frac{h}{2}, y_n + \frac{k_2}{2}\right) \\
+k_4 = h \cdot f(t_n + h, y_n + k_3) \\
+y_{n+1} = y_n + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
+\end{gather*}
 
 \end{document}
