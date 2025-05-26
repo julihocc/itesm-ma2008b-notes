@@ -49,18 +49,18 @@
 
 \section*{Ejercicio 1: Búsqueda de Raíces}
 
-Considera la ecuación $f(x) = x^3 - 2x - 5 = 0$.
+Considera la ecuación $f(x) = x^4 - 6x^2 - 7 = 0$.
 
-\subsection*{a) Existencia de raíces}
-Demuestra que existe una raíz en el intervalo $[2, 3]$.
+\subsection*{a) Solución exacta}
+Encuentra las raíces reales de la ecuación utilizando un método algebraico. \textit{Sugerencia: Realiza la sustitución $u = x^2$ para convertir la ecuación en una cuadrática.}
 
 \subsection*{b) Método de Newton-Raphson}
-Aplica el método de Newton-Raphson con valor inicial $x_0 = 2.5$ para calcular dos iteraciones. Muestra todos los cálculos intermedios, incluyendo la obtención de la derivada $f'(x)$ y la fórmula:
+Aplica el método de Newton-Raphson con valor inicial $x_0 = 2.5$ para calcular tres iteraciones. Muestra todos los cálculos intermedios, incluyendo la obtención de la derivada $f'(x)$ y la fórmula:
 
-$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
+$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$
 
 \subsection*{c) Método de la Secante}
-Aplica el método de la secante con valores iniciales $x_0 = 2$ y $x_1 = 3$ para calcular una iteración. Muestra todos los cálculos usando la fórmula:
+Aplica el método de la secante con valores iniciales $x_0 = 2$ y $x_1 = 3$ para calcular dos iteraciones. Muestra todos los cálculos usando la fórmula:
 
 $$x_{n+1} = x_n - f(x_n) \cdot \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
 
