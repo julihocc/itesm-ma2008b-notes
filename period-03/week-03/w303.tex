@@ -279,4 +279,163 @@ Boundary conditions are crucial for accurate solutions:
 \end{block}
 \end{frame}
 
+\section{Option-Specific Pricing Approaches}
+
+\begin{frame}
+\frametitle{European vs American Options}
+Different option types require different numerical treatments:
+
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{European Options:}
+\begin{itemize}
+\item Exercise only at expiration
+\item Boundary value problem
+\item Work backward from \(t = T\)
+\item Terminal condition: payoff at expiry
+\item All three methods work well
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{American Options:}
+\begin{itemize}
+\item Exercise at any time before expiry
+\item Free boundary problem
+\item Early exercise constraint
+\item \(V(S,t) \geq \text{Payoff}(S)\)
+\item Requires special treatment
+\end{itemize}
+\end{columns}
+
+\begin{block}{American Option Challenge}
+At each grid point and time step, check:
+\[V_{i,j} = \max\{V_{i,j}^{\text{European}}, \text{Payoff}(S_i)\}\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Call Option Pricing Implementation}
+\textbf{Terminal Condition (at expiration):}
+\[V(S_i, T) = \max(S_i - K, 0)\]
+
+\textbf{Boundary Conditions:}
+\begin{itemize}
+\item \textbf{At \(S = 0\)}: Call worthless, \(V(0,t) = 0\)
+\item \textbf{At \(S = S_{\max}\)}: Deep in-the-money behavior
+\[V(S_{\max},t) = S_{\max} - Ke^{-r(T-t)}\]
+\end{itemize}
+
+\begin{block}{Finite Difference Implementation}
+\begin{enumerate}
+\item Initialize grid with terminal payoffs
+\item Apply boundary conditions at each time step
+\item Use chosen finite difference scheme (explicit/implicit/Crank-Nicolson)
+\item Work backward to present time
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Put Option Pricing Implementation}
+\textbf{Terminal Condition (at expiration):}
+\[V(S_i, T) = \max(K - S_i, 0)\]
+
+\textbf{Boundary Conditions:}
+\begin{itemize}
+\item \textbf{At \(S = 0\)}: Asset worthless, put worth strike
+\[V(0,t) = Ke^{-r(T-t)}\]
+\item \textbf{At \(S = S_{\max}\)}: Put worthless, \(V(S_{\max},t) = 0\)
+\end{itemize}
+
+\begin{block}{Key Differences from Calls}
+\begin{itemize}
+\item Different payoff function (strike minus spot)
+\item Reversed boundary behavior
+\item Same numerical methods apply
+\item Early exercise more likely for American puts
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{American Option Pricing: Projected SOR}
+For American options, use \textbf{Projected Successive Over-Relaxation}:
+
+\begin{block}{Algorithm Steps}
+\begin{enumerate}
+\item Solve European problem: \(\tilde{V}_{i,j+1}\)
+\item Apply early exercise constraint:
+\[V_{i,j+1} = \max\{\tilde{V}_{i,j+1}, \text{Payoff}(S_i)\}\]
+\item Check convergence
+\item Iterate if necessary
+\end{enumerate}
+\end{block}
+
+\textbf{For American Calls (no dividends):}
+\begin{itemize}
+\item Never optimal to exercise early
+\item European and American values identical
+\item Standard finite difference methods sufficient
+\end{itemize}
+
+\textbf{For American Puts:}
+\begin{itemize}
+\item Early exercise often optimal
+\item Requires iterative solution methods
+\item Free boundary location unknown a priori
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Barrier Option Pricing}
+\textbf{Knock-out Options:} Option expires if barrier is hit
+
+\textbf{Up-and-Out Call:}
+\begin{itemize}
+\item Barrier at \(S = B > K\)
+\item If \(S_i \geq B\), set \(V_{i,j} = 0\) for all \(j\)
+\item Modified boundary condition at barrier
+\end{itemize}
+
+\textbf{Down-and-Out Put:}
+\begin{itemize}
+\item Barrier at \(S = B < K\)  
+\item If \(S_i \leq B\), set \(V_{i,j} = 0\) for all \(j\)
+\end{itemize}
+
+\begin{block}{Implementation Strategy}
+\begin{enumerate}
+\item Monitor barrier condition at each time step
+\item Set option value to zero when barrier is breached
+\item Use fine grid near barrier for accuracy
+\item Consider adaptive grid refinement
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Path-Dependent Options}
+\textbf{Asian Options:} Payoff depends on average price
+
+\textbf{Challenges:}
+\begin{itemize}
+\item State space includes both \(S\) and running average \(A\)
+\item Two-dimensional PDE: \(V(S, A, t)\)
+\item Computational complexity increases significantly
+\end{itemize}
+
+\textbf{Lookback Options:} Payoff depends on maximum/minimum
+
+\begin{block}{Alternative Approaches}
+\begin{itemize}
+\item \textbf{Monte Carlo simulation}: Often more efficient
+\item \textbf{Fourier methods}: For certain payoff structures  
+\item \textbf{Binomial/trinomial trees}: Handle path dependence naturally
+\item \textbf{Finite difference}: Requires multi-dimensional grids
+\end{itemize}
+\end{block}
+
+\textbf{Recommendation:} Use finite differences for simple barriers, Monte Carlo for complex path dependence
+\end{frame}
+
 \end{document}
