@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usetheme{metropolis}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -7,7 +7,7 @@
 
 \title{Black-Scholes Mathematical Analysis}
 \subtitle{Partial Differential Equations and Option Pricing}
-\author{Lecturer}
+\author{Dr. Juliho Castillo}
 \date{\today}
 
 \begin{document}
@@ -24,18 +24,21 @@
 \section{Proving the Black-Scholes Equation is Parabolic}
 
 \begin{frame}
-\frametitle{The Black-Scholes Partial Differential Equation}
+\frametitle{The Black-Scholes PDE}
 The Black-Scholes equation for option pricing is:
 
-$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0$$
+\[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0\]
+\end{frame}
 
+\begin{frame}
+\frametitle{Variables in the Black-Scholes Equation}
 Where:
 \begin{itemize}
-\item $V(S,t)$ = option value
-\item $S$ = underlying asset price
-\item $t$ = time
-\item $\sigma$ = volatility
-\item $r$ = risk-free interest rate
+\item \(V(S,t)\) = option value
+\item \(S\) = underlying asset price
+\item \(t\) = time
+\item \(\sigma\) = volatility
+\item \(r\) = risk-free interest rate
 \end{itemize}
 \end{frame}
 
@@ -43,58 +46,68 @@ Where:
 \frametitle{General Form of Second-Order PDEs}
 A general second-order PDE in two variables has the form:
 
-$$A\frac{\partial^2 u}{\partial x^2} + B\frac{\partial^2 u}{\partial x \partial y} + C\frac{\partial^2 u}{\partial y^2} + D\frac{\partial u}{\partial x} + E\frac{\partial u}{\partial y} + F \cdot u + G = 0$$
+\[A\frac{\partial^2 u}{\partial x^2} + B\frac{\partial^2 u}{\partial x \partial y} + C\frac{\partial^2 u}{\partial y^2} + D\frac{\partial u}{\partial x} + E\frac{\partial u}{\partial y} + F \cdot u + G = 0\]
+\end{frame}
 
-\begin{block}{Classification of PDEs}
-PDEs are classified based on the discriminant $\Delta = B^2 - 4AC$:
+\begin{frame}
+\frametitle{Classification of PDEs}
+\begin{block}{PDE Classification}
+PDEs are classified based on the discriminant \(\Delta = B^2 - 4AC\):
 \begin{itemize}
-\item \textbf{Elliptic}: $\Delta < 0$
-\item \textbf{Parabolic}: $\Delta = 0$
-\item \textbf{Hyperbolic}: $\Delta > 0$
+\item \textbf{Elliptic}: \(\Delta < 0\)
+\item \textbf{Parabolic}: \(\Delta = 0\)
+\item \textbf{Hyperbolic}: \(\Delta > 0\)
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Identifying Coefficients in Black-Scholes}
-Rewriting the Black-Scholes equation in standard form with $x = S$ and $y = t$:
+\frametitle{Black-Scholes in Standard Form}
+Rewriting the Black-Scholes equation in standard form with \(x = S\) and \(y = t\):
 
-$$\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + 0 \frac{\partial^2 V}{\partial S \partial t} + 0 \frac{\partial^2 V}{\partial t^2} + rS \frac{\partial V}{\partial S} + \frac{\partial V}{\partial t} - rV = 0$$
+\[\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + 0 \frac{\partial^2 V}{\partial S \partial t} + 0 \frac{\partial^2 V}{\partial t^2} + rS \frac{\partial V}{\partial S} + \frac{\partial V}{\partial t} - rV = 0\]
+\end{frame}
 
+\begin{frame}
+\frametitle{Identifying the Coefficients}
 \begin{block}{Coefficients}
 \begin{itemize}
-\item $A = \frac{1}{2}\sigma^2 S^2$
-\item $B = 0$
-\item $C = 0$
-\item $D = rS$
-\item $E = 1$
-\item $F = -r$
+\item \(A = \frac{1}{2}\sigma^2 S^2\)
+\item \(B = 0\)
+\item \(C = 0\)
+\item \(D = rS\)
+\item \(E = 1\)
+\item \(F = -r\)
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{Computing the Discriminant}
-$$\Delta = B^2 - 4AC = 0^2 - 4 \cdot \left(\frac{1}{2}\sigma^2 S^2\right) \cdot 0 = 0 $$
+\[\Delta = B^2 - 4AC = 0^2 - 4 \cdot \left(\frac{1}{2}\sigma^2 S^2\right) \cdot 0 = 0\]
 
 \begin{block}{Conclusion}
-Since the discriminant $\Delta = 0$, the Black-Scholes equation is \textbf{parabolic}.
+Since the discriminant \(\Delta = 0\), the Black-Scholes equation is \textbf{parabolic}.
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Physical Interpretation}
-The parabolic nature reflects:
+\frametitle{Physical Interpretation - Diffusion Process}
+The parabolic nature reflects a \textbf{diffusion process}:
 
-\begin{enumerate}
-\item \textbf{Diffusion Process}: The $\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}$ term represents diffusion in the asset price, similar to heat diffusion
+The \(\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\) term represents diffusion in the asset price, similar to heat diffusion.
+\end{frame}
 
-\item \textbf{Time Evolution}: Information propagates through the system over time, characteristic of parabolic PDEs
+\begin{frame}
+\frametitle{Physical Interpretation - Time Evolution}
+\textbf{Time Evolution}: Information propagates through the system over time, characteristic of parabolic PDEs.
 
-\item \textbf{No Second Time Derivative}: Unlike wave equations (hyperbolic), there's no "acceleration" term in time
-\end{enumerate}
+\textbf{No Second Time Derivative}: Unlike wave equations (hyperbolic), there's no "acceleration" term in time.
+\end{frame}
 
-\begin{block}{Important Implications}
+\begin{frame}
+\frametitle{Important Implications}
+\begin{block}{Mathematical Properties}
 \begin{itemize}
 \item Parabolic PDEs have unique solutions under appropriate boundary conditions
 \item Numerical methods for parabolic PDEs are well-established
@@ -106,126 +119,177 @@ The parabolic nature reflects:
 \section{Itô's Formula and Stochastic Calculus}
 
 \begin{frame}
-\frametitle{The Need for Stochastic Calculus}
-\begin{block}{Problem with Ordinary Calculus}
+\frametitle{Why Do We Need Stochastic Calculus?}
 When dealing with random processes like stock prices, ordinary calculus fails because:
 \begin{itemize}
 \item Brownian motion isn't differentiable
-\item The quadratic term $(dx)^2$ doesn't vanish
-\item We need special rules for stochastic differentiation
+\item The quadratic term \((dx)^2\) doesn't vanish
 \end{itemize}
-\end{block}
+\end{frame}
 
-\begin{block}{Brownian Motion Properties}
-For Brownian motion $W(t)$:
+\begin{frame}
+\frametitle{We Need Special Rules}
+We need special rules for stochastic differentiation to handle random processes properly.
+\end{frame}
+
+\begin{frame}
+\frametitle{Brownian Motion - Starting Point}
+For Brownian motion \(W(t)\):
 \begin{itemize}
-\item $W(0) = 0$ (starts at zero)
+\item \(W(0) = 0\) (starts at zero)
 \item Independent, normally distributed increments
-\item Continuous paths but nowhere differentiable
-\item \textbf{Key property}: $(dW)^2 = dt$
 \end{itemize}
-\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Brownian Motion - Key Properties}
+\begin{itemize}
+\item Continuous paths but nowhere differentiable
+\item \textbf{Key property}: \((dW)^2 = dt\)
+\end{itemize}
+
+This last property is fundamental to stochastic calculus!
+\end{frame}
+
+\begin{frame}
+\frametitle{Ordinary vs. Stochastic Chain Rule}
+\textbf{Ordinary calculus}: 
+\[df = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dx\]
+
+\textbf{Stochastic calculus}: We get an extra term!
 \end{frame}
 
 \begin{frame}
 \frametitle{Itô's Formula: The Stochastic Chain Rule}
-For a function $f(W,t)$ where $W$ is Brownian motion:
+For a function \(f(W,t)\) where \(W\) is Brownian motion:
 
-$df = \left(\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W^2}\right) dt + \frac{\partial f}{\partial W} dW$
-
-\begin{block}{Key Insight}
-The second derivative term appears because $(dW)^2 = dt \neq 0$ in stochastic calculus!
-\end{block}
-
-In ordinary calculus: $df = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dx$
-
-In stochastic calculus: We get an extra $\frac{1}{2}\frac{\partial^2 f}{\partial W^2}dt$ term.
+\[df = \left(\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W^2}\right) dt + \frac{\partial f}{\partial W} dW\]
 \end{frame}
 
 \begin{frame}
-\frametitle{Geometric Brownian Motion}
-Stock prices follow geometric Brownian motion (GBM):
-$dS = \mu S dt + \sigma S dW$
+\frametitle{The Key Insight}
+\begin{block}{Why the Extra Term?}
+The second derivative term appears because \((dW)^2 = dt \neq 0\) in stochastic calculus!
+\end{block}
 
+In ordinary calculus, \((dx)^2 = 0\), but in stochastic calculus, \((dW)^2 = dt\).
+\end{frame}
+
+\begin{frame}
+\frametitle{Stock Price Model}
+Stock prices follow geometric Brownian motion (GBM):
+\[dS = \mu S dt + \sigma S dW\]
+\end{frame}
+
+\begin{frame}
+\frametitle{GBM Parameters}
 Where:
 \begin{itemize}
-\item $\mu$ = expected return (drift)
-\item $\sigma$ = volatility
-\item $dW$ = Brownian motion increment
+\item \(\mu\) = expected return (drift)
+\item \(\sigma\) = volatility
+\item \(dW\) = Brownian motion increment
 \end{itemize}
+\end{frame}
 
-\begin{block}{Why GBM?}
+\begin{frame}
+\frametitle{Why Geometric Brownian Motion?}
 \begin{itemize}
 \item Stock prices can't go negative
 \item Percentage changes are more natural than absolute changes
 \item Leads to lognormal distribution of future prices
 \end{itemize}
-\end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Itô's Formula for Functions of GBM}
-For a function $V(S,t)$ where $S$ follows GBM, Itô's formula gives:
+\frametitle{Itô's Formula for Option Values}
+For a function \(V(S,t)\) where \(S\) follows GBM, Itô's formula gives:
 
-$dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW$
+\[dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW\]
+\end{frame}
 
-\begin{block}{The Derivation Logic}
+\begin{frame}
+\frametitle{The Derivation Logic}
 \begin{enumerate}
-\item Start with Taylor expansion around $(S,t)$
-\item Use $dS = \mu S dt + \sigma S dW$
-\item Compute $(dS)^2 = \sigma^2 S^2 dt$ (key step!)
-\item Keep terms up to order $dt$
+\item Start with Taylor expansion around \((S,t)\)
+\item Use \(dS = \mu S dt + \sigma S dW\)
+\item Compute \((dS)^2 = \sigma^2 S^2 dt\) (key step!)
+\item Keep terms up to order \(dt\)
 \end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fundamental Stochastic Rules}
+\begin{block}{The Three Key Rules}
+\begin{itemize}
+\item \((dt)^2 = 0\) - second-order infinitesimals vanish
+\item \((dW)^2 = dt\) - \textbf{this is the key stochastic rule}
+\item \(dt \times dW = 0\) - deterministic and random parts are orthogonal
+\end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{The Crucial Stochastic Rules}
-\begin{block}{Fundamental Rules}
-\begin{itemize}
-\item $(dt)^2 = 0$ - second-order infinitesimals vanish
-\item $(dW)^2 = dt$ - \textbf{this is the key stochastic rule}
-\item $dt \times dW = 0$ - deterministic and random parts are orthogonal
-\end{itemize}
-\end{block}
+\frametitle{Computing \((dS)^2\) - Step 1}
+\[(dS)^2 = (\mu S dt + \sigma S dW)^2\]
 
-\begin{block}{Computing $(dS)^2$}
-$(dS)^2 = (\mu S dt + \sigma S dW)^2$
-$= \mu^2 S^2 (dt)^2 + 2\mu\sigma S^2 (dt)(dW) + \sigma^2 S^2 (dW)^2$
-$= 0 + 0 + \sigma^2 S^2 dt = \sigma^2 S^2 dt$
-\end{block}
+Expanding:
+\[(dS)^2 = \mu^2 S^2 (dt)^2 + 2\mu\sigma S^2 (dt)(dW) + \sigma^2 S^2 (dW)^2\]
 \end{frame}
 
 \begin{frame}
-\frametitle{Why Itô's Formula Matters for Options}
-The formula tells us how option value $V(S,t)$ changes:
+\frametitle{Computing \((dS)^2\) - Step 2}
+Applying the stochastic rules:
+\begin{align}
+(dS)^2 &= \mu^2 S^2 (dt)^2 + 2\mu\sigma S^2 (dt)(dW) + \sigma^2 S^2 (dW)^2 \\
+&= 0 + 0 + \sigma^2 S^2 dt \\
+&= \sigma^2 S^2 dt
+\end{align}
+\end{frame}
 
-$dV = \left[\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt + \sigma S \frac{\partial V}{\partial S} dW$
+\begin{frame}
+\frametitle{Why Itô's Formula Matters - Same Randomness}
+The formula tells us how option value \(V(S,t)\) changes:
 
-\begin{block}{Key Observations}
+\[dV = \left[\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt + \sigma S \frac{\partial V}{\partial S} dW\]
+
+\textbf{Key observation}: Both stock and option driven by the same \(dW\)!
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Itô's Formula Matters - Components}
 \begin{itemize}
-\item \textbf{Same randomness}: Both stock and option driven by the same $dW$
-\item \textbf{The drift term}: Contains the volatility effect $\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}$
-\item \textbf{The diffusion term}: Proportional to $\frac{\partial V}{\partial S}$ (the delta!)
-\item \textbf{Foundation for hedging}: This shared randomness enables delta hedging
+\item \textbf{The drift term}: Contains the volatility effect \(\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\)
+\item \textbf{The diffusion term}: Proportional to \(\frac{\partial V}{\partial S}\) (the delta!)
 \end{itemize}
-\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Itô's Formula Matters - Hedging}
+\textbf{Foundation for hedging}: This shared randomness enables delta hedging.
+
+The same \(dW\) term in both stock and option changes allows us to create hedged portfolios.
 \end{frame}
 
 \section{Derivation of the Black-Scholes Equation}
 
 \begin{frame}
-\frametitle{Key Assumptions for Black-Scholes}
+\frametitle{Key Assumptions - Market Model}
 \begin{enumerate}
 \item \textbf{Geometric Brownian Motion}: Stock price follows
-$$dS = \mu S dt + \sigma S dW$$
-where $dW$ is a Wiener process (Brownian motion)
+\[dS = \mu S dt + \sigma S dW\]
+where \(dW\) is a Wiener process (Brownian motion)
 
-\item \textbf{Constant Parameters}: Risk-free rate $r$, volatility $\sigma$ are constant
+\item \textbf{Constant Parameters}: Risk-free rate \(r\), volatility \(\sigma\) are constant
+\end{enumerate}
+\end{frame}
 
+\begin{frame}
+\frametitle{Key Assumptions - Market Conditions}
+\begin{enumerate}
+\setcounter{enumi}{2}
 \item \textbf{No Dividends}: The stock pays no dividends
 
-\item \textbf{Perfect Market}: No transaction costs, continuous trading, unlimited borrowing/lending at rate $r$
+\item \textbf{Perfect Market}: No transaction costs, continuous trading, unlimited borrowing/lending at rate \(r\)
 
 \item \textbf{European Exercise}: Option can only be exercised at expiration
 \end{enumerate}
@@ -234,116 +298,151 @@ where $dW$ is a Wiener process (Brownian motion)
 \begin{frame}
 \frametitle{Step 1: Stock Price Model}
 The stock price follows geometric Brownian motion:
-$$dS = \mu S dt + \sigma S dW$$
+\[dS = \mu S dt + \sigma S dW\]
 
-Where:
-\begin{itemize}
-\item $\mu$ is the expected return (drift)
-\item $\sigma$ is the volatility  
-\item $dW$ is a Wiener process (random walk)
-\end{itemize}
+Where \(\mu\) is the expected return (drift) and \(\sigma\) is the volatility.
+\end{frame}
 
-\begin{block}{Interpretation}
-The stock has a deterministic trend $\mu S$ and random fluctuations $\sigma S$.
+\begin{frame}
+\frametitle{Step 1: Interpretation}
+\begin{block}{Economic Meaning}
+The stock has a deterministic trend \(\mu S\) and random fluctuations \(\sigma S\).
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 2: Option Value Changes (Itô's Lemma)}
-For option value $V(S,t)$, applying Itô's lemma:
+\frametitle{Step 2: Apply Itô's Lemma}
+For option value \(V(S,t)\), applying Itô's lemma:
 
-$$dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW$$
+\[dV = \left(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt + \sigma S \frac{\partial V}{\partial S} dW\]
+\end{frame}
 
-\begin{block}{Key Insight}
-Both $dS$ and $dV$ contain the same random term $dW$ - this is crucial for hedging.
+\begin{frame}
+\frametitle{Step 2: Key Insight}
+\begin{block}{Shared Randomness}
+Both \(dS\) and \(dV\) contain the same random term \(dW\) - this is crucial for hedging.
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 3: Constructing the Hedged Portfolio}
-Create a portfolio $\Pi$ consisting of:
+\frametitle{Step 3: The Hedged Portfolio}
+Create a portfolio \(\Pi\) consisting of:
 \begin{itemize}
-\item \textbf{Long 1 option} (value = $V$)
-\item \textbf{Short $\Delta$ shares} (value = $-\Delta S$)
+\item \textbf{Long 1 option} (value = \(V\))
+\item \textbf{Short \(\Delta\) shares} (value = \(-\Delta S\))
 \end{itemize}
 
-So: $\Pi = V - \Delta S$
+So: \(\Pi = V - \Delta S\)
+\end{frame}
 
+\begin{frame}
+\frametitle{Step 3: Portfolio Change}
 The change in portfolio value is:
-$$d\Pi = dV - \Delta \, dS$$
+\[d\Pi = dV - \Delta \, dS\]
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 4: The Critical Substitution}
-Substitute the expressions for $dV$ and $dS$:
+\frametitle{Step 4: Substituting the Expressions}
+Substitute the expressions for \(dV\) and \(dS\):
 
 \begin{align}
 d\Pi &= \left[\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - \Delta\mu S\right] dt \\
 &\quad + \left[\sigma S \frac{\partial V}{\partial S} - \Delta\sigma S\right] dW
 \end{align}
-
-Factoring the $dW$ coefficient:
-$$\text{dW coefficient} = \sigma S\left[\frac{\partial V}{\partial S} - \Delta\right]$$
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 4: Eliminating Risk - The Magic Choice}
-To eliminate the random $dW$ term, we set:
-$$\Delta = \frac{\partial V}{\partial S}$$
+\frametitle{Step 4: Factoring the Random Term}
+Factoring the \(dW\) coefficient:
+\[\text{dW coefficient} = \sigma S\left[\frac{\partial V}{\partial S} - \Delta\right]\]
+\end{frame}
 
-\begin{block}{Why This Works}
-$\frac{\partial V}{\partial S}$ is the option's sensitivity to stock price changes. By shorting exactly this many shares, we create perfect hedge:
+\begin{frame}
+\frametitle{Step 5: The Magic Choice}
+To eliminate the random \(dW\) term, we set:
+\[\Delta = \frac{\partial V}{\partial S}\]
+
+This is the \textbf{delta hedge ratio}!
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 5: Why This Works}
+\begin{block}{Perfect Hedge Logic}
+\(\frac{\partial V}{\partial S}\) is the option's sensitivity to stock price changes. By shorting exactly this many shares:
 \begin{itemize}
-\item Stock goes up $\rightarrow$ option gains, short stock loses
-\item Stock goes down $\rightarrow$ option loses, short stock gains
+\item Stock goes up \(\rightarrow\) option gains, short stock loses
+\item Stock goes down \(\rightarrow\) option loses, short stock gains
 \item \textbf{Net effect: zero risk!}
 \end{itemize}
 \end{block}
-
-With this choice: $d\Pi = \left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt$
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 5: No-Arbitrage Condition}
-Since the portfolio is now risk-free, it must earn the risk-free rate $r$:
-$$d\Pi = r\Pi \, dt$$
+\frametitle{Step 5: Risk-Free Portfolio}
+With this choice: 
+\[d\Pi = \left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt\]
 
-But $\Pi = V - \Delta S = V - \frac{\partial V}{\partial S}S$
+The portfolio change is now deterministic (no \(dW\) term)!
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 6: No-Arbitrage Condition}
+Since the portfolio is now risk-free, it must earn the risk-free rate \(r\):
+\[d\Pi = r\Pi \, dt\]
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 6: Portfolio Value}
+But \(\Pi = V - \Delta S = V - \frac{\partial V}{\partial S}S\)
 
 Therefore:
-$$\left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt = r\left[V - \frac{\partial V}{\partial S}S\right] dt$$
+\[\left[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right] dt = r\left[V - \frac{\partial V}{\partial S}S\right] dt\]
 \end{frame}
 
 \begin{frame}
-\frametitle{Step 6: The Black-Scholes Equation Emerges}
-Dividing by $dt$ and rearranging:
+\frametitle{Step 7: Dividing by \(dt\)}
+Dividing by \(dt\) and rearranging:
 
-$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = rV - rS\frac{\partial V}{\partial S}$$
+\[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} = rV - rS\frac{\partial V}{\partial S}\]
+\end{frame}
 
+\begin{frame}
+\frametitle{Step 7: The Black-Scholes Equation}
 Rearranging to standard form:
 
-$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$
+\[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0\]
 
-\begin{block}{Remarkable Results}
-\begin{itemize}
-\item The expected return $\mu$ disappeared completely!
-\item Option prices depend only on volatility $\sigma$, not expected return
-\item Perfect hedging creates risk-free portfolio
-\end{itemize}
-\end{block}
+\textbf{We have derived the Black-Scholes equation!}
 \end{frame}
 
 \begin{frame}
-\frametitle{The Deep Intuition}
+\frametitle{Remarkable Result 1}
+\textbf{The expected return \(\mu\) disappeared completely!}
+
+Option prices depend only on volatility \(\sigma\), not expected return.
+\end{frame}
+
+\begin{frame}
+\frametitle{Remarkable Result 2}
+\textbf{Perfect hedging creates risk-free portfolio.}
+
+The mathematics shows that continuous rebalancing eliminates all risk.
+\end{frame}
+
+\begin{frame}
+\frametitle{The Deep Intuition - Matching Sensitivities}
 \begin{block}{What We Accomplished}
-By setting $\Delta = \frac{\partial V}{\partial S}$, we matched the sensitivities:
+By setting \(\Delta = \frac{\partial V}{\partial S}\), we matched the sensitivities:
 \begin{itemize}
 \item Option position sensitivity = Stock position sensitivity
 \item Random fluctuations cancel out perfectly
 \item Only deterministic terms remain
 \end{itemize}
 \end{block}
+\end{frame}
 
+\begin{frame}
+\frametitle{The Deep Intuition - Economic Principle}
 \begin{block}{Economic Interpretation}
 In an efficient market with no arbitrage opportunities:
 \begin{itemize}
