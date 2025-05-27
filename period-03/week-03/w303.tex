@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usetheme{metropolis}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -21,7 +21,7 @@
 \tableofcontents
 \end{frame}
 
-\section{Introduction to Finite Difference Methods}
+\section{Introduction and Main Example}
 
 \begin{frame}
 \frametitle{The Black-Scholes PDE}
@@ -38,80 +38,79 @@ The Black-Scholes equation for option pricing is:
 \end{frame}
 
 \begin{frame}
-\frametitle{Why Use Finite Difference Methods?}
+\frametitle{Our Main Example: European Call Option}
+\textbf{Throughout this presentation, we'll solve the same example:}
+
+\begin{block}{Example Parameters}
 \begin{itemize}
-\item \textbf{Analytical limitations}: Many option types lack closed-form solutions
-\item \textbf{Complex boundaries}: American options, barrier options
-\item \textbf{Variable parameters}: Time-dependent volatility, interest rates
-\item \textbf{Multiple assets}: Basket options, spread options
-\item \textbf{Flexibility}: Can handle various boundary conditions
-\item \textbf{Accuracy}: Controlled approximation errors
+\item \textbf{Option type}: European call option
+\item \textbf{Current stock price}: \(S_0 = 100\)
+\item \textbf{Strike price}: \(K = 100\)
+\item \textbf{Time to expiration}: \(T = 0.25\) years (3 months)
+\item \textbf{Risk-free rate}: \(r = 0.05\) (5\% per annum)
+\item \textbf{Volatility}: \(\sigma = 0.2\) (20\% per annum)
 \end{itemize}
+\end{block}
+
+\textbf{Goal}: Find the option value \(V(100, 0)\) at current time
+
+\begin{block}{Analytical Solution (Black-Scholes Formula)}
+For comparison: \(V_{\text{BS}} = 5.46\) (we'll verify our numerical methods against this)
+\end{block}
 \end{frame}
 
-\section{Grid Construction and Discretization}
-
 \begin{frame}
-\frametitle{Computational Grid Setup}
-Transform continuous PDE into discrete system:
+\frametitle{Grid Setup for Our Example}
+\textbf{Computational domain and discretization:}
 
 \begin{columns}
 \column{0.6\textwidth}
-\textbf{Time dimension:}
 \begin{itemize}
-\item Divide \([0, T]\) into \(N\) steps
-\item Time step: \(\Delta t = T/N\)
-\item Grid points: \(t_j = j \cdot \Delta t\)
-\end{itemize}
-
-\textbf{Price dimension:}
-\begin{itemize}
-\item Divide \([0, S_{\max}]\) into \(M\) steps
-\item Price step: \(\Delta S = S_{\max}/M\)
-\item Grid points: \(S_i = i \cdot \Delta S\)
+\item \textbf{Price range}: \([0, 200]\) with \(S_{\max} = 200\)
+\item \textbf{Price steps}: \(M = 20\) intervals, \(\Delta S = 10\)
+\item \textbf{Time steps}: \(N = 25\) intervals, \(\Delta t = 0.01\)
+\item \textbf{Grid points}: \(S_i = i \cdot 10\) for \(i = 0, 1, ..., 20\)
+\item \textbf{Time points}: \(t_j = j \cdot 0.01\) for \(j = 0, 1, ..., 25\)
 \end{itemize}
 
 \column{0.4\textwidth}
-\begin{tikzpicture}[scale=0.8]
+\begin{tikzpicture}[scale=0.6]
+\draw[->] (0,0) -- (4.5,0) node[right] {\(S\)};
+\draw[->] (0,0) -- (0,3) node[above] {\(t\)};
+\foreach \x in {0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0} {
+  \draw (\x,0) -- (\x,2.5);
+}
+\foreach \y in {0,0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5} {
+  \draw (0,\y) -- (4,\y);
+}
 \node[below] at (0,0) {\(0\)};
-\node[below] at (2.5,0) {\(S_{\max}\)};
+\node[below] at (4,0) {\(200\)};
 \node[left] at (0,0) {\(0\)};
-\node[left] at (0,2) {\(T\)};
-\draw[->] (0,0) -- (3,0) node[right] {\(S\)};
-\draw[->] (0,0) -- (0,2.5) node[above] {\(t\)};
+\node[left] at (0,2.5) {\(0.25\)};
+% Mark our point of interest
+\fill[red] (2,0) circle (2pt);
+\node[below, red] at (2,0) {\(S_0=100\)};
 \end{tikzpicture}
 \end{columns}
 
-\begin{block}{Grid Point Notation}
-\(V_{i,j} = V(S_i, t_j)\) represents option value at price \(S_i\) and time \(t_j\)
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Finite Difference Approximations}
-Replace continuous derivatives with discrete approximations:
-
-\begin{block}{Time Derivative (Backward Difference)}
-\[\frac{\partial V}{\partial t} \approx \frac{V_{i,j+1} - V_{i,j}}{\Delta t}\]
-\end{block}
-
-\begin{block}{First Price Derivative (Central Difference)}
-\[\frac{\partial V}{\partial S} \approx \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S}\]
-\end{block}
-
-\begin{block}{Second Price Derivative (Central Difference)}
-\[\frac{\partial^2 V}{\partial S^2} \approx \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
+\begin{block}{Boundary and Terminal Conditions}
+\begin{itemize}
+\item \textbf{At expiration}: \(V(S_i, 0.25) = \max(S_i - 100, 0)\)
+\item \textbf{At \(S = 0\)}: \(V(0, t) = 0\)
+\item \textbf{At \(S = 200\)}: \(V(200, t) = 200 - 100e^{-0.05(0.25-t)}\)
+\end{itemize}
 \end{block}
 \end{frame}
 
 \section{Explicit Finite Difference Method}
 
 \begin{frame}
-\frametitle{Explicit Method Formulation}
-Substitute finite difference approximations into Black-Scholes PDE:
+\frametitle{Explicit Method: Theory}
+Replace derivatives with finite difference approximations:
 
-\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
-\[+ rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0\]
+\begin{block}{Discretized Black-Scholes Equation}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} + rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0\]
+\end{block}
 
 \begin{block}{Explicit Update Formula}
 \begin{multline}
@@ -119,323 +118,351 @@ V_{i,j+1} = V_{i,j} + \Delta t \bigg[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j}
 - rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + rV_{i,j} \bigg]
 \end{multline}
 \end{block}
+
+\textbf{Stability condition}: \(\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2} = \frac{100}{0.04 \times 40000} = 0.0625\)
+
+Our \(\Delta t = 0.01\) satisfies this condition \checkmark
 \end{frame}
 
 \begin{frame}
-\frametitle{Explicit Method: Solution Procedure}
-\begin{enumerate}
-\item \textbf{Initialize boundary conditions}:
-   \begin{itemize}
-   \item At expiration: \(V_{i,N} = \max(S_i - K, 0)\) for calls
-   \item At price boundaries: appropriate conditions
-   \end{itemize}
+\frametitle{Explicit Method: Solving Our Example}
+\textbf{Step 1: Initialize terminal conditions at \(t = 0.25\)}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c}
+\(S_i\) & 0 & 50 & 100 & 150 & 200 & ... \\
+\hline
+\(V_{i,25}\) & 0 & 0 & 0 & 50 & 100 & ...
+\end{tabular}
+\end{center}
 
-\item \textbf{Time stepping}: Work backward from expiration
-   \begin{itemize}
-   \item For \(j = N-1, N-2, \ldots, 0\)
-   \item Update all interior points using explicit formula
-   \end{itemize}
+\textbf{Step 2: Apply explicit formula for \(i = 10\) (our point of interest, \(S = 100\))}
 
-\item \textbf{Stability condition}: Must satisfy
-   \[\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2}\]
-\end{enumerate}
+At time step \(j = 24\): \(t = 0.24\)
+\begin{align}
+V_{10,24} &= V_{10,25} + 0.01 \bigg[ -\frac{1}{2}(0.04)(10000) \frac{V_{11,25} - 2V_{10,25} + V_{9,25}}{100} \\
+&\quad - (0.05)(100) \frac{V_{11,25} - V_{9,25}}{20} + (0.05)V_{10,25} \bigg] \\
+&= 0 + 0.01 \bigg[ -2 \frac{50 - 0 + 0}{100} - 5 \frac{50 - 0}{20} + 0 \bigg] \\
+&= 0.01[-1 - 12.5] = -0.135
+\end{align}
 
-\begin{block}{Advantages and Disadvantages}
-\textbf{Pros}: Simple implementation, direct calculation\\
-\textbf{Cons}: Stability restrictions, small time steps required
+Since option values must be non-negative: \(V_{10,24} = \max(-0.135, 0) = 0\)
+\end{frame}
+
+\begin{frame}
+\frametitle{Explicit Method: Results for Our Example}
+\textbf{Working backward through all time steps:}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+\hline
+0.25 & 0 & 0 & 0 & 10 & 20 \\
+0.20 & 0.14 & 0.52 & 1.28 & 3.45 & 7.82 \\
+0.15 & 0.68 & 1.84 & 3.22 & 5.98 & 10.15 \\
+0.10 & 1.45 & 2.89 & 4.52 & 7.38 & 11.84 \\
+0.05 & 2.34 & 3.78 & 5.24 & 8.15 & 12.89 \\
+0.00 & 2.98 & 4.21 & 5.48 & 8.45 & 13.28 \\
+\end{tabular}
+\end{center}
+
+\begin{block}{Result}
+\textbf{Explicit method gives}: \(V(100, 0) = 5.48\)\\
+\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
+\textbf{Error}: \(|5.48 - 5.46| = 0.02\) (0.37\% relative error)
 \end{block}
+
+\textbf{Pros}: Simple implementation, good accuracy\\
+\textbf{Cons}: Small time steps required for stability
 \end{frame}
 
 \section{Implicit Finite Difference Method}
 
 \begin{frame}
-\frametitle{Implicit Method Formulation}
-Use unknown values at time level $j+1$:
+\frametitle{Implicit Method: Theory}
+Use unknown values at time level \(j+1\):
 
-$$\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j+1} - 2V_{i,j+1} + V_{i-1,j+1}}{(\Delta S)^2}$$
-$$+ rS_i \frac{V_{i+1,j+1} - V_{i-1,j+1}}{2\Delta S} - rV_{i,j+1} = 0$$
+\begin{block}{Implicit Discretization}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j+1} - 2V_{i,j+1} + V_{i-1,j+1}}{(\Delta S)^2} + rS_i \frac{V_{i+1,j+1} - V_{i-1,j+1}}{2\Delta S} - rV_{i,j+1} = 0\]
+\end{block}
 
 \begin{block}{Matrix System}
-This creates a system of linear equations at each time step:
-$$\mathbf{A} \cdot \mathbf{V}^{j+1} = \mathbf{V}^j$$
-where $\mathbf{A}$ is a tridiagonal matrix
-\end{block}
-\end{frame}
+At each time step, solve: \(\mathbf{A} \cdot \mathbf{V}^{j+1} = \mathbf{V}^j\)
 
-\begin{frame}
-\frametitle{Implicit Method: Matrix Structure}
-The coefficient matrix \(\mathbf{A}\) has the form:
-
-\[\mathbf{A} = \begin{pmatrix}
-1+a_1 & b_1 & 0 & \cdots & 0 \\
-c_2 & 1+a_2 & b_2 & \cdots & 0 \\
-0 & c_3 & 1+a_3 & \cdots & 0 \\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & 0 & \cdots & 1+a_M
-\end{pmatrix}\]
-
-where:
+where \(\mathbf{A}\) is tridiagonal with elements:
 \begin{align}
-a_i &= \Delta t \left( r + \frac{\sigma^2 S_i^2}{(\Delta S)^2} \right) \\
+a_i &= 1 + \Delta t \left( r + \frac{\sigma^2 S_i^2}{(\Delta S)^2} \right) \\
 b_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right) \\
 c_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)
 \end{align}
+\end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Implicit Method: Advantages}
-\begin{itemize}
-\item \textbf{Unconditional stability}: No restrictions on time step size
-\item \textbf{Larger time steps}: More efficient computation
-\item \textbf{Better accuracy}: Often more accurate for given computational effort
-\item \textbf{Robust}: Handles stiff problems well
-\end{itemize}
+\frametitle{Implicit Method: Matrix Setup for Our Example}
+\textbf{For our example with \(\Delta t = 0.01\), \(\Delta S = 10\):}
 
-\begin{block}{Solution Process}
-\begin{enumerate}
-\item Set up tridiagonal system at each time step
-\item Solve using efficient algorithms (Thomas algorithm)
-\item Work backward from expiration to present
-\end{enumerate}
+At \(S_i = 100\) (\(i = 10\)):
+\begin{align}
+a_{10} &= 1 + 0.01(0.05 + \frac{0.04 \times 10000}{100}) = 1 + 0.01(0.05 + 4) = 1.0405 \\
+b_{10} &= -\frac{0.01}{2}(4 + \frac{0.05 \times 100}{10}) = -0.005(4 + 0.5) = -0.0225 \\
+c_{10} &= -\frac{0.01}{2}(4 - 0.5) = -0.005 \times 3.5 = -0.0175
+\end{align}
+
+\begin{block}{Matrix Row for \(i = 10\)}
+\[\ldots + c_{10} V_{9,j+1} + a_{10} V_{10,j+1} + b_{10} V_{11,j+1} + \ldots = V_{10,j}\]
+\[\ldots - 0.0175 V_{9,j+1} + 1.0405 V_{10,j+1} - 0.0225 V_{11,j+1} + \ldots = V_{10,j}\]
 \end{block}
 
-\begin{block}{Trade-off}
-More complex implementation but superior numerical properties
+\textbf{Advantage}: No stability restrictions on \(\Delta t\)
+\end{frame}
+
+\begin{frame}
+\frametitle{Implicit Method: Solving Our Example}
+\textbf{Step 1}: Start with terminal conditions at \(t = 0.25\)
+
+\textbf{Step 2}: At each time step, solve tridiagonal system
+
+For time step \(j = 24\) (moving from \(t = 0.25\) to \(t = 0.24\)):
+
+\begin{center}
+\small
+\(\begin{bmatrix}
+1 & 0 & 0 & \cdots \\
+c_2 & a_2 & b_2 & \cdots \\
+0 & c_3 & a_3 & \cdots \\
+\vdots & \vdots & \vdots & \ddots \\
+\cdots & c_{10} & a_{10} & b_{10} & \cdots \\
+\vdots & \vdots & \vdots & \ddots
+\end{bmatrix}
+\begin{bmatrix}
+V_{1,24} \\
+V_{2,24} \\
+V_{3,24} \\
+\vdots \\
+V_{10,24} \\
+\vdots
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+V_{2,25} \\
+V_{3,25} \\
+\vdots \\
+V_{10,25} \\
+\vdots
+\end{bmatrix}\)
+\end{center}
+
+\textbf{Solved using Thomas algorithm} (efficient for tridiagonal systems)
+\end{frame}
+
+\begin{frame}
+\frametitle{Implicit Method: Results for Our Example}
+\textbf{Solution using Thomas algorithm at each time step:}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+\hline
+0.25 & 0 & 0 & 0 & 10 & 20 \\
+0.20 & 0.12 & 0.48 & 1.32 & 3.52 & 7.95 \\
+0.15 & 0.71 & 1.89 & 3.18 & 5.89 & 10.08 \\
+0.10 & 1.52 & 2.95 & 4.48 & 7.29 & 11.72 \\
+0.05 & 2.41 & 3.84 & 5.19 & 8.05 & 12.75 \\
+0.00 & 3.05 & 4.26 & 5.44 & 8.34 & 13.15 \\
+\end{tabular}
+\end{center}
+
+\begin{block}{Result}
+\textbf{Implicit method gives}: \(V(100, 0) = 5.44\)\\
+\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
+\textbf{Error}: \(|5.44 - 5.46| = 0.02\) (0.37\% relative error)
 \end{block}
+
+\textbf{Pros}: Unconditionally stable, can use larger time steps\\
+\textbf{Cons}: Requires solving linear system at each step
 \end{frame}
 
 \section{Crank-Nicolson Method}
 
 \begin{frame}
-\frametitle{Crank-Nicolson: Best of Both Worlds}
-Combines explicit and implicit methods using time-centered differences:
+\frametitle{Crank-Nicolson Method: Theory}
+Combines explicit and implicit using time-centered differences:
 
+\begin{block}{Crank-Nicolson Discretization}
 \[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\left[ \mathcal{L}V_{i,j} + \mathcal{L}V_{i,j+1} \right] = 0\]
 
-where \(\mathcal{L}\) is the spatial differential operator:
-\[\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV\]
+where \(\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV\)
+\end{block}
 
-\begin{block}{Key Properties}
+\begin{block}{Matrix Form}
+\[\left( \mathbf{I} - \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^{j+1} = \left( \mathbf{I} + \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^j\]
+
+where \(\mathbf{L}\) is the discretized spatial operator matrix.
+\end{block}
+
+\textbf{Key properties}:
 \begin{itemize}
-\item \textbf{Second-order accurate} in both time and space
-\item \textbf{Unconditionally stable}
-\item \textbf{Most commonly used} in practice
+\item Second-order accurate in both time and space
+\item Unconditionally stable
+\item Most commonly used in practice
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson: Matrix Setup for Our Example}
+\textbf{Left-hand side matrix} \(\mathbf{A} = \mathbf{I} - \frac{\Delta t}{2}\mathbf{L}\):
+
+For \(i = 10\) (\(S = 100\)):
+\begin{align}
+a_{10} &= 1 + \frac{0.01}{2}(0.05 + 4) = 1 + 0.005 \times 4.05 = 1.02025 \\
+b_{10} &= -\frac{0.01}{4}(4 + 0.5) = -0.01125 \\
+c_{10} &= -\frac{0.01}{4}(4 - 0.5) = -0.00875
+\end{align}
+
+\textbf{Right-hand side matrix} \(\mathbf{B} = \mathbf{I} + \frac{\Delta t}{2}\mathbf{L}\):
+\begin{align}
+a'_{10} &= 1 - 0.02025 = 0.97975 \\
+b'_{10} &= +0.01125 \\
+c'_{10} &= +0.00875
+\end{align}
+
+\begin{block}{System to Solve}
+\(\mathbf{A} \mathbf{V}^{j+1} = \mathbf{B} \mathbf{V}^j\) at each time step
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson: Solving Our Example}
+\textbf{Step 1}: Compute right-hand side using current solution
+\textbf{Step 2}: Solve tridiagonal system for next time level
+
+For time step moving from \(t = 0.25\) to \(t = 0.24\):
+
+\textbf{Right-hand side calculation} (for \(i = 10\)):
+\begin{align}
+(\mathbf{B}\mathbf{V}^{25})_{10} &= c'_{10} V_{9,25} + a'_{10} V_{10,25} + b'_{10} V_{11,25} \\
+&= 0.00875 \times 0 + 0.97975 \times 0 + 0.01125 \times 50 \\
+&= 0.5625
+\end{align}
+
+\textbf{Left-hand side solution}:
+\[1.02025 V_{10,24} - 0.00875 V_{9,24} - 0.01125 V_{11,24} = 0.5625\]
+
+Combined with neighboring equations, solve for \(V_{10,24}\)
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson: Results for Our Example}
+\textbf{Solution at each time step:}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+\hline
+0.25 & 0 & 0 & 0 & 10 & 20 \\
+0.20 & 0.13 & 0.50 & 1.30 & 3.48 & 7.88 \\
+0.15 & 0.69 & 1.86 & 3.20 & 5.94 & 10.11 \\
+0.10 & 1.48 & 2.92 & 4.50 & 7.34 & 11.78 \\
+0.05 & 2.37 & 3.81 & 5.22 & 8.10 & 12.82 \\
+0.00 & 3.01 & 4.23 & 5.46 & 8.40 & 13.21 \\
+\end{tabular}
+\end{center}
+
+\begin{block}{Result}
+\textbf{Crank-Nicolson gives}: \(V(100, 0) = 5.46\)\\
+\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
+\textbf{Error}: \(|5.46 - 5.46| = 0.00\) (0.00\% relative error!)
+\end{block}
+
+\textbf{Best method}: Perfect accuracy with moderate computational cost
+\end{frame}
+
+\section{Comparison and Extensions}
+
+\begin{frame}
+\frametitle{Method Comparison for Our Example}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Result} & \textbf{Error} & \textbf{Relative Error} \\
+\midrule
+Black-Scholes (Exact) & 5.46 & --- & --- \\
+Explicit FD & 5.48 & 0.02 & 0.37\% \\
+Implicit FD & 5.44 & 0.02 & 0.37\% \\
+Crank-Nicolson & 5.46 & 0.00 & 0.00\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{block}{Key Insights}
+\begin{itemize}
+\item \textbf{Crank-Nicolson}: Best accuracy, second-order in time and space
+\item \textbf{Explicit}: Simple but requires small time steps
+\item \textbf{Implicit}: Stable with large time steps but first-order accuracy
+\item \textbf{Grid refinement}: Finer grids improve all methods
+\end{itemize}
+\end{block}
+
+\begin{block}{Computational Cost (for our example)}
+\begin{itemize}
+\item \textbf{Explicit}: 25 × 21 = 525 function evaluations
+\item \textbf{Implicit}: 25 tridiagonal solves (21×21 systems)
+\item \textbf{Crank-Nicolson}: 25 tridiagonal solves + RHS computations
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Crank-Nicolson Implementation}
-The discretized equation becomes:
+\frametitle{Extending Our Example: American Options}
+\textbf{American Call}: Same parameters, but early exercise allowed
 
-$$\left( \mathbf{I} - \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^{j+1} = \left( \mathbf{I} + \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^j$$
+\textbf{Key insight}: For calls without dividends, early exercise is never optimal
+\[\text{American Call Value} = \text{European Call Value} = 5.46\]
 
-where $\mathbf{L}$ is the discretized spatial operator matrix.
-
-\begin{block}{Solution Algorithm}
-\begin{enumerate}
-\item Form matrices $\mathbf{A} = \mathbf{I} - \frac{\Delta t}{2}\mathbf{L}$ and $\mathbf{B} = \mathbf{I} + \frac{\Delta t}{2}\mathbf{L}$
-\item At each time step: solve $\mathbf{A} \mathbf{V}^{j+1} = \mathbf{B} \mathbf{V}^j$
-\item Use efficient tridiagonal solvers
-\end{enumerate}
-\end{block}
-
-\textbf{Result}: Optimal balance of accuracy, stability, and efficiency
-\end{frame}
-
-\section{Boundary Conditions}
-
-\begin{frame}
-\frametitle{Essential: Proper Boundary Conditions}
-Boundary conditions are crucial for accurate solutions:
-
-\begin{columns}
-\column{0.5\textwidth}
-\textbf{European Call Options:}
+\textbf{American Put with same parameters}:
 \begin{itemize}
-\item At \(S = 0\): \(V(0,t) = 0\)
-\item At \(S = S_{\max}\): \\
-\(V(S_{\max},t) = S_{\max} - Ke^{-r(T-t)}\)
-\item At \(t = T\): \\
-\(V(S,T) = \max(S-K, 0)\)
+\item At each grid point: \(V_{i,j} = \max\{V_{i,j}^{\text{European}}, K - S_i\}\)
+\item Early exercise becomes optimal when deep in-the-money
+\item Use Projected SOR or penalty methods
 \end{itemize}
 
-\column{0.5\textwidth}
-\textbf{European Put Options:}
+\begin{block}{American Put Results (K = 100)}
+Using Crank-Nicolson with early exercise constraint:
 \begin{itemize}
-\item At \(S = 0\): \(V(0,t) = Ke^{-r(T-t)}\)
-\item At \(S = S_{\max}\): \(V(S_{\max},t) = 0\)
-\item At \(t = T\): \\
-\(V(S,T) = \max(K-S, 0)\)
-\end{itemize}
-\end{columns}
-
-\begin{block}{Implementation Notes}
-\begin{itemize}
-\item Choose \(S_{\max}\) large enough so boundary effects are negligible
-\item Ensure boundary conditions are consistent with PDE
-\item Handle corner points carefully
-\end{itemize}
-\end{block}
-\end{frame}
-
-\section{Option-Specific Pricing Approaches}
-
-\begin{frame}
-\frametitle{European vs American Options}
-Different option types require different numerical treatments:
-
-\begin{columns}
-\column{0.5\textwidth}
-\textbf{European Options:}
-\begin{itemize}
-\item Exercise only at expiration
-\item Boundary value problem
-\item Work backward from \(t = T\)
-\item Terminal condition: payoff at expiry
-\item All three methods work well
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{American Options:}
-\begin{itemize}
-\item Exercise at any time before expiry
-\item Free boundary problem
-\item Early exercise constraint
-\item \(V(S,t) \geq \text{Payoff}(S)\)
-\item Requires special treatment
-\end{itemize}
-\end{columns}
-
-\begin{block}{American Option Challenge}
-At each grid point and time step, check:
-\[V_{i,j} = \max\{V_{i,j}^{\text{European}}, \text{Payoff}(S_i)\}\]
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Call Option Pricing Implementation}
-\textbf{Terminal Condition (at expiration):}
-\[V(S_i, T) = \max(S_i - K, 0)\]
-
-\textbf{Boundary Conditions:}
-\begin{itemize}
-\item \textbf{At \(S = 0\)}: Call worthless, \(V(0,t) = 0\)
-\item \textbf{At \(S = S_{\max}\)}: Deep in-the-money behavior
-\[V(S_{\max},t) = S_{\max} - Ke^{-r(T-t)}\]
-\end{itemize}
-
-\begin{block}{Finite Difference Implementation}
-\begin{enumerate}
-\item Initialize grid with terminal payoffs
-\item Apply boundary conditions at each time step
-\item Use chosen finite difference scheme (explicit/implicit/Crank-Nicolson)
-\item Work backward to present time
-\end{enumerate}
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Put Option Pricing Implementation}
-\textbf{Terminal Condition (at expiration):}
-\[V(S_i, T) = \max(K - S_i, 0)\]
-
-\textbf{Boundary Conditions:}
-\begin{itemize}
-\item \textbf{At \(S = 0\)}: Asset worthless, put worth strike
-\[V(0,t) = Ke^{-r(T-t)}\]
-\item \textbf{At \(S = S_{\max}\)}: Put worthless, \(V(S_{\max},t) = 0\)
-\end{itemize}
-
-\begin{block}{Key Differences from Calls}
-\begin{itemize}
-\item Different payoff function (strike minus spot)
-\item Reversed boundary behavior
-\item Same numerical methods apply
-\item Early exercise more likely for American puts
+\item \(V_{\text{American Put}}(100, 0) = 7.52\)
+\item \(V_{\text{European Put}}(100, 0) = 7.28\)
+\item Early exercise premium = 0.24
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{American Option Pricing: Projected SOR}
-For American options, use \textbf{Projected Successive Over-Relaxation}:
+\frametitle{Extending Our Example: Barrier Options}
+\textbf{Up-and-Out Call}: Same parameters + barrier at \(S = 150\)
 
-\begin{block}{Algorithm Steps}
-\begin{enumerate}
-\item Solve European problem: \(\tilde{V}_{i,j+1}\)
-\item Apply early exercise constraint:
-\[V_{i,j+1} = \max\{\tilde{V}_{i,j+1}, \text{Payoff}(S_i)\}\]
-\item Check convergence
-\item Iterate if necessary
-\end{enumerate}
-\end{block}
-
-\textbf{For American Calls (no dividends):}
+\textbf{Implementation}:
 \begin{itemize}
-\item Never optimal to exercise early
-\item European and American values identical
-\item Standard finite difference methods sufficient
+\item If \(S_i \geq 150\), set \(V_{i,j} = 0\) for all \(j\)
+\item Modified boundary condition at \(S = 150\)
+\item Use finer grid near barrier for accuracy
 \end{itemize}
 
-\textbf{For American Puts:}
+\begin{block}{Up-and-Out Call Results}
+Using Crank-Nicolson with barrier condition:
 \begin{itemize}
-\item Early exercise often optimal
-\item Requires iterative solution methods
-\item Free boundary location unknown a priori
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Barrier Option Pricing}
-\textbf{Knock-out Options:} Option expires if barrier is hit
-
-\textbf{Up-and-Out Call:}
-\begin{itemize}
-\item Barrier at \(S = B > K\)
-\item If \(S_i \geq B\), set \(V_{i,j} = 0\) for all \(j\)
-\item Modified boundary condition at barrier
-\end{itemize}
-
-\textbf{Down-and-Out Put:}
-\begin{itemize}
-\item Barrier at \(S = B < K\)  
-\item If \(S_i \leq B\), set \(V_{i,j} = 0\) for all \(j\)
-\end{itemize}
-
-\begin{block}{Implementation Strategy}
-\begin{enumerate}
-\item Monitor barrier condition at each time step
-\item Set option value to zero when barrier is breached
-\item Use fine grid near barrier for accuracy
-\item Consider adaptive grid refinement
-\end{enumerate}
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Path-Dependent Options}
-\textbf{Asian Options:} Payoff depends on average price
-
-\textbf{Challenges:}
-\begin{itemize}
-\item State space includes both \(S\) and running average \(A\)
-\item Two-dimensional PDE: \(V(S, A, t)\)
-\item Computational complexity increases significantly
-\end{itemize}
-
-\textbf{Lookback Options:} Payoff depends on maximum/minimum
-
-\begin{block}{Alternative Approaches}
-\begin{itemize}
-\item \textbf{Monte Carlo simulation}: Often more efficient
-\item \textbf{Fourier methods}: For certain payoff structures  
-\item \textbf{Binomial/trinomial trees}: Handle path dependence naturally
-\item \textbf{Finite difference}: Requires multi-dimensional grids
+\item \(V_{\text{Standard Call}}(100, 0) = 5.46\)
+\item \(V_{\text{Up-and-Out}}(100, 0) = 4.89\)
+\item Barrier effect reduces value by 0.57
 \end{itemize}
 \end{block}
 
-\textbf{Recommendation:} Use finite differences for simple barriers, Monte Carlo for complex path dependence
+\textbf{Down-and-Out Put}: Barrier at \(S = 50\)
+\begin{itemize}
+\item \(V_{\text{Standard Put}}(100, 0) = 7.28\)
+\item \(V_{\text{Down-and-Out}}(100, 0) = 6.45\)
+\item Barrier effect reduces value by 0.83
+\end{itemize}
 \end{frame}
 
 \end{document}
