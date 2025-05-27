@@ -27,7 +27,7 @@
 \frametitle{The Black-Scholes PDE}
 The Black-Scholes equation for option pricing is:
 
-$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0$$
+\[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0\]
 
 \begin{itemize}
 \item This parabolic PDE describes how option values evolve over time
@@ -59,37 +59,31 @@ Transform continuous PDE into discrete system:
 \column{0.6\textwidth}
 \textbf{Time dimension:}
 \begin{itemize}
-\item Divide $[0, T]$ into $N$ steps
-\item Time step: $\Delta t = T/N$
-\item Grid points: $t_j = j \cdot \Delta t$
+\item Divide \([0, T]\) into \(N\) steps
+\item Time step: \(\Delta t = T/N\)
+\item Grid points: \(t_j = j \cdot \Delta t\)
 \end{itemize}
 
 \textbf{Price dimension:}
 \begin{itemize}
-\item Divide $[0, S_{\max}]$ into $M$ steps
-\item Price step: $\Delta S = S_{\max}/M$
-\item Grid points: $S_i = i \cdot \Delta S$
+\item Divide \([0, S_{\max}]\) into \(M\) steps
+\item Price step: \(\Delta S = S_{\max}/M\)
+\item Grid points: \(S_i = i \cdot \Delta S\)
 \end{itemize}
 
 \column{0.4\textwidth}
 \begin{tikzpicture}[scale=0.8]
-\draw[->] (0,0) -- (3,0) node[right] {$S$};
-\draw[->] (0,0) -- (0,2.5) node[above] {$t$};
-\foreach \x in {0,0.5,1,1.5,2,2.5} {
-  \draw (\x,0) -- (\x,2);
-}
-\foreach \y in {0,0.4,0.8,1.2,1.6,2} {
-  \draw (0,\y) -- (2.5,\y);
-}
-\node[below] at (0,0) {$0$};
-\node[below] at (2.5,0) {$S_{\max}$};
-\node[left] at (0,0) {$0$};
-\node[left] at (0,2) {$T$};
+\node[below] at (0,0) {\(0\)};
+\node[below] at (2.5,0) {\(S_{\max}\)};
+\node[left] at (0,0) {\(0\)};
+\node[left] at (0,2) {\(T\)};
+\draw[->] (0,0) -- (3,0) node[right] {\(S\)};
+\draw[->] (0,0) -- (0,2.5) node[above] {\(t\)};
 \end{tikzpicture}
 \end{columns}
 
 \begin{block}{Grid Point Notation}
-$V_{i,j} = V(S_i, t_j)$ represents option value at price $S_i$ and time $t_j$
+\(V_{i,j} = V(S_i, t_j)\) represents option value at price \(S_i\) and time \(t_j\)
 \end{block}
 \end{frame}
 
@@ -98,15 +92,15 @@ $V_{i,j} = V(S_i, t_j)$ represents option value at price $S_i$ and time $t_j$
 Replace continuous derivatives with discrete approximations:
 
 \begin{block}{Time Derivative (Backward Difference)}
-$$\frac{\partial V}{\partial t} \approx \frac{V_{i,j+1} - V_{i,j}}{\Delta t}$$
+\[\frac{\partial V}{\partial t} \approx \frac{V_{i,j+1} - V_{i,j}}{\Delta t}\]
 \end{block}
 
 \begin{block}{First Price Derivative (Central Difference)}
-$$\frac{\partial V}{\partial S} \approx \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S}$$
+\[\frac{\partial V}{\partial S} \approx \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S}\]
 \end{block}
 
 \begin{block}{Second Price Derivative (Central Difference)}
-$$\frac{\partial^2 V}{\partial S^2} \approx \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}$$
+\[\frac{\partial^2 V}{\partial S^2} \approx \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
 \end{block}
 \end{frame}
 
@@ -116,11 +110,11 @@ $$\frac{\partial^2 V}{\partial S^2} \approx \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,
 \frametitle{Explicit Method Formulation}
 Substitute finite difference approximations into Black-Scholes PDE:
 
-$$\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}$$
-$$+ rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0$$
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
+\[+ rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0\]
 
 \begin{block}{Explicit Update Formula}
-$$V_{i,j+1} = V_{i,j} + \Delta t \left[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} - rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + rV_{i,j} \right]$$
+\[V_{i,j+1} = V_{i,j} + \Delta t \left[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} - rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + rV_{i,j} \right]\]
 \end{block}
 \end{frame}
 
@@ -129,18 +123,18 @@ $$V_{i,j+1} = V_{i,j} + \Delta t \left[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,
 \begin{enumerate}
 \item \textbf{Initialize boundary conditions}:
    \begin{itemize}
-   \item At expiration: $V_{i,N} = \max(S_i - K, 0)$ for calls
+   \item At expiration: \(V_{i,N} = \max(S_i - K, 0)\) for calls
    \item At price boundaries: appropriate conditions
    \end{itemize}
 
 \item \textbf{Time stepping}: Work backward from expiration
    \begin{itemize}
-   \item For $j = N-1, N-2, \ldots, 0$
+   \item For \(j = N-1, N-2, \ldots, 0\)
    \item Update all interior points using explicit formula
    \end{itemize}
 
 \item \textbf{Stability condition}: Must satisfy
-   $$\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2}$$
+   \[\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2}\]
 \end{enumerate}
 
 \begin{block}{Advantages and Disadvantages}
@@ -167,15 +161,15 @@ where $\mathbf{A}$ is a tridiagonal matrix
 
 \begin{frame}
 \frametitle{Implicit Method: Matrix Structure}
-The coefficient matrix $\mathbf{A}$ has the form:
+The coefficient matrix \(\mathbf{A}\) has the form:
 
-$$\mathbf{A} = \begin{pmatrix}
+\[\mathbf{A} = \begin{pmatrix}
 1+a_1 & b_1 & 0 & \cdots & 0 \\
 c_2 & 1+a_2 & b_2 & \cdots & 0 \\
 0 & c_3 & 1+a_3 & \cdots & 0 \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & 0 & \cdots & 1+a_M
-\end{pmatrix}$$
+\end{pmatrix}\]
 
 where:
 \begin{align}
@@ -213,10 +207,10 @@ More complex implementation but superior numerical properties
 \frametitle{Crank-Nicolson: Best of Both Worlds}
 Combines explicit and implicit methods using time-centered differences:
 
-$$\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\left[ \mathcal{L}V_{i,j} + \mathcal{L}V_{i,j+1} \right] = 0$$
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\left[ \mathcal{L}V_{i,j} + \mathcal{L}V_{i,j+1} \right] = 0\]
 
-where $\mathcal{L}$ is the spatial differential operator:
-$$\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV$$
+where \(\mathcal{L}\) is the spatial differential operator:
+\[\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV\]
 
 \begin{block}{Key Properties}
 \begin{itemize}
@@ -256,23 +250,26 @@ Boundary conditions are crucial for accurate solutions:
 \column{0.5\textwidth}
 \textbf{European Call Options:}
 \begin{itemize}
-\item At $S = 0$: $V(0,t) = 0$
-\item At $S = S_{\max}$: \\$V(S_{\max},t) = S_{\max} - Ke^{-r(T-t)}$
-\item At $t = T$: \\$V(S,T) = \max(S-K, 0)$
+\item At \(S = 0\): \(V(0,t) = 0\)
+\item At \(S = S_{\max}\): \\
+\(V(S_{\max},t) = S_{\max} - Ke^{-r(T-t)}\)
+\item At \(t = T\): \\
+\(V(S,T) = \max(S-K, 0)\)
 \end{itemize}
 
 \column{0.5\textwidth}
 \textbf{European Put Options:}
 \begin{itemize}
-\item At $S = 0$: $V(0,t) = Ke^{-r(T-t)}$
-\item At $S = S_{\max}$: $V(S_{\max},t) = 0$
-\item At $t = T$: \\$V(S,T) = \max(K-S, 0)$
+\item At \(S = 0\): \(V(0,t) = Ke^{-r(T-t)}\)
+\item At \(S = S_{\max}\): \(V(S_{\max},t) = 0\)
+\item At \(t = T\): \\
+\(V(S,T) = \max(K-S, 0)\)
 \end{itemize}
 \end{columns}
 
 \begin{block}{Implementation Notes}
 \begin{itemize}
-\item Choose $S_{\max}$ large enough so boundary effects are negligible
+\item Choose \(S_{\max}\) large enough so boundary effects are negligible
 \item Ensure boundary conditions are consistent with PDE
 \item Handle corner points carefully
 \end{itemize}
