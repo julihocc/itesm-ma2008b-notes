@@ -29,17 +29,22 @@ The Black-Scholes equation for option pricing is:
 
 \[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0\]
 
+This parabolic PDE describes how option values evolve over time.
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Use Numerical Methods?}
 \begin{itemize}
-\item This parabolic PDE describes how option values evolve over time
 \item Analytical solutions exist for simple cases (European options)
 \item Complex options require numerical methods
 \item Finite difference methods are powerful numerical techniques
+\item Allow pricing of exotic and path-dependent options
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Our Main Example: European Call Option}
-\textbf{Throughout this presentation, we'll solve the same example:}
+Throughout this presentation, we'll solve the same example:
 
 \begin{block}{Example Parameters}
 \begin{itemize}
@@ -47,6 +52,14 @@ The Black-Scholes equation for option pricing is:
 \item \textbf{Current stock price}: \(S_0 = 100\)
 \item \textbf{Strike price}: \(K = 100\)
 \item \textbf{Time to expiration}: \(T = 0.25\) years (3 months)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example Parameters (continued)}
+\begin{block}{Market Parameters}
+\begin{itemize}
 \item \textbf{Risk-free rate}: \(r = 0.05\) (5\% per annum)
 \item \textbf{Volatility}: \(\sigma = 0.2\) (20\% per annum)
 \end{itemize}
@@ -54,27 +67,37 @@ The Black-Scholes equation for option pricing is:
 
 \textbf{Goal}: Find the option value \(V(100, 0)\) at current time
 
-\begin{block}{Analytical Solution (Black-Scholes Formula)}
-For comparison: \(V_{\text{BS}} = 5.46\) (we'll verify our numerical methods against this)
+\begin{block}{Analytical Benchmark}
+Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Grid Setup for Our Example}
-\textbf{Computational domain and discretization:}
+\frametitle{Grid Setup - Domain}
+\textbf{Computational domain:}
 
-\begin{columns}
-\column{0.6\textwidth}
 \begin{itemize}
 \item \textbf{Price range}: \([0, 200]\) with \(S_{\max} = 200\)
+\item \textbf{Time range}: \([0, 0.25]\) years
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Grid Setup - Discretization}
+\textbf{Grid discretization:}
+
+\begin{itemize}
 \item \textbf{Price steps}: \(M = 20\) intervals, \(\Delta S = 10\)
 \item \textbf{Time steps}: \(N = 25\) intervals, \(\Delta t = 0.01\)
 \item \textbf{Grid points}: \(S_i = i \cdot 10\) for \(i = 0, 1, ..., 20\)
 \item \textbf{Time points}: \(t_j = j \cdot 0.01\) for \(j = 0, 1, ..., 25\)
 \end{itemize}
+\end{frame}
 
-\column{0.4\textwidth}
-\begin{tikzpicture}[scale=0.6]
+\begin{frame}
+\frametitle{Grid Visualization}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
 \draw[->] (0,0) -- (4.5,0) node[right] {\(S\)};
 \draw[->] (0,0) -- (0,3) node[above] {\(t\)};
 \foreach \x in {0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0} {
@@ -91,11 +114,17 @@ For comparison: \(V_{\text{BS}} = 5.46\) (we'll verify our numerical methods aga
 \fill[red] (2,0) circle (2pt);
 \node[below, red] at (2,0) {\(S_0=100\)};
 \end{tikzpicture}
-\end{columns}
+\end{center}
+\end{frame}
 
-\begin{block}{Boundary and Terminal Conditions}
+\begin{frame}
+\frametitle{Boundary Conditions}
+\begin{block}{Terminal Condition (at expiration)}
+\(V(S_i, 0.25) = \max(S_i - 100, 0)\)
+\end{block}
+
+\begin{block}{Spatial Boundaries}
 \begin{itemize}
-\item \textbf{At expiration}: \(V(S_i, 0.25) = \max(S_i - 100, 0)\)
 \item \textbf{At \(S = 0\)}: \(V(0, t) = 0\)
 \item \textbf{At \(S = 200\)}: \(V(200, t) = 200 - 100e^{-0.05(0.25-t)}\)
 \end{itemize}
@@ -105,28 +134,47 @@ For comparison: \(V_{\text{BS}} = 5.46\) (we'll verify our numerical methods aga
 \section{Explicit Finite Difference Method}
 
 \begin{frame}
-\frametitle{Explicit Method: Theory}
-Replace derivatives with finite difference approximations:
+\frametitle{Explicit Method - Basic Idea}
+Replace derivatives with finite difference approximations using known values at current time level.
 
-\begin{block}{Discretized Black-Scholes Equation}
-\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} + rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0\]
+\begin{block}{Key Concept}
+Use values at time \(j\) to compute values at time \(j+1\)
 \end{block}
+\end{frame}
 
-\begin{block}{Explicit Update Formula}
+\begin{frame}
+\frametitle{Explicit Method - Discretization}
+\begin{block}{Discretized Black-Scholes Equation}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
+\[+ rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} - rV_{i,j} = 0\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Explicit Update Formula}
+\begin{block}{Explicit Update Rule}
 \begin{multline}
 V_{i,j+1} = V_{i,j} + \Delta t \bigg[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} \\
 - rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + rV_{i,j} \bigg]
 \end{multline}
 \end{block}
+\end{frame}
 
-\textbf{Stability condition}: \(\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2} = \frac{100}{0.04 \times 40000} = 0.0625\)
+\begin{frame}
+\frametitle{Stability Condition}
+\textbf{Stability requirement}: 
+\[\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2}\]
+
+For our example:
+\[\Delta t \leq \frac{100}{0.04 \times 40000} = 0.0625\]
 
 Our \(\Delta t = 0.01\) satisfies this condition \checkmark
 \end{frame}
 
 \begin{frame}
-\frametitle{Explicit Method: Solving Our Example}
-\textbf{Step 1: Initialize terminal conditions at \(t = 0.25\)}
+\frametitle{Explicit Method - Step 1: Initialize}
+\textbf{Terminal conditions at \(t = 0.25\):}
+
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c|c}
 \(S_i\) & 0 & 50 & 100 & 150 & 200 & ... \\
@@ -135,23 +183,34 @@ Our \(\Delta t = 0.01\) satisfies this condition \checkmark
 \end{tabular}
 \end{center}
 
-\textbf{Step 2: Apply explicit formula for \(i = 10\) (our point of interest, \(S = 100\))}
+These represent the payoff \(\max(S_i - K, 0)\) at expiration.
+\end{frame}
+
+\begin{frame}
+\frametitle{Explicit Method - Step 2: Sample Calculation}
+Apply explicit formula for \(i = 10\) (our point of interest, \(S = 100\))
 
 At time step \(j = 24\): \(t = 0.24\)
 \begin{align}
 V_{10,24} &= V_{10,25} + 0.01 \bigg[ -\frac{1}{2}(0.04)(10000) \frac{V_{11,25} - 2V_{10,25} + V_{9,25}}{100} \\
-&\quad - (0.05)(100) \frac{V_{11,25} - V_{9,25}}{20} + (0.05)V_{10,25} \bigg] \\
-&= 0 + 0.01 \bigg[ -2 \frac{50 - 0 + 0}{100} - 5 \frac{50 - 0}{20} + 0 \bigg] \\
-&= 0.01[-1 - 12.5] = -0.135
+&\quad - (0.05)(100) \frac{V_{11,25} - V_{9,25}}{20} + (0.05)V_{10,25} \bigg]
 \end{align}
-
-Since option values must be non-negative: \(V_{10,24} = \max(-0.135, 0) = 0\)
 \end{frame}
 
 \begin{frame}
-\frametitle{Explicit Method: Results for Our Example}
-\textbf{Working backward through all time steps:}
+\frametitle{Explicit Method - Calculation Result}
+Substituting values:
+\begin{align}
+V_{10,24} &= 0 + 0.01 \bigg[ -2 \frac{50 - 0 + 0}{100} - 5 \frac{50 - 0}{20} + 0 \bigg] \\
+&= 0.01[-1 - 12.5] = -0.135
+\end{align}
 
+Since option values must be non-negative: 
+\[V_{10,24} = \max(-0.135, 0) = 0\]
+\end{frame}
+
+\begin{frame}
+\frametitle{Explicit Method - Complete Results}
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
 Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
@@ -164,52 +223,72 @@ Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t
 0.00 & 2.98 & 4.21 & 5.48 & 8.45 & 13.28 \\
 \end{tabular}
 \end{center}
+\end{frame}
 
+\begin{frame}
+\frametitle{Explicit Method - Final Result}
 \begin{block}{Result}
 \textbf{Explicit method gives}: \(V(100, 0) = 5.48\)\\
 \textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
 \textbf{Error}: \(|5.48 - 5.46| = 0.02\) (0.37\% relative error)
 \end{block}
 
+\begin{block}{Assessment}
 \textbf{Pros}: Simple implementation, good accuracy\\
 \textbf{Cons}: Small time steps required for stability
+\end{block}
 \end{frame}
 
 \section{Implicit Finite Difference Method}
 
 \begin{frame}
-\frametitle{Implicit Method: Theory}
-Use unknown values at time level \(j+1\):
+\frametitle{Implicit Method - Basic Idea}
+Use unknown values at the new time level \(j+1\) in the discretization.
 
-\begin{block}{Implicit Discretization}
-\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j+1} - 2V_{i,j+1} + V_{i-1,j+1}}{(\Delta S)^2} + rS_i \frac{V_{i+1,j+1} - V_{i-1,j+1}}{2\Delta S} - rV_{i,j+1} = 0\]
+\begin{block}{Key Concept}
+Creates a system of equations to solve at each time step
 \end{block}
+\end{frame}
 
-\begin{block}{Matrix System}
+\begin{frame}
+\frametitle{Implicit Discretization}
+\begin{block}{Implicit Form}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j+1} - 2V_{i,j+1} + V_{i-1,j+1}}{(\Delta S)^2}\]
+\[+ rS_i \frac{V_{i+1,j+1} - V_{i-1,j+1}}{2\Delta S} - rV_{i,j+1} = 0\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrix System}
+\begin{block}{Linear System}
 At each time step, solve: \(\mathbf{A} \cdot \mathbf{V}^{j+1} = \mathbf{V}^j\)
 
-where \(\mathbf{A}\) is tridiagonal with elements:
+where \(\mathbf{A}\) is tridiagonal
+\end{block}
+
+Matrix elements:
 \begin{align}
 a_i &= 1 + \Delta t \left( r + \frac{\sigma^2 S_i^2}{(\Delta S)^2} \right) \\
 b_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right) \\
 c_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)
 \end{align}
-\end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Implicit Method: Matrix Setup for Our Example}
-\textbf{For our example with \(\Delta t = 0.01\), \(\Delta S = 10\):}
+\frametitle{Matrix Setup for Our Example}
+For our example with \(\Delta t = 0.01\), \(\Delta S = 10\):
 
 At \(S_i = 100\) (\(i = 10\)):
 \begin{align}
-a_{10} &= 1 + 0.01(0.05 + \frac{0.04 \times 10000}{100}) = 1 + 0.01(0.05 + 4) = 1.0405 \\
-b_{10} &= -\frac{0.01}{2}(4 + \frac{0.05 \times 100}{10}) = -0.005(4 + 0.5) = -0.0225 \\
-c_{10} &= -\frac{0.01}{2}(4 - 0.5) = -0.005 \times 3.5 = -0.0175
+a_{10} &= 1 + 0.01(0.05 + \frac{0.04 \times 10000}{100}) = 1.0405 \\
+b_{10} &= -\frac{0.01}{2}(4 + 0.5) = -0.0225 \\
+c_{10} &= -\frac{0.01}{2}(4 - 0.5) = -0.0175
 \end{align}
+\end{frame}
 
+\begin{frame}
+\frametitle{Matrix Row Example}
 \begin{block}{Matrix Row for \(i = 10\)}
-\[\ldots + c_{10} V_{9,j+1} + a_{10} V_{10,j+1} + b_{10} V_{11,j+1} + \ldots = V_{10,j}\]
 \[\ldots - 0.0175 V_{9,j+1} + 1.0405 V_{10,j+1} - 0.0225 V_{11,j+1} + \ldots = V_{10,j}\]
 \end{block}
 
@@ -217,49 +296,18 @@ c_{10} &= -\frac{0.01}{2}(4 - 0.5) = -0.005 \times 3.5 = -0.0175
 \end{frame}
 
 \begin{frame}
-\frametitle{Implicit Method: Solving Our Example}
-\textbf{Step 1}: Start with terminal conditions at \(t = 0.25\)
+\frametitle{Solving the System}
+\textbf{Solution method}: Thomas algorithm (efficient for tridiagonal systems)
 
-\textbf{Step 2}: At each time step, solve tridiagonal system
-
-For time step \(j = 24\) (moving from \(t = 0.25\) to \(t = 0.24\)):
-
-\begin{center}
-\small
-\(\begin{bmatrix}
-1 & 0 & 0 & \cdots \\
-c_2 & a_2 & b_2 & \cdots \\
-0 & c_3 & a_3 & \cdots \\
-\vdots & \vdots & \vdots & \ddots \\
-\cdots & c_{10} & a_{10} & b_{10} & \cdots \\
-\vdots & \vdots & \vdots & \ddots
-\end{bmatrix}
-\begin{bmatrix}
-V_{1,24} \\
-V_{2,24} \\
-V_{3,24} \\
-\vdots \\
-V_{10,24} \\
-\vdots
-\end{bmatrix}
-=
-\begin{bmatrix}
-0 \\
-V_{2,25} \\
-V_{3,25} \\
-\vdots \\
-V_{10,25} \\
-\vdots
-\end{bmatrix}\)
-\end{center}
-
-\textbf{Solved using Thomas algorithm} (efficient for tridiagonal systems)
+\begin{enumerate}
+\item Start with terminal conditions at \(t = 0.25\)
+\item At each time step, solve tridiagonal system
+\item Work backward to present time
+\end{enumerate}
 \end{frame}
 
 \begin{frame}
-\frametitle{Implicit Method: Results for Our Example}
-\textbf{Solution using Thomas algorithm at each time step:}
-
+\frametitle{Implicit Method - Results}
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
 Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
@@ -272,33 +320,46 @@ Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t
 0.00 & 3.05 & 4.26 & 5.44 & 8.34 & 13.15 \\
 \end{tabular}
 \end{center}
+\end{frame}
 
+\begin{frame}
+\frametitle{Implicit Method - Final Result}
 \begin{block}{Result}
 \textbf{Implicit method gives}: \(V(100, 0) = 5.44\)\\
 \textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
 \textbf{Error}: \(|5.44 - 5.46| = 0.02\) (0.37\% relative error)
 \end{block}
 
+\begin{block}{Assessment}
 \textbf{Pros}: Unconditionally stable, can use larger time steps\\
 \textbf{Cons}: Requires solving linear system at each step
+\end{block}
 \end{frame}
 
 \section{Crank-Nicolson Method}
 
 \begin{frame}
-\frametitle{Crank-Nicolson Method: Theory}
-Combines explicit and implicit using time-centered differences:
+\frametitle{Crank-Nicolson - Basic Idea}
+Combines explicit and implicit methods using time-centered differences.
 
-\begin{block}{Crank-Nicolson Discretization}
+\begin{block}{Key Concept}
+Average the spatial operators at times \(j\) and \(j+1\)
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson Discretization}
+\begin{block}{Time-Centered Form}
 \[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\left[ \mathcal{L}V_{i,j} + \mathcal{L}V_{i,j+1} \right] = 0\]
 
 where \(\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV\)
 \end{block}
+\end{frame}
 
-\begin{block}{Matrix Form}
+\begin{frame}
+\frametitle{Crank-Nicolson Matrix Form}
+\begin{block}{Matrix System}
 \[\left( \mathbf{I} - \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^{j+1} = \left( \mathbf{I} + \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^j\]
-
-where \(\mathbf{L}\) is the discretized spatial operator matrix.
 \end{block}
 
 \textbf{Key properties}:
@@ -310,16 +371,19 @@ where \(\mathbf{L}\) is the discretized spatial operator matrix.
 \end{frame}
 
 \begin{frame}
-\frametitle{Crank-Nicolson: Matrix Setup for Our Example}
+\frametitle{Matrix Setup for Crank-Nicolson}
 \textbf{Left-hand side matrix} \(\mathbf{A} = \mathbf{I} - \frac{\Delta t}{2}\mathbf{L}\):
 
 For \(i = 10\) (\(S = 100\)):
 \begin{align}
-a_{10} &= 1 + \frac{0.01}{2}(0.05 + 4) = 1 + 0.005 \times 4.05 = 1.02025 \\
+a_{10} &= 1 + \frac{0.01}{2}(0.05 + 4) = 1.02025 \\
 b_{10} &= -\frac{0.01}{4}(4 + 0.5) = -0.01125 \\
 c_{10} &= -\frac{0.01}{4}(4 - 0.5) = -0.00875
 \end{align}
+\end{frame}
 
+\begin{frame}
+\frametitle{Right-Hand Side Matrix}
 \textbf{Right-hand side matrix} \(\mathbf{B} = \mathbf{I} + \frac{\Delta t}{2}\mathbf{L}\):
 \begin{align}
 a'_{10} &= 1 - 0.02025 = 0.97975 \\
@@ -333,10 +397,7 @@ c'_{10} &= +0.00875
 \end{frame}
 
 \begin{frame}
-\frametitle{Crank-Nicolson: Solving Our Example}
-\textbf{Step 1}: Compute right-hand side using current solution
-\textbf{Step 2}: Solve tridiagonal system for next time level
-
+\frametitle{Crank-Nicolson Calculation Example}
 For time step moving from \(t = 0.25\) to \(t = 0.24\):
 
 \textbf{Right-hand side calculation} (for \(i = 10\)):
@@ -345,17 +406,10 @@ For time step moving from \(t = 0.25\) to \(t = 0.24\):
 &= 0.00875 \times 0 + 0.97975 \times 0 + 0.01125 \times 50 \\
 &= 0.5625
 \end{align}
-
-\textbf{Left-hand side solution}:
-\[1.02025 V_{10,24} - 0.00875 V_{9,24} - 0.01125 V_{11,24} = 0.5625\]
-
-Combined with neighboring equations, solve for \(V_{10,24}\)
 \end{frame}
 
 \begin{frame}
-\frametitle{Crank-Nicolson: Results for Our Example}
-\textbf{Solution at each time step:}
-
+\frametitle{Crank-Nicolson - Results}
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
 Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
@@ -368,7 +422,10 @@ Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t
 0.00 & 3.01 & 4.23 & 5.46 & 8.40 & 13.21 \\
 \end{tabular}
 \end{center}
+\end{frame}
 
+\begin{frame}
+\frametitle{Crank-Nicolson - Final Result}
 \begin{block}{Result}
 \textbf{Crank-Nicolson gives}: \(V(100, 0) = 5.46\)\\
 \textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
@@ -381,7 +438,7 @@ Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t
 \section{Comparison and Extensions}
 
 \begin{frame}
-\frametitle{Method Comparison for Our Example}
+\frametitle{Method Comparison}
 \begin{center}
 \begin{tabular}{lccc}
 \toprule
@@ -394,8 +451,11 @@ Crank-Nicolson & 5.46 & 0.00 & 0.00\% \\
 \bottomrule
 \end{tabular}
 \end{center}
+\end{frame}
 
-\begin{block}{Key Insights}
+\begin{frame}
+\frametitle{Key Insights}
+\begin{block}{Accuracy Comparison}
 \begin{itemize}
 \item \textbf{Crank-Nicolson}: Best accuracy, second-order in time and space
 \item \textbf{Explicit}: Simple but requires small time steps
@@ -403,7 +463,10 @@ Crank-Nicolson & 5.46 & 0.00 & 0.00\% \\
 \item \textbf{Grid refinement}: Finer grids improve all methods
 \end{itemize}
 \end{block}
+\end{frame}
 
+\begin{frame}
+\frametitle{Computational Cost}
 \begin{block}{Computational Cost (for our example)}
 \begin{itemize}
 \item \textbf{Explicit}: 25 × 21 = 525 function evaluations
@@ -414,12 +477,16 @@ Crank-Nicolson & 5.46 & 0.00 & 0.00\% \\
 \end{frame}
 
 \begin{frame}
-\frametitle{Extending Our Example: American Options}
+\frametitle{American Call Extension}
 \textbf{American Call}: Same parameters, but early exercise allowed
 
 \textbf{Key insight}: For calls without dividends, early exercise is never optimal
-\[\text{American Call Value} = \text{European Call Value} = 5.46\]
 
+\[\text{American Call Value} = \text{European Call Value} = 5.46\]
+\end{frame}
+
+\begin{frame}
+\frametitle{American Put Extension}
 \textbf{American Put with same parameters}:
 \begin{itemize}
 \item At each grid point: \(V_{i,j} = \max\{V_{i,j}^{\text{European}}, K - S_i\}\)
@@ -438,7 +505,7 @@ Using Crank-Nicolson with early exercise constraint:
 \end{frame}
 
 \begin{frame}
-\frametitle{Extending Our Example: Barrier Options}
+\frametitle{Up-and-Out Call}
 \textbf{Up-and-Out Call}: Same parameters + barrier at \(S = 150\)
 
 \textbf{Implementation}:
@@ -447,7 +514,10 @@ Using Crank-Nicolson with early exercise constraint:
 \item Modified boundary condition at \(S = 150\)
 \item Use finer grid near barrier for accuracy
 \end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Barrier Option Results}
 \begin{block}{Up-and-Out Call Results}
 Using Crank-Nicolson with barrier condition:
 \begin{itemize}
@@ -457,12 +527,14 @@ Using Crank-Nicolson with barrier condition:
 \end{itemize}
 \end{block}
 
-\textbf{Down-and-Out Put}: Barrier at \(S = 50\)
+\begin{block}{Down-and-Out Put Results}
+Barrier at \(S = 50\):
 \begin{itemize}
 \item \(V_{\text{Standard Put}}(100, 0) = 7.28\)
 \item \(V_{\text{Down-and-Out}}(100, 0) = 6.45\)
 \item Barrier effect reduces value by 0.83
 \end{itemize}
+\end{block}
 \end{frame}
 
 \end{document}
