@@ -13,3 +13,4 @@ cspell.json
 *.nav
 *.snm
 *.pdf
+*.pyc
