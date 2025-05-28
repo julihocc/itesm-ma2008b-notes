@@ -1,0 +1,151 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{metropolis}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+\title{Finite Difference Methods for Black-Scholes - Part 3}
+\subtitle{Advanced Topics and Best Practices}
+\author{Lecturer}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline - Part 3}
+\tableofcontents
+\end{frame}
+
+\section{Advanced Grid Techniques}
+
+\begin{frame}
+\frametitle{Grid Refinement - The Problem}
+\textbf{Issue with Fixed Grids}:
+\begin{itemize}
+\item Uniform spacing may be inefficient
+\item Need more points near important regions
+\item Want to concentrate accuracy where needed most
+\end{itemize}
+
+\textbf{Key Regions for Options}:
+\begin{itemize}
+\item Near the strike price \(S = K\)
+\item Near current time \(t = 0\)
+\item Near boundaries
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Non-Uniform Grids}
+\textbf{Basic Idea}: Use different spacing in different regions
+
+\textbf{Common Approaches}:
+\begin{itemize}
+\item \textbf{Geometric progression}: \(\Delta S_i = \Delta S_0 \times r^i\)
+\item \textbf{Hyperbolic tangent}: Dense near center, sparse at edges
+\item \textbf{Manual specification}: Define grid points explicitly
+\end{itemize}
+
+\textbf{Benefit}: Better accuracy with same number of points
+\end{frame}
+
+\begin{frame}
+\frametitle{Logarithmic Transformation}
+\textbf{Coordinate Change}: Use \(x = \ln(S)\) instead of \(S\)
+
+\begin{block}{Transformed PDE}
+\[\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 \frac{\partial^2 V}{\partial x^2} + \left(r - \frac{1}{2}\sigma^2\right) \frac{\partial V}{\partial x} - rV = 0\]
+\end{block}
+
+\textbf{Advantages}:
+\begin{itemize}
+\item Constant coefficients (easier to solve)
+\item Natural uniform grid in \(x\) space
+\item Better numerical stability
+\end{itemize}
+\end{frame}
+
+\section{Higher-Order Methods}
+
+\begin{frame}
+\frametitle{Higher-Order Methods - Motivation}
+\textbf{Standard finite differences}:
+\begin{itemize}
+\item Second-order accuracy: \(O((\Delta S)^2)\)
+\item Need many grid points for high accuracy
+\item Can we do better?
+\end{itemize}
+
+\textbf{Higher-order methods}:
+\begin{itemize}
+\item Fourth-order accuracy: \(O((\Delta S)^4)\)
+\item Exponential accuracy (spectral methods)
+\item Better accuracy with fewer points
+\end{itemize}
+\end{frame}
+
+\section{Best Practices and Conclusion}
+
+\begin{frame}
+\frametitle{Method Comparison Summary}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Speed} & \textbf{Flexibility} & \textbf{Accuracy} \\
+\midrule
+Finite Differences & Medium & High & High \\
+Monte Carlo & Slow & Very High & Medium \\
+Binomial Trees & Fast & Medium & Medium \\
+Analytical Formulas & Very Fast & Low & Very High \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{When to Use Finite Differences}:
+\begin{itemize}
+\item Complex boundary conditions
+\item American-style exercise
+\item Path-dependent features
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Key Takeaways}
+\textbf{Main Messages}:
+\begin{enumerate}
+\item \textbf{Finite differences} provide robust, flexible option pricing
+\item \textbf{Crank-Nicolson} offers best balance of accuracy and stability  
+\item \textbf{Grid design} is crucial for accurate results
+\item \textbf{Central differences} are more accurate than forward/backward
+\item \textbf{Exotic options} easily handled with appropriate modifications
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Thank You}
+\textbf{Questions and Discussion}
+
+\vspace{1cm}
+
+\textbf{Summary of Complete Series}:
+\begin{itemize}
+\item \textbf{Part 1}: Introduction and Explicit Method
+\item \textbf{Part 2}: Implicit Methods and Comparison  
+\item \textbf{Part 3}: Advanced Topics and Best Practices
+\end{itemize}
+
+\vspace{1cm}
+
+\textbf{Contact Information}:
+\begin{itemize}
+\item Email: lecturer@university.edu
+\item Office Hours: Wednesdays 2-4 PM
+\end{itemize}
+\end{frame}
+
+\end{document}

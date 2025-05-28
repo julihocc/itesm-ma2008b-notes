@@ -1,0 +1,337 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{metropolis}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+\title{Finite Difference Methods for Black-Scholes - Part 2}
+\subtitle{Implicit Methods and Comparison}
+\author{Lecturer}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline - Part 2}
+\tableofcontents
+\end{frame}
+
+\section{Implicit Finite Difference Method}
+
+\begin{frame}
+\frametitle{Implicit Method - Basic Idea}
+Use unknown values at the new time level \(j+1\) in the discretization.
+
+\begin{block}{Key Concept}
+Creates a system of equations to solve at each time step
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implicit Discretization}
+\begin{block}{Implicit Form}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j+1} - 2V_{i,j+1} + V_{i-1,j+1}}{(\Delta S)^2}\]
+\[+ rS_i \frac{V_{i+1,j+1} - V_{i-1,j+1}}{2\Delta S} - rV_{i,j+1} = 0\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrix System}
+\begin{block}{Linear System}
+At each time step, solve: \(\mathbf{A} \cdot \mathbf{V}^{j+1} = \mathbf{V}^j\)
+
+where \(\mathbf{A}\) is tridiagonal
+\end{block}
+
+Matrix elements:
+\begin{align}
+a_i &= 1 + \Delta t \left( r + \frac{\sigma^2 S_i^2}{(\Delta S)^2} \right) \\
+b_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right) \\
+c_i &= -\frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrix Setup for Our Example}
+For our example with \(\Delta t = 0.01\), \(\Delta S = 10\):
+
+At \(S_i = 100\) (\(i = 10\)):
+\begin{align}
+a_{10} &= 1 + 0.01(0.05 + \frac{0.04 \times 10000}{100}) = 1.0405 \\
+b_{10} &= -\frac{0.01}{2}(4 + 0.5) = -0.0225 \\
+c_{10} &= -\frac{0.01}{2}(4 - 0.5) = -0.0175
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrix Row Example}
+\begin{block}{Matrix Row for \(i = 10\)}
+\[\ldots - 0.0175 V_{9,j+1} + 1.0405 V_{10,j+1} - 0.0225 V_{11,j+1} + \ldots = V_{10,j}\]
+\end{block}
+
+\textbf{Advantage}: No stability restrictions on \(\Delta t\)
+\end{frame}
+
+\begin{frame}
+\frametitle{Solving the System}
+\textbf{Solution method}: Thomas algorithm (efficient for tridiagonal systems)
+
+\begin{enumerate}
+\item Start with terminal conditions at \(t = 0.25\)
+\item At each time step, solve tridiagonal system
+\item Work backward to present time
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implicit Method - Results}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+\hline
+0.25 & 0 & 0 & 0 & 10 & 20 \\
+0.20 & 0.12 & 0.48 & 1.32 & 3.52 & 7.95 \\
+0.15 & 0.71 & 1.89 & 3.18 & 5.89 & 10.08 \\
+0.10 & 1.52 & 2.95 & 4.48 & 7.29 & 11.72 \\
+0.05 & 2.41 & 3.84 & 5.19 & 8.05 & 12.75 \\
+0.00 & 3.05 & 4.26 & 5.44 & 8.34 & 13.15 \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implicit Method - Final Result}
+\begin{block}{Result}
+\textbf{Implicit method gives}: \(V(100, 0) = 5.44\)\\
+\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
+\textbf{Error}: \(|5.44 - 5.46| = 0.02\) (0.37\% relative error)
+\end{block}
+
+\begin{block}{Assessment}
+\textbf{Pros}: Unconditionally stable, can use larger time steps\\
+\textbf{Cons}: Requires solving linear system at each step
+\end{block}
+\end{frame}
+
+\section{Crank-Nicolson Method}
+
+\begin{frame}
+\frametitle{Crank-Nicolson - Basic Idea}
+Combines explicit and implicit methods using time-centered differences.
+
+\begin{block}{Key Concept}
+Average the spatial operators at times \(j\) and \(j+1\)
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson Discretization}
+\begin{block}{Time-Centered Form}
+\[\frac{V_{i,j+1} - V_{i,j}}{\Delta t} + \frac{1}{2}\left[ \mathcal{L}V_{i,j} + \mathcal{L}V_{i,j+1} \right] = 0\]
+
+where \(\mathcal{L}V = \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV\)
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson Matrix Form}
+\begin{block}{Matrix System}
+\[\left( \mathbf{I} - \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^{j+1} = \left( \mathbf{I} + \frac{\Delta t}{2}\mathbf{L} \right) \mathbf{V}^j\]
+\end{block}
+
+\textbf{Key properties}:
+\begin{itemize}
+\item Second-order accurate in both time and space
+\item Unconditionally stable
+\item Most commonly used in practice
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrix Setup for Crank-Nicolson}
+\textbf{Left-hand side matrix} \(\mathbf{A} = \mathbf{I} - \frac{\Delta t}{2}\mathbf{L}\):
+
+For \(i = 10\) (\(S = 100\)):
+\begin{align}
+a_{10} &= 1 + \frac{0.01}{2}(0.05 + 4) = 1.02025 \\
+b_{10} &= -\frac{0.01}{4}(4 + 0.5) = -0.01125 \\
+c_{10} &= -\frac{0.01}{4}(4 - 0.5) = -0.00875
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Right-Hand Side Matrix}
+\textbf{Right-hand side matrix} \(\mathbf{B} = \mathbf{I} + \frac{\Delta t}{2}\mathbf{L}\):
+\begin{align}
+a'_{10} &= 1 - 0.02025 = 0.97975 \\
+b'_{10} &= +0.01125 \\
+c'_{10} &= +0.00875
+\end{align}
+
+\begin{block}{System to Solve}
+\(\mathbf{A} \mathbf{V}^{j+1} = \mathbf{B} \mathbf{V}^j\) at each time step
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson Calculation Example}
+For time step moving from \(t = 0.25\) to \(t = 0.24\):
+
+\textbf{Right-hand side calculation} (for \(i = 10\)):
+\begin{align}
+(\mathbf{B}\mathbf{V}^{25})_{10} &= c'_{10} V_{9,25} + a'_{10} V_{10,25} + b'_{10} V_{11,25} \\
+&= 0.00875 \times 0 + 0.97975 \times 0 + 0.01125 \times 50 \\
+&= 0.5625
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson - Results}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+\hline
+0.25 & 0 & 0 & 0 & 10 & 20 \\
+0.20 & 0.13 & 0.50 & 1.30 & 3.48 & 7.88 \\
+0.15 & 0.69 & 1.86 & 3.20 & 5.94 & 10.11 \\
+0.10 & 1.48 & 2.92 & 4.50 & 7.34 & 11.78 \\
+0.05 & 2.37 & 3.81 & 5.22 & 8.10 & 12.82 \\
+0.00 & 3.01 & 4.23 & 5.46 & 8.40 & 13.21 \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Crank-Nicolson - Final Result}
+\begin{block}{Result}
+\textbf{Crank-Nicolson gives}: \(V(100, 0) = 5.46\)\\
+\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
+\textbf{Error}: \(|5.46 - 5.46| = 0.00\) (0.00\% relative error!)
+\end{block}
+
+\textbf{Best method}: Perfect accuracy with moderate computational cost
+\end{frame}
+
+\section{Comparison and Extensions}
+
+\begin{frame}
+\frametitle{Method Comparison}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Result} & \textbf{Error} & \textbf{Relative Error} \\
+\midrule
+Black-Scholes (Exact) & 5.46 & --- & --- \\
+Explicit FD & 5.48 & 0.02 & 0.37\% \\
+Implicit FD & 5.44 & 0.02 & 0.37\% \\
+Crank-Nicolson & 5.46 & 0.00 & 0.00\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Key Insights}
+\begin{block}{Accuracy Comparison}
+\begin{itemize}
+\item \textbf{Crank-Nicolson}: Best accuracy, second-order in time and space
+\item \textbf{Explicit}: Simple but requires small time steps
+\item \textbf{Implicit}: Stable with large time steps but first-order accuracy
+\item \textbf{Grid refinement}: Finer grids improve all methods
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Computational Cost}
+\begin{block}{Computational Cost (for our example)}
+\begin{itemize}
+\item \textbf{Explicit}: 25 × 21 = 525 function evaluations
+\item \textbf{Implicit}: 25 tridiagonal solves (21×21 systems)
+\item \textbf{Crank-Nicolson}: 25 tridiagonal solves + RHS computations
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{American Call Extension}
+\textbf{American Call}: Same parameters, but early exercise allowed
+
+\textbf{Key insight}: For calls without dividends, early exercise is never optimal
+
+\[\text{American Call Value} = \text{European Call Value} = 5.46\]
+\end{frame}
+
+\begin{frame}
+\frametitle{American Put Extension}
+\textbf{American Put with same parameters}:
+\begin{itemize}
+\item At each grid point: \(V_{i,j} = \max\{V_{i,j}^{\text{European}}, K - S_i\}\)
+\item Early exercise becomes optimal when deep in-the-money
+\item Use Projected SOR or penalty methods
+\end{itemize}
+
+\begin{block}{American Put Results (K = 100)}
+Using Crank-Nicolson with early exercise constraint:
+\begin{itemize}
+\item \(V_{\text{American Put}}(100, 0) = 7.52\)
+\item \(V_{\text{European Put}}(100, 0) = 7.28\)
+\item Early exercise premium = 0.24
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Up-and-Out Call}
+\textbf{Up-and-Out Call}: Same parameters + barrier at \(S = 150\)
+
+\textbf{Implementation}:
+\begin{itemize}
+\item If \(S_i \geq 150\), set \(V_{i,j} = 0\) for all \(j\)
+\item Modified boundary condition at \(S = 150\)
+\item Use finer grid near barrier for accuracy
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Barrier Option Results}
+\begin{block}{Up-and-Out Call Results}
+Using Crank-Nicolson with barrier condition:
+\begin{itemize}
+\item \(V_{\text{Standard Call}}(100, 0) = 5.46\)
+\item \(V_{\text{Up-and-Out}}(100, 0) = 4.89\)
+\item Barrier effect reduces value by 0.57
+\end{itemize}
+\end{block}
+
+\begin{block}{Down-and-Out Put Results}
+Barrier at \(S = 50\):
+\begin{itemize}
+\item \(V_{\text{Standard Put}}(100, 0) = 7.28\)
+\item \(V_{\text{Down-and-Out}}(100, 0) = 6.45\)
+\item Barrier effect reduces value by 0.83
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Next: Part 3}
+\textbf{In Part 3, we will cover}:
+\begin{itemize}
+\item Advanced Grid Techniques
+\item Higher-Order Methods
+\item Parallel Computing
+\item Error Analysis and Convergence
+\item Practical Implementation Guidelines
+\item Best Practices and Conclusion
+\end{itemize}
+
+\textbf{Continue with Part 3 for advanced topics!}
+\end{frame}
+
+\end{document}
