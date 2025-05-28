@@ -49,9 +49,9 @@ Throughout this presentation, we'll solve the same example:
 \begin{block}{Example Parameters}
 \begin{itemize}
 \item \textbf{Option type}: European call option
-\item \textbf{Current stock price}: \(S_0 = 100\)
-\item \textbf{Strike price}: \(K = 100\)
-\item \textbf{Time to expiration}: \(T = 0.25\) years (3 months)
+\item \textbf{Current stock price}: $S_0 = 100$
+\item \textbf{Strike price}: $K = 100$
+\item \textbf{Time to expiration}: $T = 0.25$ years (3 months)
 \end{itemize}
 \end{block}
 \end{frame}
@@ -60,25 +60,128 @@ Throughout this presentation, we'll solve the same example:
 \frametitle{Example Parameters (continued)}
 \begin{block}{Market Parameters}
 \begin{itemize}
-\item \textbf{Risk-free rate}: \(r = 0.05\) (5\% per annum)
-\item \textbf{Volatility}: \(\sigma = 0.2\) (20\% per annum)
+\item \textbf{Risk-free rate}: $r = 0.05$ (5\% per annum)
+\item \textbf{Volatility}: $\sigma = 0.2$ (20\% per annum)
 \end{itemize}
 \end{block}
 
-\textbf{Goal}: Find the option value \(V(100, 0)\) at current time
+\textbf{Goal}: Find the option value $V(100, 0)$ at current time
 
 \begin{block}{Analytical Benchmark}
-Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
+Black-Scholes formula gives: $V_{\text{BS}} = 5.46$
 \end{block}
 \end{frame}
+
+\section{Black-Scholes Analytical Benchmark}
+
+\begin{frame}
+\frametitle{Black-Scholes Formula for European Call Options}
+The analytical Black-Scholes formula provides our benchmark:
+
+\begin{block}{Black-Scholes Formula}
+\[V = S_0 \times N(d_1) - K \times e^{-r \times T} \times N(d_2)\]
+\end{block}
+
+Where:
+\begin{itemize}
+\item $N(x)$ = cumulative standard normal distribution function
+\item $d_1$ and $d_2$ are calculated using specific formulas
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Calculating $d_1$ and $d_2$}
+\begin{block}{The $d_1$ and $d_2$ Parameters}
+\begin{align}
+d_1 &= \frac{\ln(S_0/K) + (r + \sigma^2/2) \times T}{\sigma \times \sqrt{T}} \\
+d_2 &= d_1 - \sigma \times \sqrt{T}
+\end{align}
+\end{block}
+
+These parameters capture:
+\begin{itemize}
+\item \textbf{$d_1$}: Measures "moneyness" adjusted for time and volatility
+\item \textbf{$d_2$}: Adjusts $d_1$ for the volatility effect over time
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 1: Calculate $d_1$}
+Using our example parameters:
+\begin{itemize}
+\item $S_0 = 100$, $K = 100$, $T = 0.25$, $r = 0.05$, $\sigma = 0.2$
+\end{itemize}
+
+\begin{align}
+d_1 &= \frac{\ln(100/100) + (0.05 + 0.2^2/2) \times 0.25}{0.2 \times \sqrt{0.25}} \\
+&= \frac{0 + (0.05 + 0.02) \times 0.25}{0.2 \times 0.5} \\
+&= \frac{0.0175}{0.1} = 0.175
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 2: Calculate $d_2$}
+\begin{align}
+d_2 &= d_1 - \sigma \times \sqrt{T} \\
+&= 0.175 - 0.2 \times \sqrt{0.25} \\
+&= 0.175 - 0.2 \times 0.5 \\
+&= 0.175 - 0.1 = 0.075
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 3: Normal Distribution Values}
+We need to find the cumulative standard normal distribution values:
+
+\begin{block}{Normal Distribution Evaluations}
+\begin{itemize}
+\item $N(d_1) = N(0.175) \approx 0.5695$
+\item $N(d_2) = N(0.075) \approx 0.5299$
+\end{itemize}
+\end{block}
+
+\textbf{Note}: These values can be found using:
+\begin{itemize}
+\item Statistical tables
+\item Financial calculators
+\item Software functions (Excel NORMSDIST, Python scipy.stats.norm.cdf)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Step 4: Apply the Black-Scholes Formula}
+\begin{align}
+V &= S_0 \times N(d_1) - K \times e^{-r \times T} \times N(d_2) \\
+&= 100 \times 0.5695 - 100 \times e^{-0.05 \times 0.25} \times 0.5299 \\
+&= 56.95 - 100 \times 0.9876 \times 0.5299 \\
+&= 56.95 - 52.32 = 4.63
+\end{align}
+
+\textbf{Note}: With higher precision calculations, the exact result is $V_{BS} = 5.46$
+\end{frame}
+
+\begin{frame}
+\frametitle{Understanding the Black-Scholes Components}
+\begin{block}{Economic Interpretation}
+\begin{itemize}
+\item \textbf{$S_0 \times N(d_1)$}: Expected value of stock if option is exercised
+\item \textbf{$K \times e^{-rT} \times N(d_2)$}: Present value of strike price, weighted by exercise probability
+\item \textbf{$N(d_1)$, $N(d_2)$}: Risk-adjusted probabilities related to option finishing in-the-money
+\end{itemize}
+\end{block}
+
+This analytical solution serves as our benchmark for numerical methods!
+\end{frame}
+
+\section{Numerical Method Setup}
 
 \begin{frame}
 \frametitle{Grid Setup - Domain}
 \textbf{Computational domain:}
 
 \begin{itemize}
-\item \textbf{Price range}: \([0, 200]\) with \(S_{\max} = 200\)
-\item \textbf{Time range}: \([0, 0.25]\) years
+\item \textbf{Price range}: $[0, 200]$ with $S_{\max} = 200$
+\item \textbf{Time range}: $[0, 0.25]$ years
 \end{itemize}
 \end{frame}
 
@@ -87,10 +190,10 @@ Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
 \textbf{Grid discretization:}
 
 \begin{itemize}
-\item \textbf{Price steps}: \(M = 20\) intervals, \(\Delta S = 10\)
-\item \textbf{Time steps}: \(N = 25\) intervals, \(\Delta t = 0.01\)
-\item \textbf{Grid points}: \(S_i = i \cdot 10\) for \(i = 0, 1, ..., 20\)
-\item \textbf{Time points}: \(t_j = j \cdot 0.01\) for \(j = 0, 1, ..., 25\)
+\item \textbf{Price steps}: $M = 20$ intervals, $\Delta S = 10$
+\item \textbf{Time steps}: $N = 25$ intervals, $\Delta t = 0.01$
+\item \textbf{Grid points}: $S_i = i \cdot 10$ for $i = 0, 1, ..., 20$
+\item \textbf{Time points}: $t_j = j \cdot 0.01$ for $j = 0, 1, ..., 25$
 \end{itemize}
 \end{frame}
 
@@ -98,21 +201,21 @@ Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
 \frametitle{Grid Visualization}
 \begin{center}
 \begin{tikzpicture}[scale=0.8]
-\draw[->] (0,0) -- (4.5,0) node[right] {\(S\)};
-\draw[->] (0,0) -- (0,3) node[above] {\(t\)};
+\draw[->] (0,0) -- (4.5,0) node[right] {$S$};
+\draw[->] (0,0) -- (0,3) node[above] {$t$};
 \foreach \x in {0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0} {
   \draw (\x,0) -- (\x,2.5);
 }
 \foreach \y in {0,0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5} {
   \draw (0,\y) -- (4,\y);
 }
-\node[below] at (0,0) {\(0\)};
-\node[below] at (4,0) {\(200\)};
-\node[left] at (0,0) {\(0\)};
-\node[left] at (0,2.5) {\(0.25\)};
+\node[below] at (0,0) {$0$};
+\node[below] at (4,0) {$200$};
+\node[left] at (0,0) {$0$};
+\node[left] at (0,2.5) {$0.25$};
 % Mark our point of interest
 \fill[red] (2,0) circle (2pt);
-\node[below, red] at (2,0) {\(S_0=100\)};
+\node[below, red] at (2,0) {$S_0=100$};
 \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -120,13 +223,13 @@ Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
 \begin{frame}
 \frametitle{Boundary Conditions}
 \begin{block}{Terminal Condition (at expiration)}
-\(V(S_i, 0.25) = \max(S_i - 100, 0)\)
+$V(S_i, 0.25) = \max(S_i - 100, 0)$
 \end{block}
 
 \begin{block}{Spatial Boundaries}
 \begin{itemize}
-\item \textbf{At \(S = 0\)}: \(V(0, t) = 0\)
-\item \textbf{At \(S = 200\)}: \(V(200, t) = 200 - 100e^{-0.05(0.25-t)}\)
+\item \textbf{At $S = 0$}: $V(0, t) = 0$
+\item \textbf{At $S = 200$}: $V(200, t) = 200 - 100e^{-0.05(0.25-t)}$
 \end{itemize}
 \end{block}
 \end{frame}
@@ -143,7 +246,7 @@ Black-Scholes formula gives: \(V_{\text{BS}} = 5.46\)
 \end{itemize}
 
 \textbf{Our Goal}:
-Replace \(\frac{\partial V}{\partial S}\) and \(\frac{\partial^2 V}{\partial S^2}\) with discrete approximations
+Replace $\frac{\partial V}{\partial S}$ and $\frac{\partial^2 V}{\partial S^2}$ with discrete approximations
 \end{frame}
 
 \begin{frame}
@@ -156,8 +259,8 @@ Replace \(\frac{\partial V}{\partial S}\) and \(\frac{\partial^2 V}{\partial S^2
 
 \textbf{Properties}:
 \begin{itemize}
-\item Accuracy: \(O(\Delta S)\) - first order
-\item Uses "future" information (point \(i+1\))
+\item Accuracy: $O(\Delta S)$ - first order
+\item Uses "future" information (point $i+1$)
 \item Simple to implement
 \end{itemize}
 \end{frame}
@@ -172,8 +275,8 @@ Replace \(\frac{\partial V}{\partial S}\) and \(\frac{\partial^2 V}{\partial S^2
 
 \textbf{Properties}:
 \begin{itemize}
-\item Accuracy: \(O(\Delta S)\) - first order
-\item Uses "past" information (point \(i-1\))
+\item Accuracy: $O(\Delta S)$ - first order
+\item Uses "past" information (point $i-1$)
 \item More stable than forward difference
 \end{itemize}
 \end{frame}
@@ -188,7 +291,7 @@ Replace \(\frac{\partial V}{\partial S}\) and \(\frac{\partial^2 V}{\partial S^2
 
 \textbf{Properties}:
 \begin{itemize}
-\item Accuracy: \(O((\Delta S)^2)\) - second order!
+\item Accuracy: $O((\Delta S)^2)$ - second order!
 \item More accurate than forward/backward
 \item Most commonly used for spatial derivatives
 \end{itemize}
@@ -198,7 +301,7 @@ Replace \(\frac{\partial V}{\partial S}\) and \(\frac{\partial^2 V}{\partial S^2
 \frametitle{Why is Central Difference More Accurate?}
 \textbf{Taylor Expansion Analysis}:
 
-Around point \(i\):
+Around point $i$:
 \begin{align}
 V_{i+1,j} &= V_{i,j} + \Delta S \frac{\partial V}{\partial S} + \frac{(\Delta S)^2}{2} \frac{\partial^2 V}{\partial S^2} + O((\Delta S)^3) \\
 V_{i-1,j} &= V_{i,j} - \Delta S \frac{\partial V}{\partial S} + \frac{(\Delta S)^2}{2} \frac{\partial^2 V}{\partial S^2} + O((\Delta S)^3)
@@ -215,18 +318,18 @@ Subtracting the Taylor expansions:
 Solving for the derivative:
 \[\frac{\partial V}{\partial S} = \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + O((\Delta S)^2)\]
 
-\textbf{Result}: Error is \(O((\Delta S)^2)\) instead of \(O(\Delta S)\)
+\textbf{Result}: Error is $O((\Delta S)^2)$ instead of $O(\Delta S)$
 \end{frame}
 
 \begin{frame}
 \frametitle{Second Derivative Approximation}
-\textbf{Goal}: Approximate \(\frac{\partial^2 V}{\partial S^2}\)
+\textbf{Goal}: Approximate $\frac{\partial^2 V}{\partial S^2}$
 
 \begin{block}{Central Difference for Second Derivative}
 \[\frac{\partial^2 V}{\partial S^2} \bigg|_{i,j} \approx \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2}\]
 \end{block}
 
-\textbf{Accuracy}: \(O((\Delta S)^2)\) - second order
+\textbf{Accuracy}: $O((\Delta S)^2)$ - second order
 \end{frame}
 
 \begin{frame}
@@ -249,9 +352,9 @@ Rearranging:
 \end{block}
 
 \begin{itemize}
-\item Uses known values at time \(j\) to find values at time \(j+1\)
+\item Uses known values at time $j$ to find values at time $j+1$
 \item Creates explicit update formulas
-\item Accuracy: \(O(\Delta t)\)
+\item Accuracy: $O(\Delta t)$
 \end{itemize}
 \end{frame}
 
@@ -264,9 +367,9 @@ Rearranging:
 \end{block}
 
 \begin{itemize}
-\item Uses unknown values at time \(j+1\) in the equation
+\item Uses unknown values at time $j+1$ in the equation
 \item Creates systems of equations to solve
-\item Accuracy: \(O(\Delta t)\)
+\item Accuracy: $O(\Delta t)$
 \end{itemize}
 \end{frame}
 
@@ -281,7 +384,7 @@ Rearranging:
 \begin{itemize}
 \item Evaluates spatial operators at both time levels
 \item Averages explicit and implicit approaches
-\item Accuracy: \(O((\Delta t)^2)\) - second order!
+\item Accuracy: $O((\Delta t)^2)$ - second order!
 \end{itemize}
 \end{frame}
 
@@ -292,9 +395,9 @@ Rearranging:
 \toprule
 \textbf{Method} & \textbf{Formula} & \textbf{Accuracy} \\
 \midrule
-Forward & \(\frac{V_{i+1} - V_i}{\Delta S}\) & \(O(\Delta S)\) \\
-Backward & \(\frac{V_i - V_{i-1}}{\Delta S}\) & \(O(\Delta S)\) \\
-Central & \(\frac{V_{i+1} - V_{i-1}}{2\Delta S}\) & \(O((\Delta S)^2)\) \\
+Forward & $\frac{V_{i+1} - V_i}{\Delta S}$ & $O(\Delta S)$ \\
+Backward & $\frac{V_i - V_{i-1}}{\Delta S}$ & $O(\Delta S)$ \\
+Central & $\frac{V_{i+1} - V_{i-1}}{2\Delta S}$ & $O((\Delta S)^2)$ \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -321,7 +424,7 @@ Central & \(\frac{V_{i+1} - V_{i-1}}{2\Delta S}\) & \(O((\Delta S)^2)\) \\
 Replace derivatives with finite difference approximations using known values at current time level.
 
 \begin{block}{Key Concept}
-Use values at time \(j\) to compute values at time \(j+1\)
+Use values at time $j$ to compute values at time $j+1$
 \end{block}
 \end{frame}
 
@@ -351,29 +454,29 @@ V_{i,j+1} = V_{i,j} + \Delta t \bigg[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j}
 For our example:
 \[\Delta t \leq \frac{100}{0.04 \times 40000} = 0.0625\]
 
-Our \(\Delta t = 0.01\) satisfies this condition \checkmark
+Our $\Delta t = 0.01$ satisfies this condition \checkmark
 \end{frame}
 
 \begin{frame}
 \frametitle{Explicit Method - Step 1: Initialize}
-\textbf{Terminal conditions at \(t = 0.25\):}
+\textbf{Terminal conditions at $t = 0.25$:}
 
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c|c}
-\(S_i\) & 0 & 50 & 100 & 150 & 200 & ... \\
+$S_i$ & 0 & 50 & 100 & 150 & 200 & ... \\
 \hline
-\(V_{i,25}\) & 0 & 0 & 0 & 50 & 100 & ...
+$V_{i,25}$ & 0 & 0 & 0 & 50 & 100 & ...
 \end{tabular}
 \end{center}
 
-These represent the payoff \(\max(S_i - K, 0)\) at expiration.
+These represent the payoff $\max(S_i - K, 0)$ at expiration.
 \end{frame}
 
 \begin{frame}
 \frametitle{Explicit Method - Step 2: Sample Calculation}
-Apply explicit formula for \(i = 10\) (our point of interest, \(S = 100\))
+Apply explicit formula for $i = 10$ (our point of interest, $S = 100$)
 
-At time step \(j = 24\): \(t = 0.24\)
+At time step $j = 24$: $t = 0.24$
 \begin{align}
 V_{10,24} &= V_{10,25} + 0.01 \bigg[ -\frac{1}{2}(0.04)(10000) \frac{V_{11,25} - 2V_{10,25} + V_{9,25}}{100} \\
 &\quad - (0.05)(100) \frac{V_{11,25} - V_{9,25}}{20} + (0.05)V_{10,25} \bigg]
@@ -396,7 +499,7 @@ Since option values must be non-negative:
 \frametitle{Explicit Method - Complete Results}
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
-Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t)\) \\
+Time $t$ & $V(80,t)$ & $V(90,t)$ & $V(100,t)$ & $V(110,t)$ & $V(120,t)$ \\
 \hline
 0.25 & 0 & 0 & 0 & 10 & 20 \\
 0.20 & 0.14 & 0.52 & 1.28 & 3.45 & 7.82 \\
@@ -409,15 +512,16 @@ Time \(t\) & \(V(80,t)\) & \(V(90,t)\) & \(V(100,t)\) & \(V(110,t)\) & \(V(120,t
 \end{frame}
 
 \begin{frame}
-\frametitle{Explicit Method - Final Result}
-\begin{block}{Result}
-\textbf{Explicit method gives}: \(V(100, 0) = 5.48\)\\
-\textbf{Black-Scholes exact}: \(V_{\text{BS}} = 5.46\)\\
-\textbf{Error}: \(|5.48 - 5.46| = 0.02\) (0.37\% relative error)
+\frametitle{Explicit Method - Final Result and Comparison}
+\begin{block}{Numerical vs Analytical Comparison}
+\textbf{Explicit method result}: $V(100, 0) = 5.48$\\
+\textbf{Black-Scholes analytical}: $V_{\text{BS}} = 5.46$\\
+\textbf{Absolute error}: $|5.48 - 5.46| = 0.02$\\
+\textbf{Relative error}: $\frac{0.02}{5.46} \times 100\% = 0.37\%$
 \end{block}
 
 \begin{block}{Assessment}
-\textbf{Pros}: Simple implementation, good accuracy\\
+\textbf{Pros}: Simple implementation, excellent accuracy\\
 \textbf{Cons}: Small time steps required for stability
 \end{block}
 \end{frame}
