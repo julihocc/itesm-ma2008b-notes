@@ -68,7 +68,7 @@ Throughout this presentation, we'll solve the same example:
 \textbf{Goal}: Find the option value $V(100, 0)$ at current time
 
 \begin{block}{Analytical Benchmark}
-Black-Scholes formula gives: $V_{\text{BS}} = 5.46$
+Black-Scholes formula gives: $V_{\text{BS}} = 4.61$
 \end{block}
 \end{frame}
 
@@ -154,10 +154,10 @@ We need to find the cumulative standard normal distribution values:
 V &= S_0 \times N(d_1) - K \times e^{-r \times T} \times N(d_2) \\
 &= 100 \times 0.5695 - 100 \times e^{-0.05 \times 0.25} \times 0.5299 \\
 &= 56.95 - 100 \times 0.9876 \times 0.5299 \\
-&= 56.95 - 52.32 = 4.63
+&= 56.95 - 52.33 = 4.62
 \end{align}
 
-\textbf{Note}: With higher precision calculations, the exact result is $V_{BS} = 5.46$
+\textbf{Note}: With higher precision calculations, the exact result is $V_{BS} = 4.61$
 \end{frame}
 
 \begin{frame}
@@ -493,6 +493,8 @@ V_{10,24} &= 0 + 0.01 \bigg[ -2 \frac{50 - 0 + 0}{100} - 5 \frac{50 - 0}{20} + 0
 
 Since option values must be non-negative: 
 \[V_{10,24} = \max(-0.135, 0) = 0\]
+
+\textbf{Note}: This calculation shows the step-by-step process. The complete backward iteration yields $V(100,0) = 4.02$.
 \end{frame}
 
 \begin{frame}
@@ -501,12 +503,12 @@ Since option values must be non-negative:
 \begin{tabular}{c|c|c|c|c|c}
 Time $t$ & $V(80,t)$ & $V(90,t)$ & $V(100,t)$ & $V(110,t)$ & $V(120,t)$ \\
 \hline
-0.25 & 0 & 0 & 0 & 10 & 20 \\
-0.20 & 0.14 & 0.52 & 1.28 & 3.45 & 7.82 \\
-0.15 & 0.68 & 1.84 & 3.22 & 5.98 & 10.15 \\
-0.10 & 1.45 & 2.89 & 4.52 & 7.38 & 11.84 \\
-0.05 & 2.34 & 3.78 & 5.24 & 8.15 & 12.89 \\
-0.00 & 2.98 & 4.21 & 5.48 & 8.45 & 13.28 \\
+0.25 & 0.00 & 0.00 & 0.00 & 10.00 & 20.00 \\
+0.20 & 0.00 & 0.04 & 1.05 & 10.28 & 20.25 \\
+0.15 & 0.01 & 0.16 & 1.94 & 10.63 & 20.51 \\
+0.10 & 0.02 & 0.33 & 2.72 & 11.01 & 20.78 \\
+0.05 & 0.05 & 0.54 & 3.40 & 11.42 & 21.06 \\
+0.00 & 0.09 & 0.78 & 4.02 & 11.83 & 21.34 \\
 \end{tabular}
 \end{center}
 \end{frame}
@@ -514,15 +516,15 @@ Time $t$ & $V(80,t)$ & $V(90,t)$ & $V(100,t)$ & $V(110,t)$ & $V(120,t)$ \\
 \begin{frame}
 \frametitle{Explicit Method - Final Result and Comparison}
 \begin{block}{Numerical vs Analytical Comparison}
-\textbf{Explicit method result}: $V(100, 0) = 5.48$\\
-\textbf{Black-Scholes analytical}: $V_{\text{BS}} = 5.46$\\
-\textbf{Absolute error}: $|5.48 - 5.46| = 0.02$\\
-\textbf{Relative error}: $\frac{0.02}{5.46} \times 100\% = 0.37\%$
+\textbf{Explicit method result}: $V(100, 0) = 4.02$\\
+\textbf{Black-Scholes analytical}: $V_{\text{BS}} = 4.61$\\
+\textbf{Absolute error}: $|4.02 - 4.61| = 0.59$\\
+\textbf{Relative error}: $\frac{0.59}{4.61} \times 100\% = 12.8\%$
 \end{block}
 
 \begin{block}{Assessment}
-\textbf{Pros}: Simple implementation, excellent accuracy\\
-\textbf{Cons}: Small time steps required for stability
+\textbf{Pros}: Simple implementation, reasonable accuracy for coarse grid\\
+\textbf{Cons}: Moderate error due to discretization; finer grids needed for higher accuracy
 \end{block}
 \end{frame}
 
