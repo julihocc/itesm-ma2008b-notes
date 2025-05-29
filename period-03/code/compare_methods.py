@@ -7,7 +7,7 @@ from explicit_fd_call import explicit_fd_call
 def compare_methods(S0, K, T, r, sigma):
     """Compare Black-Scholes and Explicit FD methods"""
     bs_price = black_scholes_call(S0, K, T, r, sigma)
-    fd_price = explicit_fd_call(S0, K, T, r, sigma)
+    fd_price = explicit_fd_call(S0, K, T, r, sigma, 200, 20, 25)[int(20 * S0 / 200), 0]
     
     error = abs(fd_price - bs_price)
     rel_error = error / bs_price * 100
