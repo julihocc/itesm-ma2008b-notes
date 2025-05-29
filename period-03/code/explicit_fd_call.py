@@ -42,7 +42,7 @@ if __name__ == "__main__":
     
     V = explicit_fd_call(S0, K, T, r, sigma, S_max, M, N)
     # Print the matrix V for debugging
-    np.set_printoptions(precision=3, suppress=True)
+    np.set_printoptions(precision=2, suppress=True)
     print("Matrix V:", V)
     # Get the value at S0 at time 0
     result = V[ int( M * S0 / S_max ), 0]
