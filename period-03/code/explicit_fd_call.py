@@ -3,7 +3,7 @@
 
 import numpy as np
 
-def explicit_fd_call(S0, K, T, r, sigma, S_max=200, M=20, N=25):
+def explicit_fd_call(S0, K, T, r, sigma, S_max, M, N):
     """Calculate call option price using explicit finite difference"""
     dS, dt = S_max / M, T / N
     V = np.zeros((M+1, N+1))
@@ -33,12 +33,18 @@ def explicit_fd_call(S0, K, T, r, sigma, S_max=200, M=20, N=25):
             V[i, j] = max(V[i, j], 0)
     
     # Return V(S0, 0)
-    idx = int(S0 / dS)
-    return V[idx, 0]
+    # idx = int(S0 / dS)
+    return V
 
 if __name__ == "__main__":
     # Parameters
-    S0, K, T, r, sigma = 100, 100, 0.25, 0.05, 0.2
+    S0, K, T, r, sigma, S_max, M, N = 100, 100, 0.25, 0.05, 0.2, 200, 20, 25
     
-    result = explicit_fd_call(S0, K, T, r, sigma)
+    V = explicit_fd_call(S0, K, T, r, sigma, S_max, M, N)
+    # Print the matrix V for debugging
+    np.set_printoptions(precision=3, suppress=True)
+    print("Matrix V:", V)
+    # Get the value at S0 at time 0
+    result = V[ int( M * S0 / S_max ), 0]
+    # Print the result
     print(f"Explicit FD: {result:.2f}")
