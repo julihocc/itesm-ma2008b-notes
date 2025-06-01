@@ -437,17 +437,7 @@ Use values at time $j$ to compute values at time $j+1$
 \end{frame}
 
 \begin{frame}
-\frametitle{Explicit Update Formula}
-\begin{block}{Explicit Update Rule}
-\begin{multline}
-V_{i,j+1} = V_{i,j} + \Delta t \bigg[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j} - 2V_{i,j} + V_{i-1,j}}{(\Delta S)^2} \\
-- rS_i \frac{V_{i+1,j} - V_{i-1,j}}{2\Delta S} + rV_{i,j} \bigg]
-\end{multline}
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Alternative Explicit Formula with Coefficients}
+\frametitle{Explicit Formula with Coefficients}
 \begin{block}{Coefficient Formulation}
 Define coefficients:
 \begin{align*}
@@ -457,12 +447,19 @@ Define coefficients:
 \end{align*}
 where:
 \[a = \frac{1}{2}\sigma^2 S_i^2, \quad b = rS_i, \quad c = r\]
+\end{block}
+\end{frame}
 
+\begin{frame}
+  
 Then the update formula becomes:
 \[V_{i,j} = \alpha V_{i-1,j+1} + \beta V_{i,j+1} + \gamma V_{i+1,j+1}\]
-\end{block}
 
-After each update, enforce non-negativity:
+
+\end{frame}
+
+\begin{frame}
+  After each update, enforce non-negativity:
 \[V_{i,j} = \max(V_{i,j}, 0)\]
 \end{frame}
 
