@@ -113,6 +113,7 @@ class GridParameters:
 
 FloatArray = NDArray[np.float64]
 
+
 class BaseOptionPricer(ABC):
     """Abstract base class for option pricing methods."""
 
@@ -125,7 +126,7 @@ class BaseOptionPricer(ABC):
         self.market = market_params
         self.option = option_params
         self.grid = grid_params
-        
+
         # Initialize arrays
         self.s_grid: Optional[FloatArray] = None
         self.t_grid: Optional[FloatArray] = None
@@ -133,7 +134,7 @@ class BaseOptionPricer(ABC):
         self.dt: Optional[float] = None
         self.solution_grid: Optional[FloatArray] = None
         self.convergence_history: list[float] = []
-        
+
         # Initialize grid
         self._setup_grid()
 
@@ -144,14 +145,15 @@ class BaseOptionPricer(ABC):
             self.s_grid = self._create_adaptive_grid()
         else:
             self.s_grid = np.linspace(
-                self.grid.s_min, self.grid.s_max, self.grid.n_space + 1,
-                dtype=np.float64
+                self.grid.s_min,
+                self.grid.s_max,
+                self.grid.n_space + 1,
+                dtype=np.float64,
             )
 
         # Temporal grid
         self.t_grid = np.linspace(
-            0, self.option.time_to_expiry, self.grid.n_time + 1,
-            dtype=np.float64
+            0, self.option.time_to_expiry, self.grid.n_time + 1, dtype=np.float64
         )
 
         # Grid spacing
@@ -163,8 +165,7 @@ class BaseOptionPricer(ABC):
         """Create adaptive spatial grid with refinement near strike and barriers."""
         # Base uniform grid
         base_grid: FloatArray = np.linspace(
-            self.grid.s_min, self.grid.s_max, self.grid.n_space // 2,
-            dtype=np.float64
+            self.grid.s_min, self.grid.s_max, self.grid.n_space // 2, dtype=np.float64
         )
 
         # Add refinement points near strike
@@ -172,7 +173,7 @@ class BaseOptionPricer(ABC):
             max(self.grid.s_min, self.option.strike_price * 0.8),
             min(self.grid.s_max, self.option.strike_price * 1.2),
             self.grid.n_space // 4,
-            dtype=np.float64
+            dtype=np.float64,
         )
 
         # Add refinement near barrier if applicable
@@ -182,26 +183,46 @@ class BaseOptionPricer(ABC):
                 max(self.grid.s_min, self.option.barrier_level * 0.95),
                 min(self.grid.s_max, self.option.barrier_level * 1.05),
                 self.grid.n_space // 4,
-                dtype=np.float64
+                dtype=np.float64,
             )
 
         # Combine and sort
-        all_points: FloatArray = np.concatenate([base_grid, strike_region, barrier_region])
+        all_points: FloatArray = np.concatenate(
+            [base_grid, strike_region, barrier_region]
+        )
         return np.unique(np.sort(all_points))
 
     @abstractmethod
-    def _get_payoff(self, s_values: np.ndarray) -> np.ndarray:
-        """Calculate option payoff at expiry."""
+    def _get_payoff(self, s_values: FloatArray) -> FloatArray:
+        """Calculate option payoff at expiry.
+
+        Args:
+            s_values: Array of stock prices
+
+        Returns:
+            Array of payoff values
+        """
         pass
 
     @abstractmethod
     def _apply_boundary_conditions(self, t: float) -> Tuple[float, float]:
-        """Apply boundary conditions at current time."""
+        """Apply boundary conditions at current time.
+
+        Args:
+            t: Current time
+
+        Returns:
+            Tuple of (lower_boundary_value, upper_boundary_value)
+        """
         pass
 
     @abstractmethod
     def solve(self) -> Dict[str, Any]:
-        """Solve the pricing problem."""
+        """Solve the pricing problem.
+
+        Returns:
+            Dictionary containing solution grid and metadata
+        """
         pass
 
 
