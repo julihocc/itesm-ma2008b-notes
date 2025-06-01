@@ -447,6 +447,26 @@ V_{i,j+1} = V_{i,j} + \Delta t \bigg[ -\frac{1}{2}\sigma^2 S_i^2 \frac{V_{i+1,j}
 \end{frame}
 
 \begin{frame}
+\frametitle{Alternative Explicit Formula with Coefficients}
+\begin{block}{Coefficient Formulation}
+Define coefficients:
+\begin{align*}
+\alpha &= \Delta t \left(\frac{a}{\Delta S^2} - \frac{b}{2\Delta S}\right) \\
+\beta &= 1 - \Delta t \left(\frac{2a}{\Delta S^2} + c\right) \\
+\gamma &= \Delta t \left(\frac{a}{\Delta S^2} + \frac{b}{2\Delta S}\right)
+\end{align*}
+where:
+\[a = \frac{1}{2}\sigma^2 S_i^2, \quad b = rS_i, \quad c = r\]
+
+Then the update formula becomes:
+\[V_{i,j} = \alpha V_{i-1,j+1} + \beta V_{i,j+1} + \gamma V_{i+1,j+1}\]
+\end{block}
+
+After each update, enforce non-negativity:
+\[V_{i,j} = \max(V_{i,j}, 0)\]
+\end{frame}
+
+\begin{frame}
 \frametitle{Stability Condition}
 \textbf{Stability requirement}: 
 \[\Delta t \leq \frac{(\Delta S)^2}{\sigma^2 S_{\max}^2}\]
