@@ -15,12 +15,12 @@ Key Features:
 """
 
 import numpy as np
+from numpy.typing import NDArray
 import scipy.sparse as sp
 import scipy.sparse.linalg as spla
-from scipy.optimize import minimize_scalar
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, Tuple, Callable, Dict, Any
+from typing import Optional, Tuple, Dict, Any, Union
 from enum import Enum
 import warnings
 import time
@@ -111,6 +111,8 @@ class GridParameters:
             raise ValueError("Need at least 5 time steps")
 
 
+FloatArray = NDArray[np.float64]
+
 class BaseOptionPricer(ABC):
     """Abstract base class for option pricing methods."""
 
@@ -123,56 +125,68 @@ class BaseOptionPricer(ABC):
         self.market = market_params
         self.option = option_params
         self.grid = grid_params
-
+        
+        # Initialize arrays
+        self.s_grid: Optional[FloatArray] = None
+        self.t_grid: Optional[FloatArray] = None
+        self.ds: Optional[FloatArray] = None
+        self.dt: Optional[float] = None
+        self.solution_grid: Optional[FloatArray] = None
+        self.convergence_history: list[float] = []
+        
         # Initialize grid
         self._setup_grid()
 
-        # Initialize solution storage
-        self.solution_grid = None
-        self.convergence_history = []
-
-    def _setup_grid(self):
+    def _setup_grid(self) -> None:
         """Initialize spatial and temporal grids."""
         # Spatial grid
         if self.grid.adaptive_refinement:
             self.s_grid = self._create_adaptive_grid()
         else:
             self.s_grid = np.linspace(
-                self.grid.s_min, self.grid.s_max, self.grid.n_space + 1
+                self.grid.s_min, self.grid.s_max, self.grid.n_space + 1,
+                dtype=np.float64
             )
 
         # Temporal grid
-        self.t_grid = np.linspace(0, self.option.time_to_expiry, self.grid.n_time + 1)
+        self.t_grid = np.linspace(
+            0, self.option.time_to_expiry, self.grid.n_time + 1,
+            dtype=np.float64
+        )
 
         # Grid spacing
+        assert self.s_grid is not None  # for type checking
         self.ds = np.diff(self.s_grid)
-        self.dt = self.option.time_to_expiry / self.grid.n_time
+        self.dt = float(self.option.time_to_expiry / self.grid.n_time)
 
-    def _create_adaptive_grid(self) -> np.ndarray:
+    def _create_adaptive_grid(self) -> FloatArray:
         """Create adaptive spatial grid with refinement near strike and barriers."""
         # Base uniform grid
-        base_grid = np.linspace(
-            self.grid.s_min, self.grid.s_max, self.grid.n_space // 2
+        base_grid: FloatArray = np.linspace(
+            self.grid.s_min, self.grid.s_max, self.grid.n_space // 2,
+            dtype=np.float64
         )
 
         # Add refinement points near strike
-        strike_region = np.linspace(
+        strike_region: FloatArray = np.linspace(
             max(self.grid.s_min, self.option.strike_price * 0.8),
             min(self.grid.s_max, self.option.strike_price * 1.2),
             self.grid.n_space // 4,
+            dtype=np.float64
         )
 
         # Add refinement near barrier if applicable
-        barrier_region = np.array([])
+        barrier_region: FloatArray = np.array([], dtype=np.float64)
         if self.option.barrier_level is not None:
             barrier_region = np.linspace(
                 max(self.grid.s_min, self.option.barrier_level * 0.95),
                 min(self.grid.s_max, self.option.barrier_level * 1.05),
                 self.grid.n_space // 4,
+                dtype=np.float64
             )
 
         # Combine and sort
-        all_points = np.concatenate([base_grid, strike_region, barrier_region])
+        all_points: FloatArray = np.concatenate([base_grid, strike_region, barrier_region])
         return np.unique(np.sort(all_points))
 
     @abstractmethod
