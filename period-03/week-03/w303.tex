@@ -494,24 +494,32 @@ These represent the payoff $\max(S_i - K, 0)$ at expiration.
 Apply explicit formula for $i = 10$ (our point of interest, $S = 100$)
 
 At time step $j = 24$: $t = 0.24$
-\begin{align}
-V_{10,24} &= V_{10,25} + 0.01 \bigg[ -\frac{1}{2}(0.04)(10000) \frac{V_{11,25} - 2V_{10,25} + V_{9,25}}{100} \\
-&\quad - (0.05)(100) \frac{V_{11,25} - V_{9,25}}{20} + (0.05)V_{10,25} \bigg]
-\end{align}
+\begin{align*}
+a &= \frac{1}{2}(0.2)^2(100)^2 = 200 \\
+b &= 0.05 \times 100 = 5 \\
+c &= 0.05
+\end{align*}
+
+\begin{align*}
+\alpha &= 0.01 \left(\frac{200}{100} - \frac{5}{20}\right) = 0.0075 \\
+\beta &= 1 - 0.01 \left(\frac{2 \times 200}{100} + 0.05\right) = 0.9595 \\
+\gamma &= 0.01 \left(\frac{200}{100} + \frac{5}{20}\right) = 0.0225
+\end{align*}
 \end{frame}
 
 \begin{frame}
 \frametitle{Explicit Method - Calculation Result}
-Substituting values:
+Applying the coefficient formula:
 \begin{align}
-V_{10,24} &= 0 + 0.01 \bigg[ -2 \frac{50 - 0 + 0}{100} - 5 \frac{50 - 0}{20} + 0 \bigg] \\
-&= 0.01[-1 - 12.5] = -0.135
+V_{10,24} &= \alpha V_{9,25} + \beta V_{10,25} + \gamma V_{11,25} \\
+&= 0.0175 \times 0 + 0.9595 \times 0 + 0.0225 \times 50 \\
+&= 1.125
 \end{align}
 
-Since option values must be non-negative: 
-\[V_{10,24} = \max(-0.135, 0) = 0\]
+The result is already positive, so no need to apply the non-negativity constraint.
 
-\textbf{Note}: This calculation shows the step-by-step process. The complete backward iteration yields $V(100,0) = 4.02$.
+\textbf{Note}: This calculation shows just one step in the process. The complete backward iteration 
+through all time steps yields $V(100,0) = 4.02$.
 \end{frame}
 
 \begin{frame}
