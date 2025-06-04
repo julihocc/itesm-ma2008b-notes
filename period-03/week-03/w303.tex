@@ -221,11 +221,53 @@ This analytical solution serves as our benchmark for numerical methods!
 \end{frame}
 
 \begin{frame}
+  \frametitle{Notation for Discrete Option Values}
+  The core idea of a finite difference grid is to approximate the continuous option value function $V(S,t)$ at discrete points. We denote the value of the option at a specific point on our grid as:
+
+  \[
+    V_{i,j} = V(S_i, t_j)
+  \]
+
+  Where:
+  \begin{itemize}
+    \item $V_{i,j}$ is the numerically approximated option value at the grid point.
+    \item $S_i$ is the $i$-th discrete stock price level (e.g., $S_i = i \cdot \Delta S$).
+    \item $t_j$ is the $j$-th discrete time level (e.g., $t_j = j \cdot \Delta t$).
+    \item $V(S_i, t_j)$ represents the true, (but often unknown) analytical solution evaluated at the specific discrete point $(S_i, t_j)$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    Our numerical method aims to calculate $V_{i,j}$ such that it is a good approximation of $V(S_i, t_j)$.
+\end{frame}
+
+\begin{frame}
 \frametitle{Boundary Conditions}
 \begin{block}{Terminal Condition (at expiration)}
 $V(S_i, 0.25) = \max(S_i - 100, 0)$
 \end{block}
 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Terminal Condition in $V_{i,j}$ Notation}
+At expiration $T$ (final time step $j=N$), the option value is its intrinsic payoff:
+
+$V_{i,N} = \max(S_i - K, 0)$
+
+Where:
+\begin{itemize}
+    \item $V_{i,N}$: Option value at stock price $S_i$ and final time $t_N = T$.
+    \item $S_i$: Stock price at $i$-th node.
+    \item $K$: Strike price (here, $100$).
+\end{itemize}
+This sets the initial values for the backward iteration.
+\end{frame}
+
+\begin{frame}
+\frametitle{Spatial Boundaries}
 \begin{block}{Spatial Boundaries}
 \begin{itemize}
 \item \textbf{At $S = 0$}: $V(0, t) = 0$
