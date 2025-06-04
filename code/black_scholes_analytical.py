@@ -14,6 +14,7 @@ Author: Based on w303 example
 """
 
 import math
+import os
 from scipy.stats import norm
 
 
@@ -61,9 +62,9 @@ def black_scholes_call_analytical(S0, K, T, r, sigma):
     return option_price
 
 
-def print_black_scholes_analysis(S0, K, T, r, sigma):
+def write_black_scholes_report(S0, K, T, r, sigma, filename="black_scholes_report.txt"):
     """
-    Print complete Black-Scholes analysis.
+    Write complete Black-Scholes analysis to a file.
 
     Parameters:
     -----------
@@ -77,17 +78,31 @@ def print_black_scholes_analysis(S0, K, T, r, sigma):
         Risk-free rate (annual)
     sigma : float
         Volatility (annual)
-    """
+    filename : str, optional
+        Output filename (default: "black_scholes_report.txt")
 
-    print("Black-Scholes Solution")
-    print("=====================")
-    print(f"Parameters: S₀=${S0}, K=${K}, T={T}, r={r:.1%}, σ={sigma:.1%}")
-    print()
+    Returns:
+    --------
+    str: Path to the generated report file
+    """
 
     # Calculate option price
     option_price = black_scholes_call_analytical(S0, K, T, r, sigma)
 
-    print(f"European call option value = ${option_price:.2f}")
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    report_path = os.path.join(script_dir, filename)
+
+    # Write report to file
+    with open(report_path, "w") as f:
+        f.write("Black-Scholes Solution\n")
+        f.write("=====================\n")
+        f.write(f"Parameters: S₀=${S0}, K=${K}, T={T}, r={r:.1%}, σ={sigma:.1%}\n")
+        f.write("\n")
+        f.write(f"European call option value = ${option_price:.2f}\n")
+
+    print(f"Report written to: {report_path}")
+    return report_path
 
 
 # Parameters from w303 example
@@ -98,4 +113,4 @@ r = 0.05  # Risk-free rate (5% per annum)
 sigma = 0.2  # Volatility (20% per annum)
 
 # Run the complete analysis
-print_black_scholes_analysis(S0, K, T, r, sigma)
+write_black_scholes_report(S0, K, T, r, sigma)
