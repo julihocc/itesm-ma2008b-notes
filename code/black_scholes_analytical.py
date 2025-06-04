@@ -62,7 +62,9 @@ def black_scholes_call_analytical(S0, K, T, r, sigma):
     return option_price
 
 
-def write_black_scholes_report(S0, K, T, r, sigma, filename="black_scholes_report.txt"):
+def write_black_scholes_report(
+    S0, K, T, r, sigma, filename="black_scholes_analytical_report.txt"
+):
     """
     Write complete Black-Scholes analysis to a file.
 
@@ -79,7 +81,7 @@ def write_black_scholes_report(S0, K, T, r, sigma, filename="black_scholes_repor
     sigma : float
         Volatility (annual)
     filename : str, optional
-        Output filename (default: "black_scholes_report.txt")
+        Output filename (default: "black_scholes_analytical_report.txt")
 
     Returns:
     --------
