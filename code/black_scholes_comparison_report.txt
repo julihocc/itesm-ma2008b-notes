@@ -19,9 +19,10 @@ Time step (dt): 0.000250
 
 Results Comparison:
 ------------------
-Analytical solution:        $4.6150
-Explicit finite difference: $4.5955
-Implicit finite difference: $4.5944
+Analytical solution:           $4.6150
+Explicit finite difference:    $4.5955
+Implicit finite difference:    $4.5944
+Crank-Nicolson finite diff.:   $4.5949
 
 Error Analysis:
 --------------
@@ -31,21 +32,28 @@ Explicit method:
 Implicit method:
   Absolute error:  $0.0206
   Relative error:  0.45%
+Crank-Nicolson method:
+  Absolute error:  $0.0201
+  Relative error:  0.43%
 
 Performance Comparison:
 ----------------------
-Analytical method time:     0.000265 seconds
-Explicit method time:       0.122126 seconds
-Implicit method time:       0.039252 seconds
+Analytical method time:        0.001011 seconds
+Explicit method time:          0.123839 seconds
+Implicit method time:          0.052243 seconds
+Crank-Nicolson method time:    0.041319 seconds
 Speed ratios (vs analytical):
-  Explicit/Analytical:      461.1x
-  Implicit/Analytical:      148.2x
-  Implicit/Explicit:        0.3x
+  Explicit/Analytical:         122.5x
+  Implicit/Analytical:         51.7x
+  Crank-Nicolson/Analytical:   40.9x
+  Implicit/Explicit:           0.4x
+  Crank-Nicolson/Explicit:     0.3x
 
 Analysis:
 --------
 The explicit finite difference method achieves 99.58% accuracy
 The implicit finite difference method achieves 99.55% accuracy
+The Crank-Nicolson method achieves 99.57% accuracy
 relative to the analytical solution with a grid of 100×1000 points.
 
 Method Characteristics:
@@ -67,3 +75,11 @@ Implicit finite difference:
   - Requires solving linear system at each step
   - More complex implementation
   + Similar accuracy to explicit method
+
+Crank-Nicolson finite difference:
+  + Unconditionally stable (like implicit)
+  + Second-order accurate in time
+  + Best balance of accuracy and stability
+  - Requires solving linear system at each step
+  - Most complex implementation
+  + Generally most accurate for smooth solutions

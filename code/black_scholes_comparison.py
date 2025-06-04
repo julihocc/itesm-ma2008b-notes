@@ -7,6 +7,7 @@ This script compares different implementations of Black-Scholes option pricing:
 - Analytical solution (exact)
 - Explicit finite difference (numerical)
 - Implicit finite difference (numerical)
+- Crank-Nicolson finite difference (numerical)
 
 The comparison uses the same parameters from w303 example and analyzes
 the accuracy and performance of each method.
@@ -19,11 +20,12 @@ import time
 from black_scholes_analytical import black_scholes_call_analytical
 from black_scholes_explicit import black_scholes_call_explicit
 from black_scholes_implicit import black_scholes_call_implicit
+from black_scholes_crank_nicolson import black_scholes_call_crank_nicolson
 
 
 def compare_black_scholes_methods(S0, K, T, r, sigma, S_max=200, M=100, N=1000):
     """
-    Compare analytical, explicit, and implicit finite difference methods for Black-Scholes pricing.
+    Compare analytical, explicit, implicit, and Crank-Nicolson finite difference methods for Black-Scholes pricing.
 
     Parameters:
     -----------
@@ -46,7 +48,7 @@ def compare_black_scholes_methods(S0, K, T, r, sigma, S_max=200, M=100, N=1000):
 
     Returns:
     --------
-    dict: Comparison results including prices, errors, and timing for all three methods
+    dict: Comparison results including prices, errors, and timing for all four methods
     """
 
     # Calculate analytical solution with timing
@@ -64,9 +66,17 @@ def compare_black_scholes_methods(S0, K, T, r, sigma, S_max=200, M=100, N=1000):
     implicit_price = black_scholes_call_implicit(S0, K, T, r, sigma, S_max, M, N)
     implicit_time = time.time() - start_time
 
+    # Calculate Crank-Nicolson finite difference solution with timing
+    start_time = time.time()
+    crank_nicolson_price = black_scholes_call_crank_nicolson(
+        S0, K, T, r, sigma, S_max, M, N
+    )
+    crank_nicolson_time = time.time() - start_time
+
     # Calculate error metrics relative to analytical solution
     explicit_absolute_error = abs(explicit_price - analytical_price)
     implicit_absolute_error = abs(implicit_price - analytical_price)
+    crank_nicolson_absolute_error = abs(crank_nicolson_price - analytical_price)
 
     explicit_relative_error = (
         (explicit_absolute_error / analytical_price) * 100
@@ -78,19 +88,28 @@ def compare_black_scholes_methods(S0, K, T, r, sigma, S_max=200, M=100, N=1000):
         if analytical_price != 0
         else 0
     )
+    crank_nicolson_relative_error = (
+        (crank_nicolson_absolute_error / analytical_price) * 100
+        if analytical_price != 0
+        else 0
+    )
 
     # Return comparison results
     return {
         "analytical_price": analytical_price,
         "explicit_price": explicit_price,
         "implicit_price": implicit_price,
+        "crank_nicolson_price": crank_nicolson_price,
         "explicit_absolute_error": explicit_absolute_error,
         "implicit_absolute_error": implicit_absolute_error,
+        "crank_nicolson_absolute_error": crank_nicolson_absolute_error,
         "explicit_relative_error": explicit_relative_error,
         "implicit_relative_error": implicit_relative_error,
+        "crank_nicolson_relative_error": crank_nicolson_relative_error,
         "analytical_time": analytical_time,
         "explicit_time": explicit_time,
         "implicit_time": implicit_time,
+        "crank_nicolson_time": crank_nicolson_time,
         "grid_params": {"S_max": S_max, "M": M, "N": N},
     }
 
@@ -168,9 +187,12 @@ def write_comparison_report(
         # Results comparison
         f.write("Results Comparison:\n")
         f.write("------------------\n")
-        f.write(f"Analytical solution:        ${results['analytical_price']:.4f}\n")
-        f.write(f"Explicit finite difference: ${results['explicit_price']:.4f}\n")
-        f.write(f"Implicit finite difference: ${results['implicit_price']:.4f}\n\n")
+        f.write(f"Analytical solution:           ${results['analytical_price']:.4f}\n")
+        f.write(f"Explicit finite difference:    ${results['explicit_price']:.4f}\n")
+        f.write(f"Implicit finite difference:    ${results['implicit_price']:.4f}\n")
+        f.write(
+            f"Crank-Nicolson finite diff.:   ${results['crank_nicolson_price']:.4f}\n\n"
+        )
 
         # Error analysis
         f.write("Error Analysis:\n")
@@ -180,25 +202,43 @@ def write_comparison_report(
         f.write(f"  Relative error:  {results['explicit_relative_error']:.2f}%\n")
         f.write(f"Implicit method:\n")
         f.write(f"  Absolute error:  ${results['implicit_absolute_error']:.4f}\n")
-        f.write(f"  Relative error:  {results['implicit_relative_error']:.2f}%\n\n")
+        f.write(f"  Relative error:  {results['implicit_relative_error']:.2f}%\n")
+        f.write(f"Crank-Nicolson method:\n")
+        f.write(f"  Absolute error:  ${results['crank_nicolson_absolute_error']:.4f}\n")
+        f.write(
+            f"  Relative error:  {results['crank_nicolson_relative_error']:.2f}%\n\n"
+        )
 
         # Performance comparison
         f.write("Performance Comparison:\n")
         f.write("----------------------\n")
         f.write(
-            f"Analytical method time:     {results['analytical_time']:.6f} seconds\n"
+            f"Analytical method time:        {results['analytical_time']:.6f} seconds\n"
         )
-        f.write(f"Explicit method time:       {results['explicit_time']:.6f} seconds\n")
-        f.write(f"Implicit method time:       {results['implicit_time']:.6f} seconds\n")
+        f.write(
+            f"Explicit method time:          {results['explicit_time']:.6f} seconds\n"
+        )
+        f.write(
+            f"Implicit method time:          {results['implicit_time']:.6f} seconds\n"
+        )
+        f.write(
+            f"Crank-Nicolson method time:    {results['crank_nicolson_time']:.6f} seconds\n"
+        )
         f.write(f"Speed ratios (vs analytical):\n")
         f.write(
-            f"  Explicit/Analytical:      {results['explicit_time']/results['analytical_time']:.1f}x\n"
+            f"  Explicit/Analytical:         {results['explicit_time']/results['analytical_time']:.1f}x\n"
         )
         f.write(
-            f"  Implicit/Analytical:      {results['implicit_time']/results['analytical_time']:.1f}x\n"
+            f"  Implicit/Analytical:         {results['implicit_time']/results['analytical_time']:.1f}x\n"
         )
         f.write(
-            f"  Implicit/Explicit:        {results['implicit_time']/results['explicit_time']:.1f}x\n\n"
+            f"  Crank-Nicolson/Analytical:   {results['crank_nicolson_time']/results['analytical_time']:.1f}x\n"
+        )
+        f.write(
+            f"  Implicit/Explicit:           {results['implicit_time']/results['explicit_time']:.1f}x\n"
+        )
+        f.write(
+            f"  Crank-Nicolson/Explicit:     {results['crank_nicolson_time']/results['explicit_time']:.1f}x\n\n"
         )
 
         # Analysis
@@ -209,6 +249,9 @@ def write_comparison_report(
         )
         f.write(
             f"The implicit finite difference method achieves {100-results['implicit_relative_error']:.2f}% accuracy\n"
+        )
+        f.write(
+            f"The Crank-Nicolson method achieves {100-results['crank_nicolson_relative_error']:.2f}% accuracy\n"
         )
         f.write(
             f"relative to the analytical solution with a grid of {M}×{N} points.\n\n"
@@ -232,7 +275,15 @@ def write_comparison_report(
         f.write("  + Can use larger time steps\n")
         f.write("  - Requires solving linear system at each step\n")
         f.write("  - More complex implementation\n")
-        f.write("  + Similar accuracy to explicit method\n")
+        f.write("  + Similar accuracy to explicit method\n\n")
+
+        f.write("Crank-Nicolson finite difference:\n")
+        f.write("  + Unconditionally stable (like implicit)\n")
+        f.write("  + Second-order accurate in time\n")
+        f.write("  + Best balance of accuracy and stability\n")
+        f.write("  - Requires solving linear system at each step\n")
+        f.write("  - Most complex implementation\n")
+        f.write("  + Generally most accurate for smooth solutions\n")
 
     return report_path
 
