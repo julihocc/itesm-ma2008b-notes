@@ -1,0 +1,53 @@
+BLACK-SCHOLES IMPLICIT FINITE DIFFERENCE METHOD REPORT
+============================================================
+
+METHOD DESCRIPTION:
+- Uses implicit finite difference scheme
+- Solves tridiagonal system at each time step
+- Unconditionally stable (no restrictions on time step)
+- First-order accurate in time
+
+INPUT PARAMETERS:
+- Current stock price (S0): $100.00
+- Strike price (K): $100.00
+- Time to maturity (T): 0.25 years
+- Risk-free rate (r): 5.0%
+- Volatility (σ): 20.0%
+
+NUMERICAL PARAMETERS:
+- Maximum stock price: $200.00
+- Number of stock price steps: 100
+- Number of time steps: 1000
+- Stock price step size (ΔS): $2.00
+- Time step size (Δt): 0.000250 years
+
+COMPUTATIONAL DETAILS:
+- Matrix system: Tridiagonal (efficient Thomas algorithm)
+- Boundary conditions:
+  * At S=0: V(0,t) = 0 (call worthless)
+  * At S=S_max: Linear extrapolation
+- Time integration: Backward from expiry to present
+
+RESULTS:
+- Black-Scholes call option value: $4.5944
+- Computation time: 0.075390 seconds
+
+METHOD CHARACTERISTICS:
+ADVANTAGES:
+- Unconditionally stable for any time step size
+- Can use larger time steps than explicit method
+- No stability restrictions on parameters
+- Efficient tridiagonal solver available
+
+DISADVANTAGES:
+- Requires solving linear system at each time step
+- Only first-order accurate in time
+- More complex implementation than explicit method
+- Additional computational overhead per time step
+
+CONVERGENCE NOTES:
+- Error decreases as O(Δt) + O(ΔS²)
+- Time step can be chosen based on accuracy needs
+- Spatial grid refinement improves accuracy
+- Stable for all practical parameter values
+
