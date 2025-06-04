@@ -105,12 +105,13 @@ def write_black_scholes_report(S0, K, T, r, sigma, filename="black_scholes_repor
     return report_path
 
 
-# Parameters from w303 example
-S0 = 100  # Current stock price
-K = 100  # Strike price
-T = 0.25  # Time to expiration (3 months)
-r = 0.05  # Risk-free rate (5% per annum)
-sigma = 0.2  # Volatility (20% per annum)
+if __name__ == "__main__":
+    # Parameters from w303 example
+    S0 = 100  # Current stock price
+    K = 100  # Strike price
+    T = 0.25  # Time to expiration (3 months)
+    r = 0.05  # Risk-free rate (5% per annum)
+    sigma = 0.2  # Volatility (20% per annum)
 
-# Run the complete analysis
-write_black_scholes_report(S0, K, T, r, sigma)
+    # Run the complete analysis
+    write_black_scholes_report(S0, K, T, r, sigma)
