@@ -11,6 +11,8 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 % Code styling
 \lstset{
@@ -25,6 +27,11 @@
     numberstyle=\tiny\color{gray},
     captionpos=b
 }
+
+% Algorithm styling for CLRS style
+\renewcommand{\algorithmiccomment}[1]{\hfill $\triangleright$ #1}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \title{\textbf{Partial Differential Equations in Finance: \\
 A Comprehensive Study of Black-Scholes Numerical Methods} \\
@@ -235,6 +242,134 @@ For our parameters, this gives $\Delta t \leq 0.000248$, which our choice of $\D
 \item Absolute error: $|4.5955 - 4.6150| = \$0.0195$
 \item Relative error: $0.42\%$
 \end{itemize}
+
+\subsubsection{Algorithm Description}
+
+The following presents the explicit finite difference method in structured algorithmic form.
+
+\paragraph{Main Algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.1: Explicit Finite Difference for Black-Scholes}
+\begin{algorithmic}[1]
+\REQUIRE $S_0$ (initial stock price), $K$ (strike price), $T$ (time to expiration), $r$ (risk-free rate), $\sigma$ (volatility), $S_{max}$ (maximum stock price), $M$ (spatial grid points), $N$ (temporal grid points)
+\ENSURE Option value $V(S_0, 0)$
+
+\STATE $\Delta S \leftarrow S_{max} / M$
+\STATE $\Delta t \leftarrow T / N$
+\STATE \textsc{Validate-Stability}$(\Delta t, \Delta S, \sigma, S_{max}, r)$
+\STATE $V \leftarrow$ \textsc{Initialize-Grid}$(M, K, S_{max})$
+\STATE \textsc{Set-Boundary-Conditions}$(V, M, K, r, T, S_{max})$
+
+\FOR{$j = N-1$ \TO $0$}
+    \STATE $t \leftarrow j \cdot \Delta t$
+    \FOR{$i = 1$ \TO $M-1$}
+        \STATE $S_i \leftarrow i \cdot \Delta S$
+        \STATE $V[i] \leftarrow$ \textsc{Explicit-Update}$(V, i, S_i, \Delta t, \Delta S, r, \sigma)$
+    \ENDFOR
+    \STATE \textsc{Update-Boundary-Conditions}$(V, M, K, r, t, S_{max})$
+\ENDFOR
+
+\RETURN \textsc{Interpolate-Value}$(V, S_0, \Delta S)$
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Supporting Subroutines}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.2: Validate-Stability}
+\begin{algorithmic}[1]
+\REQUIRE $\Delta t$, $\Delta S$, $\sigma$, $S_{max}$, $r$
+\ENSURE Stability condition verified
+
+\STATE $\Delta t_{max} \leftarrow \frac{(\Delta S)^2}{2\sigma^2 S_{max}^2 + r(\Delta S)^2}$
+\IF{$\Delta t > \Delta t_{max}$}
+    \STATE \textbf{error} "Stability condition violated: $\Delta t$ too large"
+\ENDIF
+\STATE \textbf{print} "Stability condition satisfied: $\Delta t \leq \Delta t_{max}$"
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.3: Initialize-Grid}
+\begin{algorithmic}[1]
+\REQUIRE $M$ (number of spatial points), $K$ (strike price), $S_{max}$ (maximum stock price)
+\ENSURE Array $V$ of size $M+1$ with terminal conditions
+
+\STATE $V \leftarrow$ new array of size $(M+1)$
+\STATE $\Delta S \leftarrow S_{max} / M$
+
+\FOR{$i = 0$ \TO $M$}
+    \STATE $S_i \leftarrow i \cdot \Delta S$
+    \STATE $V[i] \leftarrow \max(S_i - K, 0)$ \COMMENT{Terminal payoff}
+\ENDFOR
+
+\RETURN $V$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.4: Set-Boundary-Conditions}
+\begin{algorithmic}[1]
+\REQUIRE $V$ (option values array), $M$, $K$, $r$, $T$, $S_{max}$
+\ENSURE Boundary conditions applied
+
+\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary: option worthless when $S = 0$}
+\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-rT}$ \COMMENT{Upper boundary: intrinsic value}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.5: Explicit-Update}
+\begin{algorithmic}[1]
+\REQUIRE $V$ (current values), $i$ (spatial index), $S_i$ (stock price), $\Delta t$, $\Delta S$, $r$, $\sigma$
+\ENSURE Updated option value $V_{new}$
+
+\STATE $\alpha \leftarrow \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)$
+\STATE $\beta \leftarrow 1 - \Delta t \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + r \right)$
+\STATE $\gamma \leftarrow \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right)$
+
+\STATE $V_{new} \leftarrow \alpha \cdot V[i-1] + \beta \cdot V[i] + \gamma \cdot V[i+1]$
+
+\RETURN $V_{new}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.6: Update-Boundary-Conditions}
+\begin{algorithmic}[1]
+\REQUIRE $V$, $M$, $K$, $r$, $t$ (current time), $S_{max}$
+\ENSURE Boundary conditions updated for current time step
+
+\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary remains zero}
+\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-r(T-t)}$ \COMMENT{Upper boundary with time decay}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Algorithm 4.2.7: Interpolate-Value}
+\begin{algorithmic}[1]
+\REQUIRE $V$ (final option values), $S_0$ (target stock price), $\Delta S$
+\ENSURE Interpolated option value at $S_0$
+
+\STATE $index \leftarrow S_0 / \Delta S$
+\STATE $i \leftarrow \lfloor index \rfloor$
+\STATE $fraction \leftarrow index - i$
+
+\IF{$i \geq$ length$(V) - 1$}
+    \RETURN $V[$length$(V) - 1]$ \COMMENT{Boundary case}
+\ENDIF
+
+\STATE $V_{interp} \leftarrow (1 - fraction) \cdot V[i] + fraction \cdot V[i+1]$
+\RETURN $V_{interp}$
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Complexity Analysis}
+
+\textbf{Time Complexity:} The main algorithm executes $N$ time steps, each processing $M-1$ spatial points with constant-time updates, yielding $O(N \cdot M)$ total complexity.
+
+\textbf{Space Complexity:} The algorithm requires $O(M)$ space for the option values array, with all other variables using $O(1)$ space.
 
 \subsection{Implicit Finite Difference Method}
 
