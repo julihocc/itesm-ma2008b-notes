@@ -1,5 +1,0 @@
-Black-Scholes Solution
-=====================
-Parameters: S₀=$100, K=$100, T=0.25, r=5.0%, σ=20.0%
-
-European call option value = $4.61
