@@ -1,0 +1,65 @@
+BLACK-SCHOLES CRANK-NICOLSON FINITE DIFFERENCE METHOD REPORT
+=================================================================
+
+METHOD DESCRIPTION:
+- Uses Crank-Nicolson finite difference scheme
+- Time-centered average of explicit and implicit schemes
+- Unconditionally stable (no restrictions on time step)
+- Second-order accurate in both time and space
+- Most commonly used method in practice
+
+INPUT PARAMETERS:
+- Current stock price (S0): $100.00
+- Strike price (K): $100.00
+- Time to maturity (T): 0.25 years
+- Risk-free rate (r): 5.0%
+- Volatility (σ): 20.0%
+
+NUMERICAL PARAMETERS:
+- Maximum stock price: $200.00
+- Number of stock price steps: 100
+- Number of time steps: 1000
+- Stock price step size (ΔS): $2.00
+- Time step size (Δt): 0.000250 years
+
+COMPUTATIONAL DETAILS:
+- Matrix system: Two tridiagonal matrices (A and B)
+- Left-hand side: (I - Δt/2·L)·V^{j+1}
+- Right-hand side: (I + Δt/2·L)·V^j
+- Boundary conditions:
+  * At S=0: V(0,t) = 0 (call worthless)
+  * At S=S_max: Linear extrapolation
+- Time integration: Backward from expiry to present
+- Spatial operator L includes diffusion, convection, and reaction terms
+
+RESULTS:
+- Black-Scholes call option value: $4.5949
+- Computation time: 0.073153 seconds
+
+METHOD CHARACTERISTICS:
+ADVANTAGES:
+- Second-order accuracy in both time and space
+- Unconditionally stable for any time step size
+- Optimal balance between accuracy and stability
+- Industry standard for parabolic PDEs
+- No oscillations or artificial damping
+
+DISADVANTAGES:
+- Requires solving linear system at each time step
+- More complex implementation than explicit method
+- Requires two matrix operations per time step
+- Higher memory requirements for matrix storage
+
+CONVERGENCE NOTES:
+- Error decreases as O(Δt²) + O(ΔS²)
+- Optimal convergence rate among finite difference methods
+- Time step can be chosen based on accuracy needs only
+- Spatial grid refinement improves accuracy quadratically
+- Most accurate method for given grid resolution
+
+COMPARISON WITH OTHER METHODS:
+- More accurate than explicit or implicit methods
+- Computational cost between explicit and implicit
+- Best choice for production applications
+- Standard in financial software packages
+
