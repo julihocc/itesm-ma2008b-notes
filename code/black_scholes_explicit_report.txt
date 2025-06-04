@@ -1,0 +1,7 @@
+Black-Scholes Explicit Finite Difference Solution
+=================================================
+Parameters: S₀=$100, K=$100, T=0.25, r=5.0%, σ=20.0%
+Grid: S_max=200, M=100, N=1000
+Grid spacing: dS=2.00, dt=0.000250
+
+European call option value = $4.60
