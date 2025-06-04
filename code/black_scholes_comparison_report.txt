@@ -1,0 +1,37 @@
+Black-Scholes Methods Comparison
+===============================
+
+Problem Parameters:
+------------------
+Current stock price (S₀): $100
+Strike price (K): $100
+Time to expiration (T): 0.25 years
+Risk-free rate (r): 5.0%
+Volatility (σ): 20.0%
+
+Explicit Method Grid Parameters:
+-------------------------------
+Maximum stock price (S_max): 200
+Stock price steps (M): 100
+Time steps (N): 1000
+Grid spacing (dS): 2.00
+Time step (dt): 0.000250
+
+Results Comparison:
+------------------
+Analytical solution:        $4.6150
+Explicit finite difference: $4.5955
+Absolute error:             $0.0195
+Relative error:             0.42%
+
+Performance Comparison:
+----------------------
+Analytical method time:     0.000181 seconds
+Explicit method time:       0.114461 seconds
+Speed ratio (explicit/analytical): 633.4x
+
+Analysis:
+--------
+The explicit finite difference method achieves 99.58% accuracy
+relative to the analytical solution with a grid of 100×1000 points.
+The numerical method is 633.4x slower than the analytical method.
