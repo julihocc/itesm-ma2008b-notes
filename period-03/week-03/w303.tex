@@ -276,6 +276,37 @@ This sets the initial values for the backward iteration.
 \end{block}
 \end{frame}
 
+\begin{frame}
+\frametitle{Spatial Boundaries in $V_{i,j}$ Notation}
+For a grid with $M$ price steps up to $S_{\text{max}}$ and $N$ time steps up to $T$:
+\begin{itemize}
+    \item $S_i = i \cdot \Delta S$ for $i = 0, \dots, M$
+    \item $t_j = j \cdot \Delta t$ for $j = 0, \dots, N$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  
+The spatial boundary conditions from the previous slide can be written as:
+  \begin{block}{At $S = 0$ (i.e., $i=0$)}
+For all time steps $j = 0, \dots, N$:
+\[V_{0,j} = 0\]
+This means the option has no value if the stock price is zero.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{At $S = S_{\text{max}}$ (i.e., $i=M$)}
+For a European call option, as $S \to \infty$, $V(S,t) \approx S - K e^{-r(T-t)}$.
+So, at $S_M = S_{\text{max}}$ (e.g., $S_{\text{max}} = 200$, $K=100$, $r=0.05$, $T=0.25$):
+\[V_{M,j} = S_M - K e^{-r(T-t_j)}\]
+Which can be written using time step $j$ and total time steps $N$:
+\[V_{M,j} = S_M - K e^{-r(N-j)\Delta t}\]
+This approximates the value of a deeply in-the-money call.
+\end{block}
+\end{frame}
+
 \section{Finite Difference Discretization Fundamentals}
 
 \begin{frame}
