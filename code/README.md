@@ -1,4 +1,13 @@
-# Black-Scholes Finite Difference Methods
+# Black-Scholes Finite D## Methods Comparison
+
+Using the example parameters (S₀=$100, K=$100, T=0.25 years, r=5%, σ=20%):
+
+| Method | Value | Error | Relative Error | Computation Time |
+|--------|-------|-------|----------------|------------------|
+| **Analytical** | $4.6150 | — | — | ~0.001s |
+| **Explicit FD** | $4.5955 | $0.0195 | 0.42% | ~0.124s |
+| **Implicit FD** | $4.5944 | $0.0206 | 0.45% | ~0.052s |
+| **Crank-Nicolson** | $4.5949 | $0.0201 | 0.43% | ~0.041s | Methods
 
 This directory contains implementations of Black-Scholes option pricing using different numerical methods, based on the examples from w303.tex and w304.tex.
 
@@ -8,12 +17,14 @@ This directory contains implementations of Black-Scholes option pricing using di
 - **`black_scholes_analytical.py`** - Analytical Black-Scholes solution (exact)
 - **`black_scholes_explicit.py`** - Explicit finite difference method 
 - **`black_scholes_implicit.py`** - Implicit finite difference method
-- **`black_scholes_comparison.py`** - Comparison of all three methods
+- **`black_scholes_crank_nicolson.py`** - Crank-Nicolson finite difference method
+- **`black_scholes_comparison.py`** - Comparison of all four methods
 
 ### Generated Reports
 - **`black_scholes_analytical_report.txt`** - Detailed analytical method results
 - **`black_scholes_explicit_report.txt`** - Detailed explicit method results  
 - **`black_scholes_implicit_report.txt`** - Detailed implicit method results
+- **`black_scholes_crank_nicolson_report.txt`** - Detailed Crank-Nicolson method results
 - **`black_scholes_comparison_report.txt`** - Comprehensive comparison of all methods
 
 ### Configuration
@@ -50,6 +61,14 @@ Using the example parameters (S₀=$100, K=$100, T=0.25 years, r=5%, σ=20%):
 - ❌ **More complex implementation** (requires linear solver)
 - ✅ **Similar accuracy** to explicit method
 
+### Crank-Nicolson Finite Difference
+- ✅ **Unconditionally stable** (like implicit)
+- ✅ **Second-order accurate in time**
+- ✅ **Best balance of accuracy and stability**
+- ✅ **Fastest among numerical methods**
+- ❌ **Most complex implementation**
+- ✅ **Generally most accurate** for smooth solutions
+
 ## Running the Code
 
 ### Prerequisites
@@ -69,6 +88,9 @@ python black_scholes_explicit.py
 # Run implicit finite difference  
 python black_scholes_implicit.py
 
+# Run Crank-Nicolson finite difference
+python black_scholes_crank_nicolson.py
+
 # Run comprehensive comparison
 python black_scholes_comparison.py
 ```
@@ -78,6 +100,7 @@ python black_scholes_comparison.py
 from black_scholes_analytical import black_scholes_call_analytical
 from black_scholes_explicit import black_scholes_call_explicit
 from black_scholes_implicit import black_scholes_call_implicit
+from black_scholes_crank_nicolson import black_scholes_call_crank_nicolson
 
 # Example parameters
 S0, K, T, r, sigma = 100, 100, 0.25, 0.05, 0.20
@@ -85,10 +108,12 @@ S0, K, T, r, sigma = 100, 100, 0.25, 0.05, 0.20
 analytical = black_scholes_call_analytical(S0, K, T, r, sigma)
 explicit = black_scholes_call_explicit(S0, K, T, r, sigma)
 implicit = black_scholes_call_implicit(S0, K, T, r, sigma)
+crank_nicolson = black_scholes_call_crank_nicolson(S0, K, T, r, sigma)
 
-print(f"Analytical: ${analytical:.4f}")
-print(f"Explicit:   ${explicit:.4f}")  
-print(f"Implicit:   ${implicit:.4f}")
+print(f"Analytical:     ${analytical:.4f}")
+print(f"Explicit:       ${explicit:.4f}")  
+print(f"Implicit:       ${implicit:.4f}")
+print(f"Crank-Nicolson: ${crank_nicolson:.4f}")
 ```
 
 ## Grid Parameters
