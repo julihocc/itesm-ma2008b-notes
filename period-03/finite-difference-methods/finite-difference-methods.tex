@@ -33,6 +33,10 @@
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
+% Configure algorithm numbering to follow subsection structure
+\renewcommand{\thealgorithm}{\thesubsection.\arabic{algorithm}}
+\numberwithin{algorithm}{subsection}
+
 \title{\textbf{Partial Differential Equations in Finance: \\
 A Comprehensive Study of Black-Scholes Numerical Methods} \\
 \large Period 03 - Complete Analysis and Results}
@@ -247,10 +251,8 @@ For our parameters, this gives $\Delta t \leq 0.000248$, which our choice of $\D
 
 The following presents the explicit finite difference method in structured algorithmic form.
 
-\paragraph{Main Algorithm}
-
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.1: Explicit Finite Difference for Black-Scholes}
+\caption{Explicit Finite Difference for Black-Scholes}
 \begin{algorithmic}[1]
 \REQUIRE $S_0$ (initial stock price), $K$ (strike price), $T$ (time to expiration), $r$ (risk-free rate), $\sigma$ (volatility), $S_{max}$ (maximum stock price), $M$ (spatial grid points), $N$ (temporal grid points)
 \ENSURE Option value $V(S_0, 0)$
@@ -274,10 +276,8 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{Supporting Subroutines}
-
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.2: Validate-Stability}
+\caption{Validate-Stability}
 \begin{algorithmic}[1]
 \REQUIRE $\Delta t$, $\Delta S$, $\sigma$, $S_{max}$, $r$
 \ENSURE Stability condition verified
@@ -291,7 +291,7 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.3: Initialize-Grid}
+\caption{Initialize-Grid}
 \begin{algorithmic}[1]
 \REQUIRE $M$ (number of spatial points), $K$ (strike price), $S_{max}$ (maximum stock price)
 \ENSURE Array $V$ of size $M+1$ with terminal conditions
@@ -309,7 +309,7 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.4: Set-Boundary-Conditions}
+\caption{Set-Boundary-Conditions}
 \begin{algorithmic}[1]
 \REQUIRE $V$ (option values array), $M$, $K$, $r$, $T$, $S_{max}$
 \ENSURE Boundary conditions applied
@@ -320,7 +320,7 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.5: Explicit-Update}
+\caption{Explicit-Update}
 \begin{algorithmic}[1]
 \REQUIRE $V$ (current values), $i$ (spatial index), $S_i$ (stock price), $\Delta t$, $\Delta S$, $r$, $\sigma$
 \ENSURE Updated option value $V_{new}$
@@ -336,7 +336,7 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.6: Update-Boundary-Conditions}
+\caption{Update-Boundary-Conditions}
 \begin{algorithmic}[1]
 \REQUIRE $V$, $M$, $K$, $r$, $t$ (current time), $S_{max}$
 \ENSURE Boundary conditions updated for current time step
@@ -347,7 +347,7 @@ The following presents the explicit finite difference method in structured algor
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Algorithm 4.2.7: Interpolate-Value}
+\caption{Interpolate-Value}
 \begin{algorithmic}[1]
 \REQUIRE $V$ (final option values), $S_0$ (target stock price), $\Delta S$
 \ENSURE Interpolated option value at $S_0$
