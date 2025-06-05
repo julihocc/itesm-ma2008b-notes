@@ -500,6 +500,68 @@ The following presents the implicit finite difference method in structured algor
 \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}[H]
+\caption{Initialize-Grid-Implicit}
+\begin{algorithmic}[1]
+\REQUIRE $M$ (spatial grid points), $K$ (strike price), $S_{max}$ (maximum stock price)
+\ENSURE Initial grid $V$ with terminal conditions
+
+\STATE $V \leftarrow$ new array of size $M+1$
+\STATE $\Delta S \leftarrow S_{max} / M$
+
+\FOR{$i = 0$ \TO $M$}
+    \STATE $S_i \leftarrow i \cdot \Delta S$
+    \STATE $V[i] \leftarrow \max(K - S_i, 0)$ \COMMENT{Put option payoff}
+\ENDFOR
+
+\RETURN $V$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Set-Boundary-Conditions-Implicit}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $T$ (time), $S_{max}$
+\ENSURE Grid $V$ with boundary conditions set
+
+\STATE $V[0] \leftarrow K \cdot e^{-rT}$ \COMMENT{At $S = 0$, option worth discounted strike}
+\STATE $V[M] \leftarrow 0$ \COMMENT{At $S = S_{max}$, put option worthless}
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Update-Boundary-Conditions-Implicit}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $t$ (current time), $S_{max}$
+\ENSURE Grid $V$ with updated boundary conditions
+
+\STATE $\tau \leftarrow t$ \COMMENT{Time to expiration from current time}
+\STATE $V[0] \leftarrow K \cdot e^{-r\tau}$ \COMMENT{Lower boundary: discounted strike}
+\STATE $V[M] \leftarrow 0$ \COMMENT{Upper boundary: option worthless}
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Interpolate-Value-Implicit}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $S_0$ (target stock price), $\Delta S$ (grid spacing)
+\ENSURE Interpolated option value at $S_0$
+
+\STATE $i \leftarrow \lfloor S_0 / \Delta S \rfloor$ \COMMENT{Find lower grid index}
+\STATE $\lambda \leftarrow (S_0 - i \cdot \Delta S) / \Delta S$ \COMMENT{Interpolation weight}
+
+\IF{$i \geq$ size$(V) - 1$}
+    \RETURN $V[\text{size}(V) - 1]$ \COMMENT{Boundary case}
+\ENDIF
+
+\STATE $\text{value} \leftarrow (1 - \lambda) \cdot V[i] + \lambda \cdot V[i+1]$ \COMMENT{Linear interpolation}
+
+\RETURN $\text{value}$
+\end{algorithmic}
+\end{algorithm}
+
 \paragraph{Complexity Analysis}
 
 \textbf{Time Complexity:} The main algorithm executes $N$ time steps, each requiring $O(M)$ operations for matrix assembly and $O(M)$ operations for tridiagonal system solution, yielding $O(N \cdot M)$ total complexity.
@@ -546,6 +608,156 @@ The Crank-Nicolson method offers:
 \item Absolute error: $|4.5949 - 4.6150| = \$0.0201$
 \item Relative error: $0.43\%$
 \end{itemize}
+
+\subsubsection{Algorithm Description}
+
+The following presents the Crank-Nicolson finite difference method in structured algorithmic form.
+
+\begin{algorithm}[H]
+\caption{Crank-Nicolson Finite Difference for Black-Scholes}
+\begin{algorithmic}[1]
+\REQUIRE $S_0$ (initial stock price), $K$ (strike price), $T$ (time to expiration), $r$ (risk-free rate), $\sigma$ (volatility), $S_{max}$ (maximum stock price), $M$ (spatial grid points), $N$ (temporal grid points)
+\ENSURE Option value $V(S_0, 0)$
+
+\STATE $\Delta S \leftarrow S_{max} / M$
+\STATE $\Delta t \leftarrow T / N$
+\STATE $V \leftarrow$ \textsc{Initialize-Grid-CN}$(M, K, S_{max})$
+\STATE $A \leftarrow$ \textsc{Build-Left-Matrix}$(M, \Delta t, \Delta S, \sigma, r, S_{max})$
+\STATE $B \leftarrow$ \textsc{Build-Right-Matrix}$(M, \Delta t, \Delta S, \sigma, r, S_{max})$
+\STATE \textsc{Set-Boundary-Conditions-CN}$(V, M, K, r, T, S_{max})$
+
+\FOR{$j = N-1$ \TO $0$}
+    \STATE $t \leftarrow j \cdot \Delta t$
+    \STATE $b \leftarrow B \cdot V$ \COMMENT{Compute right-hand side}
+    \STATE $V \leftarrow$ \textsc{Solve-Tridiagonal-System}$(A, b)$
+    \STATE \textsc{Update-Boundary-Conditions-CN}$(V, M, K, r, t, S_{max})$
+\ENDFOR
+
+\RETURN \textsc{Interpolate-Value-CN}$(V, S_0, \Delta S)$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Build-Left-Matrix}
+\begin{algorithmic}[1]
+\REQUIRE $M$ (spatial points), $\Delta t$, $\Delta S$, $\sigma$, $r$, $S_{max}$
+\ENSURE Left-hand side tridiagonal matrix $A$ of size $(M-1) \times (M-1)$
+
+\STATE $A \leftarrow$ new tridiagonal matrix of size $(M-1) \times (M-1)$
+
+\FOR{$i = 1$ \TO $M-1$}
+    \STATE $S_i \leftarrow i \cdot \Delta S$
+    \STATE $\alpha \leftarrow \frac{\Delta t}{4} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)$
+    \STATE $\beta \leftarrow 1 + \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + r \right)$
+    \STATE $\gamma \leftarrow \frac{\Delta t}{4} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right)$
+    
+    \IF{$i > 1$}
+        \STATE $A[i][i-1] \leftarrow -\alpha$ \COMMENT{Lower diagonal}
+    \ENDIF
+    \STATE $A[i][i] \leftarrow \beta$ \COMMENT{Main diagonal}
+    \IF{$i < M-1$}
+        \STATE $A[i][i+1] \leftarrow -\gamma$ \COMMENT{Upper diagonal}
+    \ENDIF
+\ENDFOR
+
+\RETURN $A$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Build-Right-Matrix}
+\begin{algorithmic}[1]
+\REQUIRE $M$ (spatial points), $\Delta t$, $\Delta S$, $\sigma$, $r$, $S_{max}$
+\ENSURE Right-hand side tridiagonal matrix $B$ of size $(M-1) \times (M-1)$
+
+\STATE $B \leftarrow$ new tridiagonal matrix of size $(M-1) \times (M-1)$
+
+\FOR{$i = 1$ \TO $M-1$}
+    \STATE $S_i \leftarrow i \cdot \Delta S$
+    \STATE $\alpha \leftarrow \frac{\Delta t}{4} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)$
+    \STATE $\beta \leftarrow 1 - \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + r \right)$
+    \STATE $\gamma \leftarrow \frac{\Delta t}{4} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right)$
+    
+    \IF{$i > 1$}
+        \STATE $B[i][i-1] \leftarrow \alpha$ \COMMENT{Lower diagonal}
+    \ENDIF
+    \STATE $B[i][i] \leftarrow \beta$ \COMMENT{Main diagonal}
+    \IF{$i < M-1$}
+        \STATE $B[i][i+1] \leftarrow \gamma$ \COMMENT{Upper diagonal}
+    \ENDIF
+\ENDFOR
+
+\RETURN $B$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Initialize-Grid-CN}
+\begin{algorithmic}[1]
+\REQUIRE $M$ (spatial grid points), $K$ (strike price), $S_{max}$ (maximum stock price)
+\ENSURE Initial grid $V$ with terminal conditions
+
+\STATE $V \leftarrow$ new array of size $M+1$
+\STATE $\Delta S \leftarrow S_{max} / M$
+
+\FOR{$i = 0$ \TO $M$}
+    \STATE $S_i \leftarrow i \cdot \Delta S$
+    \STATE $V[i] \leftarrow \max(K - S_i, 0)$ \COMMENT{Put option payoff}
+\ENDFOR
+
+\RETURN $V$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Set-Boundary-Conditions-CN}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $T$ (time), $S_{max}$
+\ENSURE Grid $V$ with boundary conditions set
+
+\STATE $V[0] \leftarrow K \cdot e^{-rT}$ \COMMENT{At $S = 0$, option worth discounted strike}
+\STATE $V[M] \leftarrow 0$ \COMMENT{At $S = S_{max}$, put option worthless}
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Update-Boundary-Conditions-CN}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $t$ (current time), $S_{max}$
+\ENSURE Grid $V$ with updated boundary conditions
+
+\STATE $\tau \leftarrow t$ \COMMENT{Time to expiration from current time}
+\STATE $V[0] \leftarrow K \cdot e^{-r\tau}$ \COMMENT{Lower boundary: discounted strike}
+\STATE $V[M] \leftarrow 0$ \COMMENT{Upper boundary: option worthless}
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Interpolate-Value-CN}
+\begin{algorithmic}[1]
+\REQUIRE Grid $V$, $S_0$ (target stock price), $\Delta S$ (grid spacing)
+\ENSURE Interpolated option value at $S_0$
+
+\STATE $i \leftarrow \lfloor S_0 / \Delta S \rfloor$ \COMMENT{Find lower grid index}
+\STATE $\lambda \leftarrow (S_0 - i \cdot \Delta S) / \Delta S$ \COMMENT{Interpolation weight}
+
+\IF{$i \geq$ size$(V) - 1$}
+    \RETURN $V[\text{size}(V) - 1]$ \COMMENT{Boundary case}
+\ENDIF
+
+\STATE $\text{value} \leftarrow (1 - \lambda) \cdot V[i] + \lambda \cdot V[i+1]$ \COMMENT{Linear interpolation}
+
+\RETURN $\text{value}$
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Complexity Analysis}
+
+\textbf{Time Complexity:} The main algorithm executes $N$ time steps, each requiring $O(M)$ operations for matrix-vector multiplication and $O(M)$ operations for tridiagonal system solution, yielding $O(N \cdot M)$ total complexity.
+
+\textbf{Space Complexity:} Requires $O(M)$ storage for the solution vector and $O(M)$ for each tridiagonal matrix (left and right matrices).
 
 \section{Comprehensive Results and Analysis}
 
