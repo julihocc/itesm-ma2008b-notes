@@ -530,132 +530,6 @@ The following presents the implicit finite difference method in structured algor
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[H]
-\caption{Initialize-Grid-Implicit}
-\begin{algorithmic}[1]
-\REQUIRE $M$ (spatial grid points), $K$ (strike price), $S_{max}$ (maximum stock price)
-\ENSURE Initial grid $V$ with terminal conditions
-
-\STATE $V \leftarrow$ new array of size $M+1$
-\STATE $\Delta S \leftarrow S_{max} / M$
-
-\FOR{$i = 0$ \TO $M$}
-    \STATE $S_i \leftarrow i \cdot \Delta S$
-    \STATE $V[i] \leftarrow \max(S_i - K, 0)$ \COMMENT{Call option payoff}
-\ENDFOR
-
-\RETURN $V$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[H]
-\caption{Set-Boundary-Conditions-Implicit}
-\begin{algorithmic}[1]
-\REQUIRE $V$ (option values array), $M$, $K$, $r$, $T$, $S_{max}$
-\ENSURE Boundary conditions applied
-
-\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary: option worthless when $S = 0$}
-\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-rT}$ \COMMENT{Upper boundary: intrinsic value}
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[H]
-\caption{Update-Boundary-Conditions-Implicit}
-\begin{algorithmic}[1]
-\REQUIRE $V$, $M$, $K$, $r$, $t$ (current time), $S_{max}$
-\ENSURE Boundary conditions updated for current time step
-
-\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary remains zero}
-\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-r(T-t)}$ \COMMENT{Upper boundary with time decay}
-\end{algorithmic}
-\end{algorithm}
-
-\subsubsection{Algorithm Description}
-
-The following presents the implicit finite difference method in structured algorithmic form.
-
-\begin{algorithm}[H]
-\caption{Implicit Finite Difference for Black-Scholes}
-\begin{algorithmic}[1]
-\REQUIRE $S_0$ (initial stock price), $K$ (strike price), $T$ (time to expiration), $r$ (risk-free rate), $\sigma$ (volatility), $S_{max}$ (maximum stock price), $M$ (spatial grid points), $N$ (temporal grid points)
-\ENSURE Option value $V(S_0, 0)$
-
-\STATE $\Delta S \leftarrow S_{max} / M$
-\STATE $\Delta t \leftarrow T / N$
-\STATE $V \leftarrow$ \textsc{Initialize-Grid}$(M, K, S_{max})$
-\STATE $A \leftarrow$ \textsc{Build-Tridiagonal-Matrix}$(M, \Delta t, \Delta S, \sigma, r, S_{max})$
-\STATE \textsc{Set-Boundary-Conditions}$(V, M, K, r, T, S_{max})$
-
-\FOR{$j = N-1$ \TO $0$}
-    \STATE $t \leftarrow j \cdot \Delta t$
-    \STATE $V \leftarrow$ \textsc{Solve-Tridiagonal-System}$(A, V)$
-    \STATE \textsc{Update-Boundary-Conditions}$(V, M, K, r, t, S_{max})$
-\ENDFOR
-
-\RETURN \textsc{Interpolate-Value}$(V, S_0, \Delta S)$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[H]
-\caption{Build-Tridiagonal-Matrix}
-\begin{algorithmic}[1]
-\REQUIRE $M$ (spatial points), $\Delta t$, $\Delta S$, $\sigma$, $r$, $S_{max}$
-\ENSURE Tridiagonal matrix $A$ of size $(M-1) \times (M-1)$
-
-\STATE $A \leftarrow$ new tridiagonal matrix of size $(M-1) \times (M-1)$
-
-\FOR{$i = 1$ \TO $M-1$}
-    \STATE $S_i \leftarrow i \cdot \Delta S$
-    \STATE $\alpha \leftarrow \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} - \frac{rS_i}{\Delta S} \right)$
-    \STATE $\beta \leftarrow 1 + \Delta t \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + r \right)$
-    \STATE $\gamma \leftarrow \frac{\Delta t}{2} \left( \frac{\sigma^2 S_i^2}{(\Delta S)^2} + \frac{rS_i}{\Delta S} \right)$
-    
-    \IF{$i > 1$}
-        \STATE $A[i][i-1] \leftarrow -\alpha$ \COMMENT{Lower diagonal}
-    \ENDIF
-    \STATE $A[i][i] \leftarrow \beta$ \COMMENT{Main diagonal}
-    \IF{$i < M-1$}
-        \STATE $A[i][i+1] \leftarrow -\gamma$ \COMMENT{Upper diagonal}
-    \ENDIF
-\ENDFOR
-
-\RETURN $A$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[H]
-\caption{Solve-Tridiagonal-System}
-\begin{algorithmic}[1]
-\REQUIRE Tridiagonal matrix $A$, right-hand side vector $b$
-\ENSURE Solution vector $x$ such that $Ax = b$
-
-\STATE $n \leftarrow$ size$(b)$
-\STATE $c' \leftarrow$ new array of size $n$
-\STATE $d' \leftarrow$ new array of size $n$
-
-\COMMENT{Forward elimination}
-\STATE $c'[1] \leftarrow A[1][2] / A[1][1]$
-\STATE $d'[1] \leftarrow b[1] / A[1][1]$
-
-\FOR{$i = 2$ \TO $n-1$}
-    \STATE $m \leftarrow A[i][i] - A[i][i-1] \cdot c'[i-1]$
-    \STATE $c'[i] \leftarrow A[i][i+1] / m$
-    \STATE $d'[i] \leftarrow (b[i] - A[i][i-1] \cdot d'[i-1]) / m$
-\ENDFOR
-
-\STATE $m \leftarrow A[n][n] - A[n][n-1] \cdot c'[n-1]$
-\STATE $d'[n] \leftarrow (b[n] - A[n][n-1] \cdot d'[n-1]) / m$
-
-\COMMENT{Back substitution}
-\STATE $x[n] \leftarrow d'[n]$
-\FOR{$i = n-1$ \TO $1$}
-    \STATE $x[i] \leftarrow d'[i] - c'[i] \cdot x[i+1]$
-\ENDFOR
-
-\RETURN $x$
-\end{algorithmic}
-\end{algorithm}
-
 \paragraph{Complexity Analysis}
 
 \textbf{Time Complexity:} The main algorithm executes $N$ time steps, each requiring $O(M)$ operations for matrix assembly and $O(M)$ operations for tridiagonal system solution, yielding $O(N \cdot M)$ total complexity.
@@ -841,17 +715,17 @@ Table \ref{tab:comparison} presents a comprehensive comparison of all implemente
 \centering
 \caption{Comprehensive Methods Comparison}
 \label{tab:comparison}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Method} & \textbf{Value (\$)} & \textbf{Absolute Error (\$)} & \textbf{Relative Error (\%)} & \textbf{Time (s)} \\
-\midrule
-Analytical & 4.6150 & --- & --- & 0.001 \\
-Explicit FD & 4.5955 & 0.0195 & 0.42 & 0.124 \\
-Implicit FD & 4.5944 & 0.0206 & 0.45 & 0.052 \\
-Crank-Nicolson & 4.5949 & 0.0201 & 0.43 & 0.041 \\
-\bottomrule
+\begin{tabular}{l S[table-format=1.4] S[table-format=1.4] S[table-format=1.2] S[table-format=1.3]}
+ \toprule
+ \textbf{Method} & {\textbf{Value (\$)}} & {\textbf{Abs.~Error (\$)}} & {\textbf{Rel.~Error (\%)}} & {\textbf{Time (s)}} \\
+ \midrule
+ Analytical & 4.6150 & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & 0.001 \\
+ Explicit FD & 4.5955 & 0.0195 & 0.42 & 0.124 \\
+ Implicit FD & 4.5944 & 0.0206 & 0.45 & 0.052 \\
+ Crank-Nicolson & 4.5949 & 0.0201 & 0.43 & 0.041 \\
+ \bottomrule
 \end{tabular}
-\end{table}
+ \end{table}
 
 \subsection{Key Insights}
 
