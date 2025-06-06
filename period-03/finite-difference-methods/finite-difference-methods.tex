@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -13,6 +14,13 @@
 \usepackage{xcolor}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\usepackage[capitalise]{cleveref}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
 
 % Code styling
 \lstset{
@@ -521,22 +529,22 @@ The following presents the implicit finite difference method in structured algor
 \begin{algorithm}[H]
 \caption{Set-Boundary-Conditions-Implicit}
 \begin{algorithmic}[1]
-\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $T$ (time), $S_{max}$
-\ENSURE Grid $V$ with boundary conditions set
+\REQUIRE $V$ (option values array), $M$, $K$, $r$, $T$, $S_{max}$
+\ENSURE Boundary conditions applied
 
-\STATE $V[0] \leftarrow 0$ \COMMENT{Call worthless when $S=0$}
-\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-rT}$ \COMMENT{Call intrinsic at $S_{max}$}
+\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary: option worthless when $S = 0$}
+\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-rT}$ \COMMENT{Upper boundary: intrinsic value}
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}[H]
 \caption{Update-Boundary-Conditions-Implicit}
 \begin{algorithmic}[1]
-\REQUIRE Grid $V$, $M$ (spatial points), $K$ (strike), $r$ (rate), $t$ (current time), $S_{max}$
-\ENSURE Grid $V$ with updated boundary conditions
+\REQUIRE $V$, $M$, $K$, $r$, $t$ (current time), $S_{max}$
+\ENSURE Boundary conditions updated for current time step
 
-\STATE $V[0] \leftarrow 0$ \COMMENT{Call worthless at $S=0$}
-\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-r\tau}$ \COMMENT{Call intrinsic at $S_{max}$}
+\STATE $V[0] \leftarrow 0$ \COMMENT{Lower boundary remains zero}
+\STATE $V[M] \leftarrow S_{max} - K \cdot e^{-r(T-t)}$ \COMMENT{Upper boundary with time decay}
 \end{algorithmic}
 \end{algorithm}
 
