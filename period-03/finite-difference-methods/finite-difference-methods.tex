@@ -60,9 +60,13 @@ This comprehensive article presents a complete analysis of partial differential 
 \end{abstract}
 
 \tableofcontents
+\listoffigures
+\newpage
+\listoftables
 \newpage
 
 \section{Introduction}
+\label{sec:introduction}
 
 The application of partial differential equations (PDEs) in financial mathematics has revolutionized modern option pricing theory. The Black-Scholes equation, derived by Fischer Black, Myron Scholes, and Robert Merton in the early 1970s, provides a mathematical framework for pricing European options and serves as the foundation for modern derivatives pricing.
 
@@ -80,7 +84,23 @@ This article addresses the following key objectives:
 \item \textbf{Practical Applications}: Provide computational results and best practices
 \end{itemize}
 
+\section*{Notation}
+\begin{tabular}{ll}
+  $S$ & Underlying asset price \\
+  $K$ & Strike price \\
+  $T$ & Time to maturity \\
+  $t_j$ & Time grid point, $t_j = j\,\Delta t$ \\
+  $S_i$ & Price grid point, $S_i = i\,\Delta S$ \\
+  $\Delta S$ & Price step size, $\Delta S = S_{\max}/M$ \\
+  $\Delta t$ & Time step size, $\Delta t = T/N$ \\
+  $M$ & Number of spatial intervals \\
+  $N$ & Number of time intervals \\
+  $\sigma$ & Volatility of the underlying asset \\
+  $r$ & Risk-free interest rate \\
+\end{tabular}
+
 \section{Mathematical Foundation}
+\label{sec:math-foundation}
 
 \subsection{The Black-Scholes Partial Differential Equation}
 
@@ -139,6 +159,7 @@ V(S, t) &\sim S - Ke^{-r(T-t)} \quad \text{as } S \to \infty
 \end{align}
 
 \section{Analytical Solution}
+\label{sec:analytical-solution}
 
 \subsection{The Black-Scholes Formula}
 
@@ -193,6 +214,7 @@ V_{BS} &= 100 \times 0.5695 - 100 \times e^{-0.05 \times 0.25} \times 0.5299 \\
 This analytical result serves as our benchmark for evaluating numerical methods.
 
 \section{Finite Difference Methods}
+\label{sec:fdm-methods}
 
 Finite difference methods approximate the continuous Black-Scholes PDE using discrete grid points in space and time. We implement three primary schemes: explicit, implicit, and Crank-Nicolson.
 
