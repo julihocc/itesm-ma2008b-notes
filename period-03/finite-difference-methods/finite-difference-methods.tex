@@ -197,27 +197,26 @@ Using the standard test parameters:
 \item $\sigma = \SI{20}{\percent}$ volatility
 \end{itemize}
 
-\textbf{Step-by-step calculation:}
-
+\textbf{Step-by-step calculation (convert numbers):}
 \begin{align}
-d_1 &= \frac{\ln(100/100) + (0.05 + 0.20^2/2) \times 0.25}{0.20 \times \sqrt{0.25}} \\
-    &= \frac{0 + (0.05 + 0.02) \times 0.25}{0.20 \times 0.5} \\
-    &= \frac{0.0175}{0.10} = 0.175
+d_1 &= \frac{\ln(\num{100}/\num{100}) + (\num{0.05} + \num{0.20}^2/2) \times \num{0.25}}{\num{0.20} \times \sqrt{\num{0.25}}} \\
+    &= \frac{0 + (\num{0.05} + \num{0.02}) \times \num{0.25}}{\num{0.20} \times \num{0.5}} \\
+    &= \frac{\num{0.0175}}{\num{0.10}} = \num{0.175}
 \end{align}
 
 \begin{equation}
-d_2 = 0.175 - 0.20 \times 0.5 = 0.075
+d_2 = \num{0.175} - \num{0.20} \times \num{0.5} = \num{0.075}
 \end{equation}
 
 \begin{align}
-N(d_1) &= N(0.175) = 0.5695 \\
-N(d_2) &= N(0.075) = 0.5299
+N(d_1) &= N(\num{0.175}) = \num{0.5695} \\
+N(d_2) &= N(\num{0.075}) = \num{0.5299}
 \end{align}
 
 \begin{align}
-V_{BS} &= 100 \times 0.5695 - 100 \times e^{-0.05 \times 0.25} \times 0.5299 \\
-       &= 56.95 - 100 \times 0.9876 \times 0.5299 \\
-       &= 56.95 - 52.33 = \$4.6150
+V_{BS} &= \num{100} \times \num{0.5695} - \num{100} \times e^{-\num{0.05} \times \num{0.25}} \times \num{0.5299} \\
+       &= \num{56.95} - \num{100} \times \num{0.9876} \times \num{0.5299} \\
+       &= \num{56.95} - \num{52.33} = \SI{4.6150}{\dollar}
 \end{align}
 
 This analytical result serves as our benchmark for evaluating numerical methods.
@@ -728,10 +727,10 @@ Table \ref{tab:comparison} presents a comprehensive comparison of all implemente
  \toprule
  \textbf{Method} & {\textbf{Value (\$)}} & {\textbf{Abs.~Error (\$)}} & {\textbf{Rel.~Error (\%)}} & {\textbf{Time (s)}} \\
  \midrule
- Analytical & 4.6150 & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & 0.001 \\
- Explicit FD & 4.5955 & 0.0195 & 0.42 & 0.124 \\
- Implicit FD & 4.5944 & 0.0206 & 0.45 & 0.052 \\
- Crank-Nicolson & 4.5949 & 0.0201 & 0.43 & 0.041 \\
+Analytical & \SI{4.6150}{\$} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \SI{0.001}{\second} \\
+Explicit FD & \SI{4.5955}{\$} & \SI{0.0195}{\$} & \SI{0.42}{\percent} & \SI{0.124}{\second} \\
+Implicit FD & \SI{4.5944}{\$} & \SI{0.0206}{\$} & \SI{0.45}{\percent} & \SI{0.052}{\second} \\
+Crank-Nicolson & \SI{4.5949}{\$} & \SI{0.0201}{\$} & \SI{0.43}{\percent} & \SI{0.041}{\second} \\
  \bottomrule
 \end{tabular}
  \end{table}
@@ -742,10 +741,10 @@ Table \ref{tab:comparison} presents a comprehensive comparison of all implemente
 
 All numerical methods achieve excellent accuracy:
 \begin{itemize}
-\item \textbf{All methods exceed 99.5\% accuracy} relative to the analytical solution
-\item \textbf{Maximum absolute error}: \$0.0206 (implicit method)
-\item \textbf{Maximum relative error}: 0.45\% (implicit method)
-\item \textbf{Best accuracy}: Explicit method with 0.42\% relative error
+\item \textbf{All methods exceed \SI{99.5}{\percent} accuracy} relative to the analytical solution
+\item \textbf{Maximum absolute error}: \SI{0.0206}{\dollar} (implicit method)
+\item \textbf{Maximum relative error}: \SI{0.45}{\percent} (implicit method)
+\item \textbf{Best accuracy}: Explicit method with \SI{0.42}{\percent} relative error
 \end{itemize}
 
 \subsubsection{Performance Analysis}
@@ -834,19 +833,19 @@ All numerical methods achieve excellent accuracy:
 
 The accuracy of finite difference methods can be significantly improved through grid refinement. Our analysis demonstrates the effect of different grid resolutions:
 
-\textbf{Coarse Grid (M=20, N=25):}
+\textbf{Coarse Grid (\M=\num{20}, \N=\num{25}):}
 \begin{itemize}
-\item Explicit method result: \$4.02
-\item Relative error: 12.8\% (high due to coarse discretization)
+\item Explicit method result: \SI{4.02}{\$}
+\item Relative error: \SI{12.8}{\percent} (high due to coarse discretization)
 \end{itemize}
 
-\textbf{Refined Grid (M=100, N=1000):}
+\textbf{Refined Grid (\M=\num{100}, \N=\num{1000}):}
 \begin{itemize}
-\item Explicit method result: \$4.5955
-\item Relative error: 0.42\% (excellent accuracy)
+\item Explicit method result: \SI{4.5955}{\$}
+\item Relative error: \SI{0.42}{\percent} (excellent accuracy)
 \end{itemize}
 
-This demonstrates that \textbf{grid refinement dramatically improves accuracy}, reducing the error from 12.8\% to 0.42\%.
+This demonstrates that \textbf{grid refinement dramatically improves accuracy}, reducing the error from \SI{12.8}{\percent} to \SI{0.42}{\percent}.
 
 \subsection{Convergence Analysis}
 
@@ -989,11 +988,11 @@ This comprehensive study of the Black-Scholes equation and its numerical solutio
 \subsection{Main Findings}
 
 \begin{enumerate}
-\item \textbf{All numerical methods achieve excellent accuracy}: With proper grid refinement, explicit, implicit, and Crank-Nicolson methods all exceed 99.5\% accuracy relative to the analytical solution.
+\item \textbf{All numerical methods achieve excellent accuracy}: With proper grid refinement, explicit, implicit, and Crank-Nicolson methods all exceed \SI{99.5}{\percent} accuracy relative to the analytical solution.
 
 \item \textbf{Crank-Nicolson is optimal for production use}: It offers the best balance of accuracy, stability, and computational efficiency, making it the preferred choice for practical applications.
 
-\item \textbf{Grid refinement is crucial}: The difference between coarse and refined grids is dramatic, improving accuracy from 12.8\% to 0.42\% error.
+\item \textbf{Grid refinement is crucial}: The difference between coarse and refined grids is dramatic, improving accuracy from \SI{12.8}{\percent} to \SI{0.42}{\percent} error.
 
 \item \textbf{Method selection depends on requirements}: Each method has distinct advantages depending on the specific application needs.
 \end{enumerate}
