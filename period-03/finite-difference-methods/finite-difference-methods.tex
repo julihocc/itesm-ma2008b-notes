@@ -22,6 +22,10 @@
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf,skip=5pt}
 
+% Custom notation macros
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\Lop}{\mathcal{L}}
+
 % Code styling
 \lstset{
     basicstyle=\ttfamily\footnotesize,
@@ -549,7 +553,7 @@ The Crank-Nicolson method combines explicit and implicit approaches using the av
 where $L$ is the spatial differential operator. This leads to the matrix equation:
 
 \begin{equation}
-(\mathbf{I} - \frac{\Delta t}{2}\mathbf{L}) \mathbf{V}^{j+1} = (\mathbf{I} + \frac{\Delta t}{2}\mathbf{L}) \mathbf{V}^j
+(\mathbf{I} - \tfrac{\Delta t}{2}\Lop) \V^{j+1} = (\mathbf{I} + \tfrac{\Delta t}{2}\Lop) \V^j
 \end{equation}
 
 \subsubsection{Stability and Accuracy}
