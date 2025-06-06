@@ -25,6 +25,11 @@
 % Custom notation macros
 \newcommand{\V}{\mathbf{V}}
 \newcommand{\Lop}{\mathcal{L}}
+% Grid parameter macros
+\newcommand{\DS}{\Delta S}
+\newcommand{\Dt}{\Delta t}
+\newcommand{\M}{M}
+\newcommand{\N}{N}
 
 % Code styling
 \lstset{
@@ -60,7 +65,7 @@ A Comprehensive Study of Black-Scholes Numerical Methods} \\
 \maketitle
 
 \begin{abstract}
-This comprehensive article presents a complete analysis of partial differential equations in finance, focusing on the Black-Scholes equation and its numerical solution methods. The study covers theoretical foundations, mathematical analysis, and practical implementation of finite difference methods for option pricing. Through detailed comparison of explicit, implicit, and Crank-Nicolson finite difference schemes, we demonstrate that all numerical methods achieve excellent accuracy (>99.5\%) when properly implemented with refined grids. The article synthesizes results from five weeks of intensive study, providing both theoretical insights and practical computational results.
+This comprehensive article presents a complete analysis of partial differential equations in finance, focusing on the Black-Scholes equation and its numerical solution methods. The study covers theoretical foundations, mathematical analysis, and practical implementation of finite difference methods for option pricing. Through detailed comparison of explicit, implicit, and Crank–Nicolson finite difference schemes, we demonstrate that all numerical methods achieve excellent accuracy (> \SI{99.5}{\percent}) when properly implemented with refined grids. The article synthesizes results from five weeks of intensive study, providing both theoretical insights and practical computational results.
 \end{abstract}
 
 \tableofcontents
@@ -227,10 +232,10 @@ Finite difference methods approximate the continuous Black-Scholes PDE using dis
 All numerical methods use the following discretization:
 
 \begin{itemize}
-\item \textbf{Stock price domain}: $[0, S_{max}]$ with $S_{max} = 200$
-\item \textbf{Spatial grid}: $M = 100$ intervals, giving $\Delta S = S_{max}/M = 2.0$
+\item \textbf{Stock price domain}: $[0, S_{max}]$ with $S_{max} = \num{200}$
+\item \textbf{Spatial grid}: $M = \num{100}$ intervals, giving $\Delta S = S_{max}/M = \num{2.0}$
 \item \textbf{Time domain}: $[0, T]$ with $T = 0.25$
-\item \textbf{Temporal grid}: $N = 1000$ intervals, giving $\Delta t = T/N = 0.00025$
+\item \textbf{Temporal grid}: $N = \num{1000}$ intervals, giving $\Delta t = T/N = \num{0.00025}$
 \end{itemize}
 
 Grid points are defined as:
@@ -271,14 +276,14 @@ For our parameters, this gives $\Delta t \leq 0.000248$, which our choice of $\D
 \begin{itemize}
 \item Algorithm complexity: $O(MN)$ operations
 \item Memory requirement: $O(M)$ for solution vector
-\item Computation time: $\sim 0.124$ seconds
+\item Computation time: $\sim\SI{0.124}{\second}$
 \end{itemize}
 
 \textbf{Numerical Results:}
 \begin{itemize}
 \item Option value: $V(S_0, 0) = \$4.5955$
 \item Absolute error: $|4.5955 - 4.6150| = \$0.0195$
-\item Relative error: $0.42\%$
+\item Relative error: \SI{0.42}{\percent}
 \end{itemize}
 
 \subsubsection{Algorithm Description}
@@ -438,7 +443,7 @@ The implicit method is unconditionally stable, meaning there are no restrictions
 \begin{itemize}
 \item Algorithm complexity: $O(MN)$ operations (with efficient tridiagonal solver)
 \item Memory requirement: $O(M)$ for solution vector and matrix storage
-\item Computation time: $\sim 0.052$ seconds
+\item Computation time: $\sim\SI{0.052}{\second}$
 \end{itemize}
 
 \textbf{Numerical Results:}
@@ -571,7 +576,7 @@ The Crank-Nicolson method offers:
 \begin{itemize}
 \item Algorithm complexity: $O(MN)$ operations
 \item Memory requirement: $O(M)$ for vectors plus two tridiagonal matrices
-\item Computation time: $\sim 0.041$ seconds
+\item Computation time: $\sim\SI{0.041}{\second}$
 \end{itemize}
 
 \textbf{Numerical Results:}
