@@ -97,11 +97,28 @@ def write_black_scholes_report(
 
     # Write report to file
     with open(report_path, "w") as f:
-        f.write("Black-Scholes Solution\n")
-        f.write("=====================\n")
-        f.write(f"Parameters: S₀=${S0}, K=${K}, T={T}, r={r:.1%}, σ={sigma:.1%}\n")
-        f.write("\n")
-        f.write(f"European call option value = ${option_price:.2f}\n")
+        f.write(
+            f"""
+========================================
+ Black-Scholes Analytical Solution Report
+========================================
+
+Parameters
+----------
+  S₀    : ${S0}
+  K     : ${K}
+  T     : {T} years
+  r     : {r:.2%} (annual risk-free rate)
+  σ     : {sigma:.2%} (annual volatility)
+
+----------------------------------------
+Result
+------
+  European call option value: ${option_price:.4f}
+
+----------------------------------------
+Generated on: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+""")
 
     print(f"Report written to: {report_path}")
     return report_path
