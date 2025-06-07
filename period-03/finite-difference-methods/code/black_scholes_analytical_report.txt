@@ -1,5 +1,20 @@
-Black-Scholes Solution
-=====================
-Parameters: S₀=$100, K=$100, T=0.25, r=5.0%, σ=20.0%
 
-European call option value = $4.61
+========================================
+ Black-Scholes Analytical Solution Report
+========================================
+
+Parameters
+----------
+  S₀    : $100
+  K     : $100
+  T     : 0.25 years
+  r     : 5.00% (annual risk-free rate)
+  σ     : 20.00% (annual volatility)
+
+----------------------------------------
+Result
+------
+  European call option value: $4.6150
+
+----------------------------------------
+Generated on: 2025-06-06 18:06:22
